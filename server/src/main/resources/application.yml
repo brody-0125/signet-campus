@@ -23,3 +23,6 @@ management:
         include: health,info
 server:
   shutdown: graceful
+campus:
+  signing-key: file:${SIGNING_KEY_PATH:/run/secrets/campus-signing.jwk}
+  public-url: ${CAMPUS_PUBLIC_URL:http://localhost:5173}

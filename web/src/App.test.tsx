@@ -56,3 +56,21 @@ it('uses the current version for a review and reports a stale update', async () 
   expect(await screen.findByRole('alert')).toHaveTextContent('changed since you opened it')
   await waitFor(() => expect(fetchMock).toHaveBeenCalledWith('/api/submissions/submission-1/approve', expect.objectContaining({ body: '{"expectedVersion":7}' })))
 })
+it('issues an approved badge and verifies the returned credential', async () => {
+  const user = userEvent.setup()
+  useWorkspace.setState({ view: 'submissions' })
+  const credential = { id: 'http://localhost:5173/api/credentials/credential-1', type: ['VerifiableCredential', 'OpenBadgeCredential'] }
+  fetchMock.mockImplementation(async (url: string) => response(
+    url.endsWith('/verify') ? { status: 'VALID', valid: true } :
+    url.endsWith('/credential') ? credential :
+    url.includes('achievements') ? [achievement] : [{ submission: { ...submission, status: 'APPROVED' }, version: 1 }],
+  ))
+  mount()
+  await user.click(await screen.findByRole('button', { name: 'View submission' }))
+  await user.click(screen.getByRole('button', { name: 'Issue badge' }))
+  const download = await screen.findByRole('link', { name: 'Download JSON' })
+  expect(download).toHaveAttribute('download', 'signet-campus-credential.json')
+  expect(JSON.parse(decodeURIComponent(download.getAttribute('href')!.split(',')[1]))).toEqual(credential)
+  await user.click(screen.getByRole('button', { name: 'Verify badge' }))
+  expect(await screen.findByRole('status')).toHaveTextContent('Verified: authentic, current and not revoked.')
+})

@@ -5,6 +5,7 @@ import { signIn, useSession } from './auth'
 import { Dialog } from './Dialog'
 import { EvidenceForm } from './EvidenceForm'
 import { useWorkspace } from './store'
+import { CredentialActions } from './CredentialActions'
 
 const statusLabel = { PENDING: 'Pending review', APPROVED: 'Approved', REJECTED: 'Changes requested' }
 export function Submissions({ achievements }: { achievements: Achievement[] }) {
@@ -49,5 +50,6 @@ function ReviewDetails({ item, achievement, reviewer, onClose, onEdit }: { item:
       <div className="form-actions"><button className="button outline" disabled={!reason.trim() || mutation.isPending} onClick={() => mutation.mutate('reject')}>Request changes</button><button className="button primary" disabled={mutation.isPending} onClick={() => mutation.mutate('approve')}>{mutation.isPending ? 'Saving…' : 'Approve evidence'}</button></div>
     </>}
     {!reviewer && item.submission.status === 'REJECTED' && <button className="button primary" onClick={onEdit}>Update evidence</button>}
+    {!reviewer && item.submission.status === 'APPROVED' && <CredentialActions submissionId={item.submission.id}/>}
   </Dialog>
 }

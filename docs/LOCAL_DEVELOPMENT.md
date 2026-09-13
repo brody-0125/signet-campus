@@ -8,6 +8,8 @@ docker compose up -d --build web
 
 Open the web interface at `http://localhost:5173`. The stack also exposes the API at `http://localhost:8080`, Keycloak at `http://localhost:8081`, and PostgreSQL on `localhost:5432`. Ports bind to the loopback interface. PostgreSQL and Keycloak data use named volumes.
 
+The `key-init` service creates the issuer signing key once in the `signing-keys` volume. Keep this volume with the database when restarting or backing up the application. See [Credentials](CREDENTIALS.md) for key configuration and verification behavior.
+
 The included Keycloak realm contains synthetic local accounts:
 
 | Username | Password | Role |
