@@ -48,6 +48,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 
 ## Documentation
 
+- [Evidence review](docs/EVIDENCE_REVIEW.md)
 - [Testing](docs/TESTING.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security reporting](SECURITY.md)
