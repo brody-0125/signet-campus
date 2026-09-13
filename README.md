@@ -5,10 +5,10 @@ Evidence submission and review for campus skills recognition, integrated with Op
 ## Run locally
 
 ```bash
-docker compose up -d --build server
+docker compose up -d --build web
 ```
 
-The API runs at `http://localhost:8080` with PostgreSQL storage and Keycloak authentication. See [Local development](docs/LOCAL_DEVELOPMENT.md) for accounts, configuration and smoke tests.
+Open `http://localhost:5173` to explore achievements, submit evidence and follow reviews. The API runs at `http://localhost:8080` with PostgreSQL storage and Keycloak authentication. See [Local development](docs/LOCAL_DEVELOPMENT.md) for accounts, configuration and smoke tests.
 
 ## Credential integration
 
@@ -57,6 +57,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 ## Documentation
 
 - [Submission API](docs/API.md)
+- [Web interface and design system](docs/WEB_INTERFACE.md)
 - [Local development](docs/LOCAL_DEVELOPMENT.md)
 - [Evidence review](docs/EVIDENCE_REVIEW.md)
 - [Testing](docs/TESTING.md)

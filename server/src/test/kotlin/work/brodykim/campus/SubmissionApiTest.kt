@@ -51,7 +51,8 @@ class SubmissionApiTest {
         .andReturn().response.contentAsString)["submission"]["id"].asText()
 
     @Test fun `unauthenticated calls and forged JWTs are rejected`() {
-        mvc.perform(get("/api/achievements")).andExpect(status().isUnauthorized)
+        mvc.perform(get("/api/achievements")).andExpect(status().isOk)
+        mvc.perform(get("/api/submissions")).andExpect(status().isUnauthorized)
         mvc.perform(get("/api/achievements").header("Authorization", "Bearer invalid"))
             .andExpect(status().isUnauthorized)
     }
