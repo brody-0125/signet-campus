@@ -16,7 +16,7 @@ The repository includes the unmodified Gradle wrapper scripts and JAR, originall
 
 ## Evidence for resolved software
 
-- [167 resolved artifacts and SHA-256 hashes](docs/third-party/inventory.json).
+- [171 resolved artifacts and SHA-256 hashes](docs/third-party/inventory.json).
 - [Per-coordinate POM license declarations, including inherited parents](docs/DEPENDENCY_LICENSES.md).
 - [Original POMs and license/notice files extracted from the resolved JARs](docs/third-party/).
 - Reproduce extraction from `server` with `sh ./gradlew -I third-party.init.gradle thirdPartyInventory`. The script does not resolve license expressions or declare compatibility automatically.
@@ -40,6 +40,10 @@ The pinned [core `v0.1.3`](https://github.com/brody-0125/signet-core/tree/v0.1.3
 Parsson retains its own EPL-2.0 terms and conditional secondary-license designation; Signet's Apache-2.0 license does not replace them. Parsson's original license and NOTICE from the resolved JAR are preserved at [its artifact evidence directory](docs/third-party/org.eclipse.parsson/parsson/1.1.7/).
 
 ## Distribution obligations
+
+The mail integration adds Spring Mail (Apache-2.0), Angus Activation and Jakarta Activation (EDL-1.0), and Angus Jakarta Mail 2.0.5. Jakarta Mail's bundled NOTICE specifies EPL-2.0 with a conditional GPL-2.0/ClassPath secondary license; this project retains the EPL-2.0 route and all embedded license/notice texts. Unmodified corresponding source is available from [Maven Central](https://repo.maven.apache.org/maven2/org/eclipse/angus/jakarta.mail/2.0.5/jakarta.mail-2.0.5-sources.jar). Keep this source-availability statement and the artifact's notices with any binary redistribution.
+
+The local Compose service uses unmodified [Mailpit v1.31.1](https://github.com/axllent/mailpit/tree/v1.31.1), licensed under MIT. Its [license](LICENSES/Mailpit-LICENSE.txt) is retained here; container layers and bundled third-party components retain their respective terms. Mailpit is a separate local development service, not part of the browser bundle or application JAR.
 
 - Apache-2.0: accompany distributed covered work with the license, preserve applicable copyright/attribution and NOTICE content, and identify modified upstream files. Trademark rights are not granted. See [Apache-2.0 sections 4 and 6](https://www.apache.org/licenses/LICENSE-2.0).
 - EPL-2.0: preserve the license and source availability requirements for the covered Program when distributing it. Provide the exact corresponding source location and required notices; modifications to covered code must be handled under the applicable terms. Merely using a dependency does not make all original application code EPL. See [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/).

@@ -614,6 +614,7 @@
     {
         "coordinate": "jakarta.activation:jakarta.activation-api:2.1.4",
         "scopes": [
+            "runtimeClasspath",
             "testRuntimeClasspath"
         ],
         "sha256": "c9db52100ce6c8aac95cc39075f95720d2e561b11f8051b81c121ad4effd7004",
@@ -845,6 +846,32 @@
         "evidence": [
             "META-INF__LICENSE.txt",
             "checker-qual-3.52.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.angus:angus-activation:2.0.3",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a6bd35c538cf90fff941ad6258c40c08fca0b5c9c3f536c657114f27ce0527a7",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "META-INF__NOTICE.md",
+            "angus-activation-2.0.3.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.angus:jakarta.mail:2.0.5",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "f48001755a4a591bb1b602965337fcf316d794c43783052f88ede05130539358",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "META-INF__NOTICE.md",
+            "jakarta.mail-2.0.5.pom"
         ]
     },
     {
@@ -1554,6 +1581,19 @@
         ]
     },
     {
+        "coordinate": "org.springframework.boot:spring-boot-starter-mail:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "92dd2b7f945a2bc7723809e9b24eafbd088be09638c8adcd4f5fb0fe4cb13a86",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-mail-3.5.11.pom"
+        ]
+    },
+    {
         "coordinate": "org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.5.11",
         "scopes": [
             "runtimeClasspath",
@@ -1786,6 +1826,19 @@
             "META-INF__license.txt",
             "META-INF__notice.txt",
             "spring-beans-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-context-support:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d292ddb7eb99eda8adddd9c818a69bb06d39b50405473e9fded7dd268183175c",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-context-support-6.2.16.pom"
         ]
     },
     {

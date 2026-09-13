@@ -1,4 +1,6 @@
 services:
+  mailpit:
+    ports: !reset []
   web:
     build:
       args:

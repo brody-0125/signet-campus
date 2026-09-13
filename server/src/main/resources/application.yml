@@ -1,4 +1,11 @@
 spring:
+  mail:
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:1025}
+    properties:
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
   application:
     name: signet-campus
   datasource:
@@ -24,6 +31,9 @@ management:
 server:
   shutdown: graceful
 campus:
+  notifications:
+    enabled: ${NOTIFICATIONS_ENABLED:false}
+    from: ${NOTIFICATIONS_FROM:campus@example.test}
   signing-key: file:${SIGNING_KEY_PATH:/run/secrets/campus-signing.jwk}
   verification-keys: ${VERIFICATION_KEYS:classpath:empty-jwks.json}
   public-url: ${CAMPUS_PUBLIC_URL:http://localhost:5173}

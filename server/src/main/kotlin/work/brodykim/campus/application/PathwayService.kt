@@ -16,7 +16,7 @@ interface PathwayRepository {
     fun list(): List<Pathway>
     fun find(id: UUID): Pathway?
     fun create(pathway: Pathway): Pathway
-    fun enroll(id: UUID, learnerId: UUID): PathwayProgress
+    fun enroll(id: UUID, learnerId: UUID, email: String?): PathwayProgress
     fun progress(id: UUID, learnerId: UUID): PathwayProgress?
 }
 
@@ -29,6 +29,10 @@ class PathwayService(private val repository: PathwayRepository) {
         require(achievements.size in 1..50 && achievements.distinct().size == achievements.size)
         return repository.create(Pathway(UUID.randomUUID(), name.trim(), description.trim(), achievements))
     }
-    fun enroll(actor: Actor, id: UUID): PathwayProgress { get(id); return repository.enroll(id, actor.id) }
+    fun enroll(actor: Actor, id: UUID, verifiedEmail: String? = null): PathwayProgress {
+        get(id)
+        require(verifiedEmail == null || (verifiedEmail.length <= 254 && verifiedEmail.matches(Regex("[^\\s@,;<>]+@[^\\s@,;<>]+"))))
+        return repository.enroll(id, actor.id, verifiedEmail)
+    }
     fun progress(actor: Actor, id: UUID) = repository.progress(id, actor.id) ?: throw PathwayNotFound()
 }
