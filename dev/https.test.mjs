@@ -16,10 +16,10 @@ const get = (path, options = {}) => new Promise((resolve, reject) => {
 })
 
 test('only the HTTPS ingress is published to the host', () => {
-  const services = ['db', 'server', 'identity', 'web']
+  const services = ['db', 'server', 'identity', 'mailpit', 'web']
   const containers = JSON.parse(execFileSync('docker', ['inspect', ...services.map(service => `signet-campus-tls-${service}-1`)], { encoding: 'utf8' }))
-  for (const container of containers.slice(0, 3)) assert.deepEqual(container.HostConfig.PortBindings ?? {}, {})
-  assert.deepEqual(containers[3].HostConfig.PortBindings, { '8443/tcp': [{ HostIp: '127.0.0.1', HostPort: '8443' }] })
+  for (const container of containers.slice(0, -1)) assert.deepEqual(container.HostConfig.PortBindings ?? {}, {})
+  assert.deepEqual(containers.at(-1).HostConfig.PortBindings, { '8443/tcp': [{ HostIp: '127.0.0.1', HostPort: '8443' }] })
 })
 
 test('TLS 1.2 and 1.3 serve the web and status APIs with certificate validation', async () => {

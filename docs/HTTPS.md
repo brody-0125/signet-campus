@@ -33,6 +33,12 @@ Restart the TLS server with the same Compose arguments and run `node dev/smoke.m
 
 ## Production configuration
 
+Both proxy configurations use Docker's embedded DNS resolver (`127.0.0.11`) with a five-second cache and a two-second resolver timeout. API and identity service names are resolved during request handling, so replacing a container does not require restarting the web proxy. The destination names are fixed configuration values, not caller-supplied hosts. DNS refresh does not eliminate errors while a backend is unavailable or starting.
+
+Run `node --test dev/proxy-resolution.test.mjs` to verify address replacement against both actual proxy configurations in an isolated Docker network. The test occupies the old backend IP, starts a replacement at a different address, and checks HTTP/API, HTTPS/API and HTTPS/auth requests without restarting Nginx. It also checks POST bodies, encoded query strings and forwarded headers. Certificate verification remains enabled.
+
+When deploying outside Docker's embedded DNS network, replace the resolver address with the deployment's trusted DNS service. See Nginx's [resolver](https://nginx.org/en/docs/http/ngx_http_core_module.html#resolver) and [variable proxy destinations](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass) documentation.
+
 This overlay uses development accounts, Keycloak `start-dev`, local passwords and a short-lived self-signed certificate. Before an actual service deployment, provision trusted certificates with renewal, production identity/database credentials and backups. Replace the localhost origin consistently in the frontend build argument, Keycloak hostname and client redirect/origin allowlists, server issuer/public URL, Nginx server name and forwarded port. Restrict proxy-header trust to the controlled ingress network. Keep the public origin stable after issuing credentials. Provision a renewed certificate/key pair in the mounted TLS location and reload or recreate Nginx; this initializer is not an automatic renewal service.
 
 Internal service links in this overlay use HTTP on the private Compose network. Deployments requiring encryption between services must add that transport separately. The single-host overlay does not establish multi-node high availability or a complete production security configuration.
