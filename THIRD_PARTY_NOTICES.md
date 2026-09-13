@@ -35,7 +35,7 @@ POM lists sometimes express alternatives without machine-readable AND/OR semanti
 
 ## Signet libraries
 
-The pinned [core `v0.1.3`](https://github.com/brody-0125/signet-core/tree/v0.1.3) and [starter `v0.1.3`](https://github.com/brody-0125/signet-spring-boot-starter/tree/v0.1.3) use Apache-2.0. Their published POMs declare the license, and their JARs include `META-INF/LICENSE` and `META-INF/NOTICE`. These files are retained in the per-artifact evidence directories and must accompany redistributed covered artifacts.
+The pinned [core `v0.1.3`](https://github.com/brody-0125/signet-core/tree/v0.1.3) and [starter `v0.1.4`](https://github.com/brody-0125/signet-spring-boot-starter/tree/v0.1.4) use Apache-2.0. Their published POMs declare the license, and their JARs include `META-INF/LICENSE` and `META-INF/NOTICE`. These files are retained in the per-artifact evidence directories and must accompany redistributed covered artifacts.
 
 Parsson retains its own EPL-2.0 terms and conditional secondary-license designation; Signet's Apache-2.0 license does not replace them. Parsson's original license and NOTICE from the resolved JAR are preserved at [its artifact evidence directory](docs/third-party/org.eclipse.parsson/parsson/1.1.7/).
 

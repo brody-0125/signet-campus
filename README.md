@@ -54,7 +54,7 @@ See [Testing](docs/TESTING.md) for covered behaviors, report locations and depen
 | Kotlin | 2.2.21 |
 | Spring Boot | 3.5.11 |
 | Gradle | 8.14.3 |
-| Signet Spring Boot starter | `v0.1.3` |
+| Signet Spring Boot starter | `v0.1.4` |
 | Kotest | 6.0.4 |
 | Konsist | 0.17.3 |
 | Kover | 0.9.3 |
@@ -66,6 +66,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 
 - [Submission API](docs/API.md)
 - [Credential issuance and verification](docs/CREDENTIALS.md)
+- [Portable PNG and SVG badges](docs/PORTABLE_BADGES.md)
 - [Web interface and design system](docs/WEB_INTERFACE.md)
 - [Local development](docs/LOCAL_DEVELOPMENT.md)
 - [Evidence review](docs/EVIDENCE_REVIEW.md)

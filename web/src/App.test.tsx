@@ -159,3 +159,21 @@ it('issues an approved badge and verifies the returned credential', async () => 
   await user.click(screen.getByRole('button', { name: 'Verify badge' }))
   expect(await screen.findByRole('status')).toHaveTextContent('Verified: authentic, current and not revoked.')
 })
+
+it('requests private badge images with authentication and reports download failures', async () => {
+  const user = userEvent.setup()
+  useWorkspace.setState({ view: 'submissions' })
+  fetchMock.mockImplementation(async (url: string) => {
+    if (url.endsWith('/image/png')) return response({}, 503)
+    return response(url.endsWith('/credential') ? { id: 'http://localhost:5173/api/credentials/credential-1' }
+      : url.includes('achievements') ? [achievement] : [{ submission: { ...submission, status: 'APPROVED' }, version: 1 }])
+  })
+  mount()
+  await user.click(await screen.findByRole('button', { name: 'View submission' }))
+  await user.click(screen.getByRole('button', { name: 'Issue badge' }))
+  await user.click(await screen.findByRole('button', { name: 'Download PNG' }))
+  expect(await screen.findByRole('alert')).toHaveTextContent('Please try again')
+  expect(fetchMock).toHaveBeenCalledWith('/api/credentials/credential-1/image/png', expect.objectContaining({
+    headers: expect.objectContaining({ Authorization: 'Bearer test-token' }),
+  }))
+})

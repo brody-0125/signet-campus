@@ -29,6 +29,7 @@ class CredentialApiTest : SigningTestSupport() {
     @Autowired lateinit var jdbc: JdbcTemplate
     @Autowired lateinit var submissions: SubmissionService
     @Autowired lateinit var credentials: CredentialService
+    @Autowired lateinit var badgeBaker: work.brodykim.signet.baking.CompositeBadgeBaker
     private val owner = Actor(UUID.fromString("11111111-1111-4111-8111-111111111111"), false)
     private val reviewer = Actor(UUID.fromString("22222222-2222-4222-8222-222222222222"), true)
     private fun auth(actor: Actor = owner, verified: Boolean = true) = jwt()
@@ -47,6 +48,35 @@ class CredentialApiTest : SigningTestSupport() {
     private fun issue(id: UUID) = mvc.perform(post("/api/submissions/$id/credential").with(auth()))
         .andExpect(status().isOk).andExpect(header().string("Cache-Control", "no-store"))
         .andReturn().response.contentAsString
+
+    @Test fun `private PNG and SVG exports preserve the signed credential and revocation status`() {
+        val signed = issue(submission())
+        val id = UUID.fromString(json.readTree(signed)["id"].asText().substringAfterLast('/'))
+        for ((format, mediaType) in mapOf("png" to "image/png", "svg" to "image/svg+xml")) {
+            val path = "/api/credentials/$id/image/$format"
+            mvc.perform(get(path)).andExpect(status().isUnauthorized)
+            mvc.perform(get(path).with(auth(reviewer))).andExpect(status().isNotFound)
+            val image = mvc.perform(get(path).with(auth())).andExpect(status().isOk)
+                .andExpect(content().contentType(mediaType)).andExpect(header().string("Cache-Control", "no-store"))
+                .andExpect(header().string("Content-Disposition", "attachment; filename=\"signet-campus-$id.$format\""))
+                .andReturn().response.contentAsByteArray
+            val extracted = badgeBaker.extract(image)
+            assertEquals(json.readTree(signed), json.readTree(extracted))
+            assertEquals("VALID", credentials.verify(id, extracted).status)
+            if (format == "png") {
+                val pixels = javax.imageio.ImageIO.read(java.io.ByteArrayInputStream(image))
+                assertEquals(512, pixels.width)
+                assertEquals(512, pixels.height)
+            } else {
+                assertTrue(image.toString(Charsets.UTF_8).contains("https://purl.imsglobal.org/ob/v3p0"))
+            }
+        }
+        mvc.perform(get("/api/credentials/$id/image/jpeg").with(auth())).andExpect(status().isBadRequest)
+        credentials.revoke(reviewer, id)
+        val image = mvc.perform(get("/api/credentials/$id/image/png").with(auth())).andExpect(status().isOk)
+            .andReturn().response.contentAsByteArray
+        assertEquals("REVOKED", credentials.verify(id, badgeBaker.extract(image)).status)
+    }
 
     @Test fun `public revocation list exposes only revoked credential identifiers`() {
         val submissionId = submission()
