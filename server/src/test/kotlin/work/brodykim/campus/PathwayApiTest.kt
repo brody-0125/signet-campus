@@ -103,7 +103,7 @@ class PathwayApiTest : SigningTestSupport() {
         val id = created["id"].asText()
         fun blocked() {
             mvc.perform(post("/api/pathways/$id/enrollment").with(auth().jwt {
-                it.claim("email", "learner@example.test").claim("email_verified", true)
+                it.subject(learner.id.toString()).claim("email", "learner@example.test").claim("email_verified", true)
             })).andExpect(status().isConflict)
             assertEquals(0, jdbc.queryForObject("SELECT count(*) FROM pathway_enrollments WHERE pathway_id = ?", Int::class.java, UUID.fromString(id))!!)
             assertEquals(0, jdbc.queryForObject("SELECT count(*) FROM notification_outbox WHERE pathway_id = ?", Int::class.java, UUID.fromString(id))!!)
