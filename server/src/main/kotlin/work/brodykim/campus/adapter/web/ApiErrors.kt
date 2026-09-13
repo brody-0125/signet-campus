@@ -14,6 +14,8 @@ import work.brodykim.campus.application.AchievementConflict
 
 @RestControllerAdvice
 class ApiErrors {
+    @ExceptionHandler(work.brodykim.campus.application.PathwayNotFound::class)
+    fun missingPathway() = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Pathway or enrollment not found")
     @ExceptionHandler(AchievementNotFound::class)
     fun missingAchievement() = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Achievement not found")
 
