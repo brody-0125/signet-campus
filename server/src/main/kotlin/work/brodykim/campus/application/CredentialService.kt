@@ -11,6 +11,7 @@ data class IssuedCredential(val id: UUID, val submissionId: UUID, val learnerId:
 data class CredentialVerification(val status: String, val valid: Boolean = status == "VALID")
 
 interface CredentialRepository {
+    fun revokedCredentialIds(): List<String>
     fun find(id: UUID): IssuedCredential?
     fun findBySubmission(id: UUID): IssuedCredential?
     fun saveIfAbsent(record: IssuedCredential): IssuedCredential
@@ -25,6 +26,7 @@ interface CredentialCryptography {
 
 class CredentialService(private val submissions: SubmissionRepository, private val repository: CredentialRepository,
                         private val crypto: CredentialCryptography, private val clock: Clock) {
+    fun revokedCredentialIds(): List<String> = repository.revokedCredentialIds()
     fun issue(actor: Actor, submissionId: UUID, verifiedEmail: String): IssuedCredential {
         val submission = submissions.find(submissionId)?.submission ?: throw SubmissionNotFound()
         if (actor.id != submission.learnerId) throw SubmissionNotFound()

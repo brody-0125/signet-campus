@@ -5,7 +5,7 @@
 <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.brody-0125</groupId>
   <artifactId>signet-core</artifactId>
-  <version>v0.1.1</version>
+  <version>v0.1.2</version>
   <name>brody-0125/signet-core</name>
   <description>Java library for W3C VC 2.0 &amp; Open Badges 3.0. supports EdDSA, ECDSA, and Selective Disclosure (ecdsa-sd-2023)</description>
   <url>https://github.com/brody-0125/signet-core</url>

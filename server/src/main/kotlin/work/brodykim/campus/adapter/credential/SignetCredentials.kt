@@ -43,7 +43,8 @@ class SignetCredentials(private val signer: CredentialSigner, private val json: 
         val builder = CredentialBuilder(baseUrl, UUID.randomUUID().toString())
         val badge = BadgeAchievement(achievement.id, achievement.name, achievement.criteria, achievement.criteria,
             "Badge", null, listOf("accessibility"))
-        val unsigned = builder.buildCredential(id, email, null, badge, issuer, at, until, null, null, null)
+        val unsigned = builder.buildCredential(id, email, null, badge, issuer, at, until, null, null, null,
+            CredentialBuilder.CredentialStatus("$baseUrl/revocations"), false)
         return json.writeValueAsString(signer.signWithDataIntegrity(unsigned, key, keyId))
     }
 

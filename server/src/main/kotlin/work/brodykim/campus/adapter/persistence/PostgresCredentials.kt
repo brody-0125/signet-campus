@@ -12,6 +12,8 @@ import java.util.UUID
 
 @Repository
 class PostgresCredentials(private val jdbc: JdbcTemplate) : CredentialRepository {
+    override fun revokedCredentialIds(): List<String> = jdbc.queryForList(
+        "SELECT document->>'id' FROM credentials WHERE revoked_at IS NOT NULL ORDER BY id", String::class.java)
     override fun find(id: UUID) = jdbc.query("SELECT * FROM credentials WHERE id = ?", { rs, _ -> read(rs) }, id).singleOrNull()
     override fun findBySubmission(id: UUID) = jdbc.query("SELECT * FROM credentials WHERE submission_id = ?", { rs, _ -> read(rs) }, id).singleOrNull()
 

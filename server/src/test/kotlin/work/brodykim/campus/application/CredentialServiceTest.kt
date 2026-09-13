@@ -63,6 +63,7 @@ class CredentialServiceTest : StringSpec({
 
 private class MemoryCredentials : CredentialRepository {
     val records = mutableMapOf<UUID, IssuedCredential>()
+    override fun revokedCredentialIds() = records.values.filter { it.revokedAt != null }.map { it.id.toString() }
     override fun find(id: UUID) = records[id]
     override fun findBySubmission(id: UUID) = records.values.find { it.submissionId == id }
     override fun saveIfAbsent(record: IssuedCredential): IssuedCredential {

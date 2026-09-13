@@ -48,6 +48,30 @@ class CredentialApiTest : SigningTestSupport() {
         .andExpect(status().isOk).andExpect(header().string("Cache-Control", "no-store"))
         .andReturn().response.contentAsString
 
+    @Test fun `public revocation list exposes only revoked credential identifiers`() {
+        val submissionId = submission()
+        val signed = issue(submissionId)
+        val credential = json.readTree(signed)
+        val credentialUrl = credential["id"].asText()
+        val origin = credentialUrl.substringBefore("/api/credentials/")
+        val listUrl = "$origin/api/revocations"
+        assertEquals(json.readTree("""{"id":"$listUrl","type":"1EdTechRevocationList"}"""), credential["credentialStatus"])
+        fun list() = mvc.perform(get("/api/revocations").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(header().string("Cache-Control", "no-store")).andReturn().response.contentAsString
+        val empty = """{"id":"$listUrl","issuer":"$origin/api/issuers/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb","revokedCredentials":[]}"""
+        assertEquals(json.readTree(empty), json.readTree(list()))
+        issue(submission()) // Another valid credential must not appear in the public list.
+        repeat(2) {
+            mvc.perform(post("/api/credentials/${credentialUrl.substringAfterLast('/')}/revoke").with(auth(reviewer)))
+                .andExpect(status().isNoContent)
+        }
+        val expected = json.readTree(empty).deepCopy<com.fasterxml.jackson.databind.node.ObjectNode>()
+        expected.putArray("revokedCredentials").addObject().put("id", credentialUrl).put("revoked", true)
+        assertEquals(expected, json.readTree(list())) // Exact shape excludes names, evidence, email and actor IDs.
+        assertEquals(credential, json.readTree(issue(submissionId)))
+    }
+
     @Test fun `approved evidence produces stable credential private download and public verification`() {
         val id = submission()
         val signed = issue(id)
