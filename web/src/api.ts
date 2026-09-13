@@ -23,6 +23,11 @@ export async function api<T>(path: string, body?: unknown, signal?: AbortSignal)
     ...(body === undefined ? {} : { method: 'POST', body: JSON.stringify(body) }),
   })
   if (!response.ok) {
+    if (path.endsWith('/credential')) {
+      if (response.status === 400) throw new ApiError(400, 'A verified email address is required on your account to issue a badge.')
+      if (response.status === 404) throw new ApiError(404, 'No credential is available for this record.')
+      if (response.status === 409) throw new ApiError(409, 'The requirements for this badge are not met. Refresh your progress and check that every required badge is current and not revoked.')
+    }
     if (path.startsWith('/pathways')) {
       if (response.status === 409) throw new ApiError(409, 'Earn every prerequisite badge before enrolling. Each badge must be current and not revoked.')
       if (response.status === 400) throw new ApiError(400, 'Enter a name and description. Choose 1–50 completion badges and up to 50 different prerequisites, with no overlap.')

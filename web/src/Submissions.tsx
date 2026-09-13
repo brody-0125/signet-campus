@@ -50,6 +50,6 @@ function ReviewDetails({ item, achievement, reviewer, onClose, onEdit }: { item:
       <div className="form-actions"><button className="button outline" disabled={!reason.trim() || mutation.isPending} onClick={() => mutation.mutate('reject')}>Request changes</button><button className="button primary" disabled={mutation.isPending} onClick={() => mutation.mutate('approve')}>{mutation.isPending ? 'Saving…' : 'Approve evidence'}</button></div>
     </>}
     {!reviewer && item.submission.status === 'REJECTED' && <button className="button primary" onClick={onEdit}>Update evidence</button>}
-    {!reviewer && item.submission.status === 'APPROVED' && <CredentialActions submissionId={item.submission.id}/>}
+    {!reviewer && item.submission.status === 'APPROVED' && <CredentialActions source={{ type: 'submissions', id: item.submission.id }}/>}
   </Dialog>
 }

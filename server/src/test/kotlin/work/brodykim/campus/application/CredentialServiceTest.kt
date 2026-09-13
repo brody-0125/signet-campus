@@ -26,7 +26,7 @@ class CredentialServiceTest : StringSpec({
         }
         val crypto = object : CredentialCryptography {
             override fun publicProfile() = emptyMap<String, Any>()
-            override fun issue(id: UUID, email: String, achievement: AchievementSummary, at: Instant, until: Instant) = "signed:$id"
+            override fun issue(id: UUID, email: String, achievement: AchievementSummary, at: Instant, until: Instant, pathway: Boolean) = "signed:$id"
             override fun verify(document: String) = document.startsWith("signed:")
             override fun sameDocument(left: String, right: String) = left == right
         }
@@ -62,12 +62,14 @@ class CredentialServiceTest : StringSpec({
 })
 
 private class MemoryCredentials : CredentialRepository {
+    override fun findByPathway(id: UUID, learnerId: UUID): IssuedCredential? = error("Unused")
+    override fun savePathwayIfAbsent(record: IssuedCredential): IssuedCredential = error("Unused")
     val records = mutableMapOf<UUID, IssuedCredential>()
     override fun revokedCredentialIds() = records.values.filter { it.revokedAt != null }.map { it.id.toString() }
     override fun find(id: UUID) = records[id]
     override fun findBySubmission(id: UUID) = records.values.find { it.submissionId == id }
     override fun saveIfAbsent(record: IssuedCredential): IssuedCredential {
-        findBySubmission(record.submissionId)?.let { return it }
+        findBySubmission(requireNotNull(record.submissionId))?.let { return it }
         records[record.id] = record
         return record
     }

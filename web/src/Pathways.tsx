@@ -4,6 +4,7 @@ import { api, ApiError, type Achievement, type Pathway, type PathwayProgress } f
 import { signIn, useSession } from './auth'
 import { Dialog } from './Dialog'
 import { useWorkspace } from './store'
+import { CredentialActions } from './CredentialActions'
 
 function PathwayCard({ pathway, achievements }: { pathway: Pathway; achievements: Achievement[] }) {
   const session = useSession()
@@ -34,6 +35,7 @@ function PathwayCard({ pathway, achievements }: { pathway: Pathway; achievements
       {progress.data === null && <button className="button primary" disabled={enroll.isPending} onClick={() => enroll.mutate()}>{enroll.isPending ? 'Enrolling…' : 'Enroll'}</button>}
       {(progress.data || progress.isError) && <button className="button outline" disabled={progress.isFetching} onClick={() => void progress.refetch()}>Refresh progress</button>}
       {enroll.isError && <p className="error" role="alert">{enroll.error.message}</p>}
+      {progress.data && <CredentialActions source={{ type: 'pathways', id: pathway.id }} canIssue={progress.data.completed}/>}
     </>}
   </article>
 }

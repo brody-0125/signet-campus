@@ -5,23 +5,48 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
-data class IssuedCredential(val id: UUID, val submissionId: UUID, val learnerId: UUID,
+data class IssuedCredential(val id: UUID, val submissionId: UUID?, val learnerId: UUID,
                             val document: String, val issuedAt: Instant, val validUntil: Instant,
-                            val revokedAt: Instant? = null)
+                            val revokedAt: Instant? = null, val pathwayId: UUID? = null)
 data class CredentialVerification(val status: String, val valid: Boolean = status == "VALID")
 
 interface CredentialRepository {
     fun revokedCredentialIds(): List<String>
     fun find(id: UUID): IssuedCredential?
     fun findBySubmission(id: UUID): IssuedCredential?
+    fun findByPathway(id: UUID, learnerId: UUID): IssuedCredential?
+    fun savePathwayIfAbsent(record: IssuedCredential): IssuedCredential
     fun saveIfAbsent(record: IssuedCredential): IssuedCredential
     fun revoke(id: UUID, actorId: UUID, at: Instant): Boolean
 }
 interface CredentialCryptography {
     fun publicProfile(): Map<String, Any>
-    fun issue(id: UUID, email: String, achievement: AchievementSummary, at: Instant, until: Instant): String
+    fun issue(id: UUID, email: String, achievement: AchievementSummary, at: Instant, until: Instant, pathway: Boolean = false): String
     fun verify(document: String): Boolean
     fun sameDocument(left: String, right: String): Boolean
+}
+
+class PathwayCompletionRequired : RuntimeException("Current credentials required for every completion achievement")
+
+class PathwayCredentialService(private val pathways: PathwayRepository, private val repository: CredentialRepository,
+                               private val crypto: CredentialCryptography, private val clock: Clock) {
+    fun get(actor: Actor, id: UUID) = repository.findByPathway(id, actor.id) ?: throw PathwayNotFound()
+
+    fun issue(actor: Actor, id: UUID, email: String): IssuedCredential {
+        require(email.length <= 254 && email.matches(Regex("[^\\s@,;<>]+@[^\\s@,;<>]+")))
+        val pathway = pathways.find(id) ?: throw PathwayNotFound()
+        val progress = pathways.progress(id, actor.id) ?: throw PathwayNotFound()
+        repository.findByPathway(id, actor.id)?.let { return it }
+        if (!progress.completed) throw PathwayCompletionRequired()
+        val at = clock.instant().truncatedTo(ChronoUnit.SECONDS)
+        val until = at.plus(365, ChronoUnit.DAYS)
+        val credentialId = UUID.randomUUID()
+        val criteria = "Enrolled in ${pathway.name} and held a current, non-revoked credential for every required achievement at issuance: " +
+            pathway.achievementIds.joinToString() + ". This award records completion at issuance; later component expiry or revocation does not cancel it."
+        val achievement = AchievementSummary(pathway.id, pathway.name, criteria)
+        return repository.savePathwayIfAbsent(IssuedCredential(credentialId, null, actor.id,
+            crypto.issue(credentialId, email, achievement, at, until, pathway = true), at, until, pathwayId = id))
+    }
 }
 
 class CredentialService(private val submissions: SubmissionRepository, private val repository: CredentialRepository,
