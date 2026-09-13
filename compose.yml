@@ -29,6 +29,8 @@ services:
       DATABASE_PASSWORD: local-campus-only
       OIDC_ISSUER: http://localhost:8081/realms/signet-campus
       OIDC_JWKS: http://identity:8080/realms/signet-campus/protocol/openid-connect/certs
+      SIGNING_KEY_PATH: ${SIGNING_KEY_PATH:-/run/secrets/campus-signing.jwk}
+      VERIFICATION_KEYS: ${VERIFICATION_KEYS:-classpath:empty-jwks.json}
     ports:
       - "127.0.0.1:8080:8080"
     volumes:

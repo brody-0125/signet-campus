@@ -3,6 +3,7 @@ package work.brodykim.campus.adapter.credential
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nimbusds.jose.jwk.Curve
+import com.nimbusds.jose.jwk.JWKSet
 import com.nimbusds.jose.jwk.OctetKeyPair
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
@@ -21,7 +22,8 @@ import java.util.UUID
 @Component
 class SignetCredentials(private val signer: CredentialSigner, private val json: ObjectMapper,
     @Value("\${campus.signing-key}") keyResource: Resource,
-    @Value("\${campus.public-url}") base: String) : CredentialCryptography {
+    @Value("\${campus.public-url}") base: String,
+    @Value("\${campus.verification-keys:classpath:empty-jwks.json}") verificationKeyResource: Resource) : CredentialCryptography {
     private val baseUrl = base.trimEnd('/').also {
         val uri = URI(it)
         require(uri.isAbsolute && uri.host != null && uri.userInfo == null && uri.query == null && uri.fragment == null)
@@ -36,6 +38,14 @@ class SignetCredentials(private val signer: CredentialSigner, private val json: 
     }
     private val issuer = BadgeIssuer(UUID.fromString("bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"), "Signet Campus", base.trimEnd('/'), null, "Campus skills recognition")
     private val keyId = "$baseUrl/issuers/${issuer.id()}#${key.computeThumbprint()}"
+    private val verificationKeys = (listOf(key.toPublicJWK()) + verificationKeyResource.inputStream.use {
+        JWKSet.load(it).keys.map { retained ->
+            require(retained is OctetKeyPair && retained.curve == Curve.Ed25519 && !retained.isPrivate) {
+                "Verification keys must contain only Ed25519 public JWKs"
+            }
+            retained
+        }
+    }).associateBy { "$baseUrl/issuers/${issuer.id()}#${it.computeThumbprint()}" }
     private val mapType = object : TypeReference<Map<String, Any>>() {}
 
     override fun issue(id: UUID, email: String, achievement: AchievementSummary, at: Instant, until: Instant): String {
@@ -51,11 +61,12 @@ class SignetCredentials(private val signer: CredentialSigner, private val json: 
     override fun verify(document: String): Boolean = try {
         val credential = json.readValue(document, mapType)
         val proof = credential["proof"] as? Map<*, *>
+        val verificationKey = verificationKeys[proof?.get("verificationMethod")]
         val embeddedIssuer = credential["issuer"] as? Map<*, *>
         proof?.get("type") == "DataIntegrityProof" && proof["cryptosuite"] == "eddsa-rdfc-2022" &&
-            proof["proofPurpose"] == "assertionMethod" && proof["verificationMethod"] == keyId &&
+            proof["proofPurpose"] == "assertionMethod" && verificationKey != null &&
             embeddedIssuer?.get("id") == "$baseUrl/issuers/${issuer.id()}" &&
-            signer.verifyDataIntegrity(credential, key.toPublicJWK())
+            signer.verifyDataIntegrity(credential, verificationKey)
     } catch (_: Exception) { false }
 
     override fun sameDocument(left: String, right: String): Boolean = try {
@@ -65,8 +76,8 @@ class SignetCredentials(private val signer: CredentialSigner, private val json: 
     override fun publicProfile(): Map<String, Any> = mapOf(
         "@context" to listOf("https://www.w3.org/ns/credentials/v2", "https://w3id.org/security/multikey/v1"),
         "id" to "$baseUrl/issuers/${issuer.id()}",
-        "verificationMethod" to listOf(mapOf("id" to keyId, "type" to "Multikey",
-            "controller" to "$baseUrl/issuers/${issuer.id()}", "publicKeyMultibase" to KeyPairManager.toPublicKeyMultibase(key.toPublicJWK()))),
-        "assertionMethod" to listOf(keyId),
+        "verificationMethod" to verificationKeys.map { (id, publicKey) -> mapOf("id" to id, "type" to "Multikey",
+            "controller" to "$baseUrl/issuers/${issuer.id()}", "publicKeyMultibase" to KeyPairManager.toPublicKeyMultibase(publicKey)) },
+        "assertionMethod" to verificationKeys.keys.toList(),
     )
 }

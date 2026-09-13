@@ -18,6 +18,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - run: node --test dev/prepare-key-rotation.test.mjs
+        working-directory: .
       - run: git diff --exit-code -- public/THIRD_PARTY_NOTICES.txt
   test:
     runs-on: ubuntu-latest

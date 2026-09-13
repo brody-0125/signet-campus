@@ -50,7 +50,30 @@ Compose generates a private Ed25519 JWK once in the `signing-keys` volume and pr
 
 Outside Compose, provide `SIGNING_KEY_PATH` and set `CAMPUS_PUBLIC_URL` to a stable HTTPS web origin. Local HTTP accepts only `localhost` or `127.0.0.1`. Credential and issuer identifiers use that origin's `/api` path.
 
-Back up the database and signing key together using restricted storage. Do not delete the volume or replace the key to rotate it: historical verification currently requires the original key and public origin. Multiple replicas must receive the same securely provisioned key. The cryptography port supports integration with a managed signer; multi-key rotation and a managed-key adapter are not implemented yet.
+Back up the database, active private key and retained public key set using restricted storage. Historical verification requires the original public keys and stable issuer origin, not the old private keys. A managed-key adapter is not implemented yet.
+
+### Signing key rotation
+
+`SIGNING_KEY_PATH` selects the active Ed25519 private JWK. `VERIFICATION_KEYS` selects a Spring resource URI containing a public JWK Set (`{"keys":[...]}`). Its default is an empty bundled set. The server always trusts the active key's public component plus the configured public set. Unknown proof method IDs are rejected without remote retrieval. Private keys, malformed sets and other curves in the public set prevent startup.
+
+The issuer controller publishes all trusted public methods and their `assertionMethod` references. Method IDs use public-key thumbprints, so retaining a public key preserves its method ID. Removing a retired key from the set removes local trust in credentials signed by it; retirement from issuance alone should not remove historical verification trust. A compromised active key must also be replaced. Coordinate incident response and credential revocation separately; this configuration does not undo signatures or already cached external trust decisions.
+
+The preparation utility requires Node 24 and writes a new directory containing a new private JWK and a public set with previous, active and new public keys. It leaves active files unchanged and refuses an existing destination, including a partially written one. Files use mode 0600 and the directory 0700 on POSIX. Run it inside the Compose container for local Linux permissions; protect Windows files with appropriate ACLs if preparing on Windows.
+
+For the initial Compose key, prepare a unique directory:
+
+```sh
+docker compose run --rm -v ./dev/prepare-key-rotation.mjs:/workspace/prepare-key-rotation.mjs:ro key-init node /workspace/prepare-key-rotation.mjs /keys/campus-signing.jwk /keys/rotation-01
+```
+
+For later rotations, pass the current signing file and the existing public set as the third argument. Preserve all historical public keys that must remain trusted. Keep private files out of source control.
+
+Deploy in two stages using your deployment's environment or Compose `.env`:
+
+1. Set `VERIFICATION_KEYS=file:/run/secrets/rotation-01/campus-verification.jwks`, keep the current `SIGNING_KEY_PATH`, and recreate all server replicas. Verify the controller publishes both methods and old credentials still verify. With Compose, use `docker compose up -d server`.
+2. After every replica trusts the new public key, set `SIGNING_KEY_PATH=/run/secrets/rotation-01/campus-signing.jwk` and recreate servers. Verify newly issued credentials use the new method while old credentials still verify. Preserve the combined public set during rollback as well.
+
+These files are loaded at startup. Provision identical public sets to every replica before activating the new signer. Existing signed documents and revocation records are not modified by rotation. Securely archive or destroy retired private material according to the operator's retention policy; the preparation tool does neither automatically.
 
 ## Browser and tests
 
