@@ -13,6 +13,7 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | com.fasterxml.jackson.core:jackson-annotations:2.19.4 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.fasterxml.jackson.core:jackson-core:2.19.4 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.fasterxml.jackson.core:jackson-databind:2.19.4 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
+| com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.19.4 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.19.4 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.4 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.fasterxml.jackson.module:jackson-module-kotlin:2.19.4 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
@@ -39,6 +40,7 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | com.lemonappdev:konsist:0.17.3 | test only | The Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.nimbusds:nimbus-jose-jwt:10.7 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.vaadin.external.google:android-json:0.0.20131108.vaadin1 | test only | Apache License 2.0 [http://www.apache.org/licenses/LICENSE-2.0] |
+| com.zaxxer:HikariCP:6.3.3 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | commons-codec:commons-codec:1.18.0 | runtime | Apache-2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | commons-io:commons-io:2.18.0 | runtime | Apache-2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | io.github.java-diff-utils:java-diff-utils:4.16 | test only | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
@@ -52,6 +54,8 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | io.kotest:kotest-framework-engine-jvm:6.0.4 | test only | Apache-2.0 [https://opensource.org/licenses/Apache-2.0] |
 | io.kotest:kotest-runner-junit5-jvm:6.0.4 | test only | Apache-2.0 [https://opensource.org/licenses/Apache-2.0] |
 | io.micrometer:micrometer-commons:1.15.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.micrometer:micrometer-core:1.15.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.micrometer:micrometer-jakarta9:1.15.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | io.micrometer:micrometer-observation:1.15.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | io.setl:rdf-urdna:1.4 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | jakarta.activation:jakarta.activation-api:2.1.4 | test only | EDL 1.0 [http://www.eclipse.org/org/documents/edl-v10.php] |
@@ -73,6 +77,7 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | org.apache.tomcat.embed:tomcat-embed-websocket:10.1.52 | runtime | Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.assertj:assertj-core:3.27.7 | test only | Apache-2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.awaitility:awaitility:4.2.2 | test only | Apache 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| org.checkerframework:checker-qual:3.52.0 | runtime | The MIT License [http://opensource.org/licenses/MIT] |
 | org.eclipse.parsson:parsson:1.1.7 | runtime | Eclipse Public License 2.0 [https://projects.eclipse.org/license/epl-2.0]; GNU General Public License, version 2 with the GNU Classpath Exception [https://projects.eclipse.org/license/secondary-gpl-2.0-cp] |
 | org.eclipse.rdf4j:rdf4j-common-annotation:5.2.2 | runtime | Eclipse Distribution License v1.0 [https://eclipse.org/org/documents/edl-v10.php] |
 | org.eclipse.rdf4j:rdf4j-common-exception:5.2.2 | runtime | Eclipse Distribution License v1.0 [https://eclipse.org/org/documents/edl-v10.php] |
@@ -89,7 +94,10 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | org.eclipse.rdf4j:rdf4j-rio-languages:5.2.2 | runtime | Eclipse Distribution License v1.0 [https://eclipse.org/org/documents/edl-v10.php] |
 | org.eclipse.rdf4j:rdf4j-rio-nquads:5.2.2 | runtime | Eclipse Distribution License v1.0 [https://eclipse.org/org/documents/edl-v10.php] |
 | org.eclipse.rdf4j:rdf4j-rio-ntriples:5.2.2 | runtime | Eclipse Distribution License v1.0 [https://eclipse.org/org/documents/edl-v10.php] |
+| org.flywaydb:flyway-core:11.7.2 | runtime | Apache License, Version 2.0 [https://flywaydb.org/licenses/flyway-oss] |
+| org.flywaydb:flyway-database-postgresql:11.7.2 | runtime | Apache License, Version 2.0 [https://flywaydb.org/licenses/flyway-oss] |
 | org.hamcrest:hamcrest:3.0 | test only | BSD-3-Clause [https://raw.githubusercontent.com/hamcrest/JavaHamcrest/master/LICENSE] |
+| org.hdrhistogram:HdrHistogram:2.2.2 | runtime | Public Domain, per Creative Commons CC0 [http://creativecommons.org/publicdomain/zero/1.0/]; BSD-2-Clause [https://opensource.org/licenses/BSD-2-Clause] |
 | org.hibernate.validator:hibernate-validator:8.0.3.Final | runtime | Apache License 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.jboss.logging:jboss-logging:3.6.2.Final | runtime | Apache License 2.0 [https://repository.jboss.org/licenses/apache-2.0.txt] |
 | org.jetbrains.kotlin:kotlin-compiler-embeddable:2.2.21 | test only | Apache-2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
@@ -116,17 +124,24 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | org.junit.platform:junit-platform-engine:1.12.2 | test only | Eclipse Public License v2.0 [https://www.eclipse.org/legal/epl-v20.html] |
 | org.junit.platform:junit-platform-launcher:1.12.2 | test only | Eclipse Public License v2.0 [https://www.eclipse.org/legal/epl-v20.html] |
 | org.junit.platform:junit-platform-suite-api:1.12.2 | test only | Eclipse Public License v2.0 [https://www.eclipse.org/legal/epl-v20.html] |
+| org.latencyutils:LatencyUtils:2.0.3 | runtime | Public Domain, per Creative Commons CC0 [http://creativecommons.org/publicdomain/zero/1.0/] |
 | org.mockito:mockito-core:5.17.0 | test only | MIT [https://opensource.org/licenses/MIT] |
 | org.mockito:mockito-junit-jupiter:5.17.0 | test only | MIT [https://opensource.org/licenses/MIT] |
 | org.objenesis:objenesis:3.3 | test only | Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.opentest4j:opentest4j:1.3.0 | test only | The Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.ow2.asm:asm:9.7.1 | test only | BSD-3-Clause [https://asm.ow2.io/license.html] |
+| org.postgresql:postgresql:42.7.10 | runtime | BSD-2-Clause [https://jdbc.postgresql.org/about/license.html] |
 | org.skyscreamer:jsonassert:1.5.3 | test only | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.slf4j:jul-to-slf4j:2.0.17 | runtime | MIT [https://opensource.org/license/mit] |
 | org.slf4j:slf4j-api:2.0.17 | runtime | MIT [https://opensource.org/license/mit] |
+| org.springframework.boot:spring-boot-actuator-autoconfigure:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.boot:spring-boot-actuator:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework.boot:spring-boot-autoconfigure:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.boot:spring-boot-starter-actuator:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.boot:spring-boot-starter-jdbc:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework.boot:spring-boot-starter-json:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework.boot:spring-boot-starter-logging:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework.boot:spring-boot-starter-test:3.5.11 | test only | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework.boot:spring-boot-starter-tomcat:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework.boot:spring-boot-starter-validation:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
@@ -135,13 +150,23 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | org.springframework.boot:spring-boot-test-autoconfigure:3.5.11 | test only | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework.boot:spring-boot-test:3.5.11 | test only | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework.boot:spring-boot:3.5.11 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.security:spring-security-config:6.5.8 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.security:spring-security-core:6.5.8 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.security:spring-security-crypto:6.5.8 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.security:spring-security-oauth2-core:6.5.8 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.security:spring-security-oauth2-jose:6.5.8 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.security:spring-security-oauth2-resource-server:6.5.8 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.security:spring-security-test:6.5.8 | test only | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework.security:spring-security-web:6.5.8 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework:spring-aop:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework:spring-beans:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework:spring-context:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework:spring-core:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework:spring-expression:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework:spring-jcl:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework:spring-jdbc:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework:spring-test:6.2.16 | test only | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
+| org.springframework:spring-tx:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework:spring-web:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.springframework:spring-webmvc:6.2.16 | runtime | Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | org.xmlunit:xmlunit-core:2.10.4 | test only | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |

@@ -1,0 +1,75 @@
+name: signet-campus
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: campus
+      POSTGRES_USER: campus
+      POSTGRES_PASSWORD: local-campus-only
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - campus-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U campus -d campus"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  server:
+    build: ./server
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/campus
+      DATABASE_USER: campus
+      DATABASE_PASSWORD: local-campus-only
+      OIDC_ISSUER: http://localhost:8081/realms/signet-campus
+      OIDC_JWKS: http://identity:8080/realms/signet-campus/protocol/openid-connect/certs
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+      identity:
+        condition: service_started
+  identity:
+    image: quay.io/keycloak/keycloak:26.3.3
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_HOSTNAME: http://localhost:8081
+    ports:
+      - "127.0.0.1:8081:8080"
+    volumes:
+      - ./dev/realm.json:/opt/keycloak/data/import/realm.json:ro
+      - identity-data:/opt/keycloak/data
+  tests:
+    image: eclipse-temurin:17-jdk
+    profiles: [test]
+    working_dir: /workspace/server
+    volumes:
+      - .:/workspace
+      - gradle-cache:/root/.gradle
+    environment:
+      DATABASE_URL: jdbc:postgresql://test-db:5432/campus_test
+      DATABASE_USER: campus
+      DATABASE_PASSWORD: local-campus-only
+    command: ["sh", "./gradlew", "check", "postgresTest", "koverXmlReport", "--no-daemon"]
+    depends_on:
+      test-db:
+        condition: service_healthy
+  test-db:
+    image: postgres:17-alpine
+    profiles: [test]
+    environment:
+      POSTGRES_DB: campus_test
+      POSTGRES_USER: campus
+      POSTGRES_PASSWORD: local-campus-only
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U campus -d campus_test"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+volumes:
+  campus-db:
+  identity-data:
+  gradle-cache:

@@ -1,0 +1,28 @@
+{
+  "realm": "signet-campus",
+  "enabled": true,
+  "roles": {"realm": [{"name": "reviewer"}]},
+  "clients": [{
+    "clientId": "campus-dev",
+    "publicClient": true,
+    "directAccessGrantsEnabled": true,
+    "standardFlowEnabled": true,
+    "redirectUris": ["http://localhost:5173/*"],
+    "webOrigins": ["http://localhost:5173"],
+    "protocolMappers": [{
+      "name": "campus-audience",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "config": {"included.custom.audience": "signet-campus", "access.token.claim": "true"}
+    }]
+  }],
+  "users": [
+    {"id":"11111111-1111-4111-8111-111111111111", "username":"learner", "enabled":true,
+      "email":"learner@example.test", "emailVerified":true, "firstName":"Demo", "lastName":"Learner",
+      "credentials":[{"type":"password","value":"local-learner-only","temporary":false}]},
+    {"id":"22222222-2222-4222-8222-222222222222", "username":"reviewer", "enabled":true,
+      "email":"reviewer@example.test", "emailVerified":true, "firstName":"Demo", "lastName":"Reviewer",
+      "realmRoles":["reviewer"],
+      "credentials":[{"type":"password","value":"local-reviewer-only","temporary":false}]}
+  ]
+}

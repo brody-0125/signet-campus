@@ -45,6 +45,29 @@ class EvidenceSubmission private constructor(
     }
 
     companion object {
+        fun restore(id: UUID, learnerId: UUID, achievementId: UUID, evidence: String, submittedAt: Instant,
+                    status: ReviewStatus, review: Review?, revision: Int): EvidenceSubmission {
+            require(revision >= 0) { "Revision must be non-negative" }
+            val pending = submit(id, learnerId, achievementId, evidence, submittedAt)
+            val restored = when (status) {
+                ReviewStatus.PENDING -> {
+                    require(review == null) { "Pending submissions cannot have a review" }
+                    pending
+                }
+                ReviewStatus.APPROVED -> {
+                    requireNotNull(review) { "Approved submissions require a review" }
+                    require(review.reason == null) { "Approval cannot have a rejection reason" }
+                    pending.approve(review.reviewerId, review.reviewedAt)
+                }
+                ReviewStatus.REJECTED -> {
+                    requireNotNull(review) { "Rejected submissions require a review" }
+                    pending.reject(review.reviewerId, review.reviewedAt, requireNotNull(review.reason))
+                }
+            }
+            return EvidenceSubmission(id, learnerId, achievementId, restored.evidence, submittedAt,
+                status, restored.review, revision)
+        }
+
         fun submit(id: UUID, learnerId: UUID, achievementId: UUID, evidence: String, at: Instant) =
             EvidenceSubmission(id, learnerId, achievementId, validatedText(evidence, 4000, "Evidence"),
                 at, ReviewStatus.PENDING, null, 0)
