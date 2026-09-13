@@ -1,7 +1,7 @@
 import { accessToken } from './auth'
 
 export type Achievement = { id: string; name: string; criteria: string; version: number }
-export type Pathway = { id: string; name: string; description: string; achievementIds: string[] }
+export type Pathway = { id: string; name: string; description: string; achievementIds: string[]; prerequisiteAchievementIds?: string[] }
 export type PathwayProgress = { pathwayId: string; enrolledAt: string; earned: number; total: number; completed: boolean; requirements: { achievementId: string; earned: boolean }[] }
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message) }
@@ -24,7 +24,8 @@ export async function api<T>(path: string, body?: unknown, signal?: AbortSignal)
   })
   if (!response.ok) {
     if (path.startsWith('/pathways')) {
-      if (response.status === 400) throw new ApiError(400, 'Enter a name, description and between 1 and 50 different achievements.')
+      if (response.status === 409) throw new ApiError(409, 'Earn every prerequisite badge before enrolling. Each badge must be current and not revoked.')
+      if (response.status === 400) throw new ApiError(400, 'Enter a name and description. Choose 1–50 completion badges and up to 50 different prerequisites, with no overlap.')
       if (response.status === 404) throw new ApiError(404, 'This pathway or enrollment is not available.')
     }
     if (path.startsWith('/achievements')) {

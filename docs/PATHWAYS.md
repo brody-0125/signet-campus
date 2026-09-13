@@ -1,12 +1,20 @@
 # Learning pathways
 
-Pathways group achievements into a learning objective. Reviewers publish a name, description and 1–50 different required achievements in **Pathways → Create pathway**. Learners can inspect the requirements, enroll and open each achievement's criteria to submit evidence.
+Pathways group achievements into a learning objective. Reviewers publish a name, description and 1–50 different required achievements in **Pathways → Create pathway**. They may also select up to 50 prerequisite achievements for enrollment. Learners can inspect both sets of criteria, earn prerequisite badges, enroll and work toward the completion requirements.
 
 Every required achievement must have at least one current credential issued to the enrolled learner. Pending, rejected or approved-but-unissued submissions do not count. Multiple credentials for the same achievement count once. Credentials earned before enrollment count while they remain current. The server calculates progress from its issuance registry on every request; revoked, expired and future-dated records are excluded. **Refresh progress** updates the browser after issuance or revocation elsewhere.
 
 Completion describes current holdings, not a permanent award. It can return to incomplete after expiry or revocation. This view does not independently re-verify signatures or accept imported credentials. Use the credential verification endpoint to check a document's proof.
 
-Published pathway membership is immutable. Create a new pathway when the set of required achievements changes. Achievement criteria follow the [catalog policy](CATALOG.md), including freezing on first submission. Requirements may be pursued in any order. [Enrollment emails](NOTIFICATIONS.md) are queued for verified account addresses and captured by local Mailpit. Ordered prerequisites, withdrawal and a separate completion credential are not implemented yet.
+Published pathway membership is immutable. Create a new pathway when its requirements or prerequisites change. Achievement criteria follow the [catalog policy](CATALOG.md), including freezing on first submission. Completion requirements may be pursued in any order. [Enrollment emails](NOTIFICATIONS.md) are queued for verified account addresses and captured by local Mailpit. Ordered steps within a pathway, withdrawal and a separate completion credential are not implemented yet.
+
+## Enrollment prerequisites
+
+Prerequisites are an entry condition, separate from completion requirements. The two sets cannot overlap. First enrollment requires at least one current, non-revoked credential for each prerequisite, belonging to the authenticated learner. Approval without issuance is insufficient. Expired, future-dated and revoked credentials do not qualify. Imported credentials are not considered.
+
+The enrollment INSERT evaluates eligibility using one database statement snapshot and timestamp. If any prerequisite is missing, the API returns 409 and creates neither an enrollment nor an email event. A revocation committed after that snapshot does not retroactively undo enrollment. Existing registrations remain valid when prerequisites later expire or are revoked; repeat enrollment requests return the same registration. Completion is still calculated only from current completion badges.
+
+Existing pathways and requests that omit `prerequisiteAchievementIds` have no prerequisites. Prerequisite changes require a new pathway ID. This policy defines entry requirements, not a global restriction on submitting evidence for individual achievements.
 
 ## API
 
@@ -14,11 +22,11 @@ Published pathway membership is immutable. Create a new pathway when the set of 
 |---|---|---|
 | GET | `/api/pathways` | Public catalog |
 | GET | `/api/pathways/{id}` | Public pathway, including ordered `achievementIds` |
-| POST | `/api/pathways` | Reviewer; `name`, `description`, `achievementIds`; returns 201 and Location |
+| POST | `/api/pathways` | Reviewer; `name`, `description`, `achievementIds`, optional `prerequisiteAchievementIds`; returns 201 and Location |
 | POST | `/api/pathways/{id}/enrollment` | Signed-in learner; idempotent enrollment; returns progress |
 | GET | `/api/pathways/{id}/progress` | Signed-in learner's own progress; 404 if not enrolled |
 
-Names and descriptions are trimmed and limited to 120 and 5,000 characters. Empty, duplicate or unknown requirements return 400 and the creation transaction rolls back. Missing authentication returns 401; authoring without reviewer permission returns 403. Unknown pathways return 404.
+Names and descriptions are trimmed and limited to 120 and 5,000 characters. Empty completion sets, duplicate/unknown IDs, excessive sets or overlap between prerequisites and completion requirements return 400 and the creation transaction rolls back. Missing authentication returns 401; authoring without reviewer permission returns 403. Unknown pathways return 404; unmet enrollment prerequisites return 409. Public pathway responses include both `achievementIds` and `prerequisiteAchievementIds`.
 
 Progress returns `pathwayId`, `enrolledAt`, `requirements` (achievement ID and earned flag), `earned`, `total` and `completed`. Enrollment and progress responses use `Cache-Control: no-store`. The learner identity comes from the bearer token; callers cannot select another learner. Public catalog responses contain no enrollment or learner data.
 

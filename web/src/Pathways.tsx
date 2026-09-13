@@ -17,6 +17,11 @@ function PathwayCard({ pathway, achievements }: { pathway: Pathway; achievements
     onSuccess: value => client.setQueryData(queryKey, value) })
   return <article className="pathway-card">
     <h2>{pathway.name}</h2><p>{pathway.description}</p>
+    {!!pathway.prerequisiteAchievementIds?.length && <div className="criteria"><h3>Before you enroll</h3>
+      <p className="field-help">Earn these badges first. They must be current when you enroll.</p>
+      <ul>{pathway.prerequisiteAchievementIds.map(id => <li key={id}><button className="nav-link" onClick={() => useWorkspace.setState({ selectedId: id })}>{achievements.find(a => a.id === id)?.name || 'Achievement'}</button></li>)}</ul>
+    </div>}
+    <h3>To complete this pathway</h3>
     <ul>{pathway.achievementIds.map(id => <li key={id}>
       <button className="nav-link" onClick={() => useWorkspace.setState({ selectedId: id })}>{achievements.find(a => a.id === id)?.name || 'Achievement'}</button>
       {progress.data?.requirements.find(r => r.achievementId === id)?.earned && <span className="badge-status">Earned</span>}
@@ -37,17 +42,22 @@ function PathwayForm({ achievements, onClose }: { achievements: Achievement[]; o
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [ids, setIds] = useState<string[]>([])
+  const [prerequisites, setPrerequisites] = useState<string[]>([])
   const client = useQueryClient()
-  const save = useMutation({ mutationFn: () => api<Pathway>('/pathways', { name: name.trim(), description: description.trim(), achievementIds: ids }),
+  const save = useMutation({ mutationFn: () => api<Pathway>('/pathways', { name: name.trim(), description: description.trim(), achievementIds: ids, prerequisiteAchievementIds: prerequisites }),
     onSuccess: () => { void client.invalidateQueries({ queryKey: ['pathways'] }); onClose() } })
   function submit(event: FormEvent) { event.preventDefault(); save.mutate() }
   return <Dialog title="Create pathway" onClose={onClose}><form onSubmit={submit}>
-    <p className="field-help">Every selected achievement is required. Published requirements cannot be changed; create a new pathway for a different set.</p>
+    <p className="field-help">Choose completion badges and optional enrollment prerequisites. Published requirements cannot be changed; create a new pathway for a different set.</p>
     <label htmlFor="pathway-name">Pathway name</label><input id="pathway-name" required maxLength={120} value={name} onChange={e => setName(e.target.value)}/>
     <label htmlFor="pathway-description">Description</label><textarea id="pathway-description" required maxLength={5000} value={description} onChange={e => setDescription(e.target.value)}/>
     <fieldset className="pathway-choices"><legend>Required achievements (1–50)</legend>{achievements.map(a => <label key={a.id}>
-      <input type="checkbox" checked={ids.includes(a.id)} disabled={ids.length >= 50 && !ids.includes(a.id)} onChange={e => setIds(e.target.checked ? [...ids, a.id] : ids.filter(id => id !== a.id))}/>{a.name}
+      <input type="checkbox" checked={ids.includes(a.id)} disabled={prerequisites.includes(a.id) || (ids.length >= 50 && !ids.includes(a.id))} onChange={e => setIds(e.target.checked ? [...ids, a.id] : ids.filter(id => id !== a.id))}/>{a.name}
     </label>)}</fieldset>
+    <fieldset className="pathway-choices"><legend>Before enrollment (optional, up to 50)</legend>
+      <p className="field-help">Choose prerequisite badges. They cannot also be completion requirements.</p>
+      {achievements.map(a => <label key={a.id}><input type="checkbox" aria-label={`Prerequisite: ${a.name}`} checked={prerequisites.includes(a.id)} disabled={ids.includes(a.id) || (prerequisites.length >= 50 && !prerequisites.includes(a.id))} onChange={e => setPrerequisites(e.target.checked ? [...prerequisites, a.id] : prerequisites.filter(id => id !== a.id))}/>{a.name}</label>)}
+    </fieldset>
     {save.isError && <p className="error" role="alert">{save.error.message}</p>}
     <div className="form-actions"><button type="button" className="button outline" onClick={onClose}>Cancel</button>
       <button className="button primary" disabled={save.isPending || !name.trim() || !description.trim() || ids.length === 0}>{save.isPending ? 'Saving…' : 'Publish pathway'}</button></div>

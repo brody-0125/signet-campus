@@ -32,7 +32,7 @@ if (process.argv[2]) {
   assert.equal(list.revokedCredentials.some(entry => entry.id === credential.id && entry.revoked === true), verification.status === 'REVOKED');
   console.log(`Persisted approval verified: ${record.submission.id}`);
 } else {
-  await request('/api/achievements', null);
+  const catalog = await request('/api/achievements', null);
   await request('/api/submissions', null, undefined, 401);
   await request('/api/achievements', `${learner}corrupted`, undefined, 401);
   await request('/api/achievements', learner, { name: 'Unauthorized', criteria: 'Audit' }, 403);
@@ -54,6 +54,10 @@ if (process.argv[2]) {
   assert.equal(enrollment.completed, false);
   await request(progressPath, reviewer, undefined, 404);
   const path = `/api/submissions/${record.submission.id}`;
+  const gatedInput = { name: 'Advanced accessibility (smoke)', description: 'Build on an existing keyboard audit badge',
+    achievementIds: [catalog[0].id], prerequisiteAchievementIds: [achievement.id] };
+  const gatedPath = await request('/api/pathways', reviewer, gatedInput, 201);
+  await request(`/api/pathways/${gatedPath.id}/enrollment`, learner, {}, 409);
   await request(`/api/achievements/${achievement.id}`, reviewer, {
     name: achievement.name, criteria: 'Different criteria', expectedVersion: achievement.version,
   }, 409);
@@ -62,6 +66,7 @@ if (process.argv[2]) {
   assert.equal(approved.submission.status, 'APPROVED');
   const credential = await request(`${path}/credential`, learner, {});
   assert.equal(credential.credentialSubject.achievement.criteria.narrative, achievement.criteria);
+  const gatedEnrollment = await request(`/api/pathways/${gatedPath.id}/enrollment`, learner, {});
   assert.equal((await request(progressPath, learner)).completed, true);
   if (process.env.CAMPUS_EXPECTED_KEY_ID) assert.equal(credential.proof.verificationMethod, process.env.CAMPUS_EXPECTED_KEY_ID);
   assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
@@ -75,6 +80,9 @@ if (process.argv[2]) {
   await request(credentialPath, null, undefined, 401);
   await request(`${credentialPath}/revoke`, learner, {}, 403);
   await request(`${credentialPath}/revoke`, reviewer, {}, 204);
+  assert.deepEqual(await request(`/api/pathways/${gatedPath.id}/enrollment`, learner, {}), gatedEnrollment);
+  const blockedPath = await request('/api/pathways', reviewer, gatedInput, 201);
+  await request(`/api/pathways/${blockedPath.id}/enrollment`, learner, {}, 409);
   assert.equal((await request(progressPath, learner)).completed, false);
   assert.equal((await request(`${credentialPath}/verify`, null, credential)).status, 'REVOKED');
   const after = await request('/api/revocations', null);
