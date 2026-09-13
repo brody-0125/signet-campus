@@ -46,7 +46,7 @@ See [Testing](docs/TESTING.md) for covered behaviors, report locations and depen
 | Kotlin | 2.2.21 |
 | Spring Boot | 3.5.11 |
 | Gradle | 8.14.3 |
-| Signet Spring Boot starter | `v0.1.0` |
+| Signet Spring Boot starter | `v0.1.1` |
 | Kotest | 6.0.4 |
 | Konsist | 0.17.3 |
 | Kover | 0.9.3 |
