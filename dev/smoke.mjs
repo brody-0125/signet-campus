@@ -35,15 +35,23 @@ if (process.argv[2]) {
   await request('/api/achievements', null);
   await request('/api/submissions', null, undefined, 401);
   await request('/api/achievements', `${learner}corrupted`, undefined, 401);
-  const [achievement] = await request('/api/achievements', learner);
+  await request('/api/achievements', learner, { name: 'Unauthorized', criteria: 'Audit' }, 403);
+  const authored = await request('/api/achievements', reviewer, { name: 'Keyboard audit (smoke)', criteria: 'Audit focus order' }, 201);
+  const achievement = await request(`/api/achievements/${authored.id}`, reviewer, {
+    name: authored.name, criteria: 'Audit focus order and keyboard operation', expectedVersion: authored.version,
+  });
   const record = await request('/api/submissions', learner, {
     achievementId: achievement.id, evidence: 'Synthetic keyboard navigation audit',
   }, 201);
   const path = `/api/submissions/${record.submission.id}`;
+  await request(`/api/achievements/${achievement.id}`, reviewer, {
+    name: achievement.name, criteria: 'Different criteria', expectedVersion: achievement.version,
+  }, 409);
   await request(`${path}/approve`, learner, { expectedVersion: 0 }, 403);
   const approved = await request(`${path}/approve`, reviewer, { expectedVersion: 0 });
   assert.equal(approved.submission.status, 'APPROVED');
   const credential = await request(`${path}/credential`, learner, {});
+  assert.equal(credential.credentialSubject.achievement.criteria.narrative, achievement.criteria);
   if (process.env.CAMPUS_EXPECTED_KEY_ID) assert.equal(credential.proof.verificationMethod, process.env.CAMPUS_EXPECTED_KEY_ID);
   assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
   const credentialPath = `/api/credentials/${credential.id.split('/').pop()}`;

@@ -22,7 +22,7 @@ class ApiSecurity {
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         .authorizeHttpRequests {
             it.requestMatchers("/actuator/health/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/achievements").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/achievements", "/api/achievements/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/revocations").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/issuers/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/credentials/*/verify").permitAll()

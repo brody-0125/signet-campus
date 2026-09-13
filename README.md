@@ -14,6 +14,8 @@ For an isolated deployment with HTTPS login, issuance and public revocation chec
 
 ## Credential integration
 
+Reviewers can [create and edit achievements](docs/CATALOG.md) from Explore. Criteria become immutable after the first evidence submission to preserve the basis of assessment and issuance.
+
 The Kotlin server module integrates the published Signet Spring Boot starter. Its contract test builds a credential, signs it with an Ed25519 Data Integrity proof, verifies the signature, and checks rejection of modified credentials and unrelated public keys.
 
 ## Requirements
