@@ -21,8 +21,8 @@ test('running HTTP and HTTPS proxies follow changed Docker addresses and preserv
   const names = [];
   const run = (suffix, ...args) => {
     const name = `${prefix}-${suffix}`;
-    docker('run', '-d', '--name', name, '--network', prefix, ...args);
     names.push(name);
+    docker('run', '-d', '--name', name, '--network', prefix, ...args);
     return name;
   };
   const inspect = name => JSON.parse(docker('inspect', name))[0];
@@ -57,6 +57,10 @@ test('running HTTP and HTTPS proxies follow changed Docker addresses and preserv
   };
   try {
     docker('network', 'create', prefix);
+    const subnet = JSON.parse(docker('network', 'inspect', prefix))[0].IPAM.Config[0].Subnet;
+    docker('network', 'rm', prefix);
+    // Explicit IP reservation requires a user-configured subnet on Linux Docker engines.
+    docker('network', 'create', '--subnet', subnet, prefix);
     docker('volume', 'create', volume);
     docker('run', '--rm', '--mount', `type=volume,src=${volume},dst=/certs`, '--mount', `type=bind,src=${root}dev/generate-tls-certificate.sh,dst=/generate.sh,readonly`,
       'eclipse-temurin:17-jdk', 'sh', '/generate.sh');
