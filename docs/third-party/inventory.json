@@ -105,6 +105,19 @@
         ]
     },
     {
+        "coordinate": "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.19.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "e6cbf9e55275ed5765b30bc06cf5b1f245047500060de361a01f60ca5a01ccfb",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "jackson-dataformat-toml-2.19.4.pom"
+        ]
+    },
+    {
         "coordinate": "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.19.4",
         "scopes": [
             "runtimeClasspath",
@@ -393,6 +406,17 @@
         ]
     },
     {
+        "coordinate": "com.zaxxer:HikariCP:6.3.3",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "709f378c05756280939ce50fc1b1f1a53bb8e1899dc1b249f21f12703640b48b",
+        "evidence": [
+            "HikariCP-6.3.3.pom"
+        ]
+    },
+    {
         "coordinate": "commons-codec:commons-codec:1.18.0",
         "scopes": [
             "runtimeClasspath",
@@ -531,6 +555,32 @@
             "META-INF__LICENSE",
             "META-INF__NOTICE",
             "micrometer-commons-1.15.9.pom"
+        ]
+    },
+    {
+        "coordinate": "io.micrometer:micrometer-core:1.15.9",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "53f35fc706ab2d487897d786c05c797148401ba8ed3ffc50c9790c04fa678552",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "micrometer-core-1.15.9.pom"
+        ]
+    },
+    {
+        "coordinate": "io.micrometer:micrometer-jakarta9:1.15.9",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "1db72d0b954b745c9ecdec89adf24049a6de40a7f21438b4edafbfcab31839d0",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "micrometer-jakarta9-1.15.9.pom"
         ]
     },
     {
@@ -782,6 +832,18 @@
         ]
     },
     {
+        "coordinate": "org.checkerframework:checker-qual:3.52.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "0b5bb1a4bdc4e4b1217482fe598efcaab4e1fba7b37f9412639178fc8116fc05",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "checker-qual-3.52.0.pom"
+        ]
+    },
+    {
         "coordinate": "org.eclipse.parsson:parsson:1.1.7",
         "scopes": [
             "runtimeClasspath",
@@ -960,6 +1022,29 @@
         ]
     },
     {
+        "coordinate": "org.flywaydb:flyway-core:11.7.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ff01fab3bcfd79e9345df191ecf82cbe1f9f65a757266158bd691564b1c1282c",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "flyway-core-11.7.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.flywaydb:flyway-database-postgresql:11.7.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "1d586e14ea772c75613df2c27ddc20f5c065e8a32283815338611af82e48f9a2",
+        "evidence": [
+            "flyway-database-postgresql-11.7.2.pom"
+        ]
+    },
+    {
         "coordinate": "org.hamcrest:hamcrest:3.0",
         "scopes": [
             "testRuntimeClasspath"
@@ -968,6 +1053,18 @@
         "evidence": [
             "META-INF__LICENSE",
             "hamcrest-3.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.hdrhistogram:HdrHistogram:2.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "22d1d4316c4ec13a68b559e98c8256d69071593731da96136640f864fa14fad8",
+        "evidence": [
+            "HdrHistogram-2.2.2.pom",
+            "META-INF__LICENSE.txt"
         ]
     },
     {
@@ -1245,6 +1342,17 @@
         ]
     },
     {
+        "coordinate": "org.latencyutils:LatencyUtils:2.0.3",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a32a9ffa06b2f4e01c5360f8f9df7bc5d9454a5d373cd8f361347fa5a57165ec",
+        "evidence": [
+            "LatencyUtils-2.0.3.pom"
+        ]
+    },
+    {
         "coordinate": "org.mockito:mockito-core:5.17.0",
         "scopes": [
             "testRuntimeClasspath"
@@ -1301,6 +1409,22 @@
         ]
     },
     {
+        "coordinate": "org.postgresql:postgresql:42.7.10",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "cab1cd67cfa25c25de4348e532298028288a877ba01c77d1619fe45416193387",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__licenses__com.ongres.scram__scram-client-3.2__META-INF__LICENSE",
+            "META-INF__licenses__com.ongres.scram__scram-common-3.2__META-INF__LICENSE",
+            "META-INF__licenses__com.ongres.stringprep__saslprep-2.2__META-INF__LICENSE",
+            "META-INF__licenses__com.ongres.stringprep__stringprep-2.2__META-INF__LICENSE",
+            "postgresql-42.7.10.pom"
+        ]
+    },
+    {
         "coordinate": "org.skyscreamer:jsonassert:1.5.3",
         "scopes": [
             "testRuntimeClasspath"
@@ -1335,6 +1459,32 @@
         ]
     },
     {
+        "coordinate": "org.springframework.boot:spring-boot-actuator-autoconfigure:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "7a30bd6c75553553e4e724f519d1e18bee6072da509ef0ebe70e20e469f9891c",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-actuator-autoconfigure-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-actuator:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "f59b2fe37b663fc17d33c0bd093b366c857392851d24be16323b3b7626ff28ab",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-actuator-3.5.11.pom"
+        ]
+    },
+    {
         "coordinate": "org.springframework.boot:spring-boot-autoconfigure:3.5.11",
         "scopes": [
             "runtimeClasspath",
@@ -1345,6 +1495,32 @@
             "META-INF__LICENSE.txt",
             "META-INF__NOTICE.txt",
             "spring-boot-autoconfigure-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter-actuator:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "16d0ccff9381ff0a7dc100da05e4b346e944edfa218fd13e4e85b61df5acbfdc",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-actuator-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter-jdbc:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "035ca5c231fa1eac9aec16415052b62a33f083a64ff9d0786cacec55de547f65",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-jdbc-3.5.11.pom"
         ]
     },
     {
@@ -1371,6 +1547,19 @@
             "META-INF__LICENSE.txt",
             "META-INF__NOTICE.txt",
             "spring-boot-starter-logging-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "574f4aeed854d4341ad85ede4e974a7cb4f55bc2cb8ff2335b983c910736b492",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-oauth2-resource-server-3.5.11.pom"
         ]
     },
     {
@@ -1475,6 +1664,101 @@
         ]
     },
     {
+        "coordinate": "org.springframework.security:spring-security-config:6.5.8",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b1f8db93ceb03d1a1b5f1b031ae3823229129489df249f056ae95113725367cf",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "spring-security-config-6.5.8.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.security:spring-security-core:6.5.8",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "6688f618719a04a4ba0b28b3a6fc93a96d02726975881ccc0fbd7f4463ad370e",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "spring-security-core-6.5.8.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.security:spring-security-crypto:6.5.8",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "3b326b378a8d89d00c547a89fa98036be47ce889da1757b928fda208fb1a96a7",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "spring-security-crypto-6.5.8.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.security:spring-security-oauth2-core:6.5.8",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "4b0a38b463deb6e597bf3b06cfc959703f5a14ad97b146bbda142ba6fa1a860e",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "spring-security-oauth2-core-6.5.8.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.security:spring-security-oauth2-jose:6.5.8",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "04b59086d2686250aee3603f8b9d56220e654ab614f7ffe13b0a71c16a9c1177",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "spring-security-oauth2-jose-6.5.8.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.security:spring-security-oauth2-resource-server:6.5.8",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "f81495623c32cf6b3bb7e6a9ba078298d3a4961272fc3b47c42157b2a8acaf52",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "spring-security-oauth2-resource-server-6.5.8.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.security:spring-security-test:6.5.8",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "7677278d23ce4c0a052ff54a1ecb94e8268cb2593c5225dcaac51068a838a8a2",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "spring-security-test-6.5.8.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.security:spring-security-web:6.5.8",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a7c3f6732d0395a1372c6b3d16ee2a68326cf036f7d1039d01223ddb41c8433a",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "spring-security-web-6.5.8.pom"
+        ]
+    },
+    {
         "coordinate": "org.springframework:spring-aop:6.2.16",
         "scopes": [
             "runtimeClasspath",
@@ -1553,6 +1837,19 @@
         ]
     },
     {
+        "coordinate": "org.springframework:spring-jdbc:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "f3d725b6bb286087c19ef679c9a8b7abccf6a6ef12bd004765117805dc698676",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-jdbc-6.2.16.pom"
+        ]
+    },
+    {
         "coordinate": "org.springframework:spring-test:6.2.16",
         "scopes": [
             "testRuntimeClasspath"
@@ -1562,6 +1859,19 @@
             "META-INF__license.txt",
             "META-INF__notice.txt",
             "spring-test-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-tx:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "af5bc791d25429fd30874994b40b9a237f66600cc56f930fa970c27e388c5af1",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-tx-6.2.16.pom"
         ]
     },
     {

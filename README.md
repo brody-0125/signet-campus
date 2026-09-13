@@ -1,6 +1,14 @@
 # Signet Campus
 
-Open Badges credential integration for campus skills recognition.
+Evidence submission and review for campus skills recognition, integrated with Open Badges credentials.
+
+## Run locally
+
+```bash
+docker compose up -d --build server
+```
+
+The API runs at `http://localhost:8080` with PostgreSQL storage and Keycloak authentication. See [Local development](docs/LOCAL_DEVELOPMENT.md) for accounts, configuration and smoke tests.
 
 ## Credential integration
 
@@ -48,6 +56,8 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 
 ## Documentation
 
+- [Submission API](docs/API.md)
+- [Local development](docs/LOCAL_DEVELOPMENT.md)
 - [Evidence review](docs/EVIDENCE_REVIEW.md)
 - [Testing](docs/TESTING.md)
 - [Contributing](CONTRIBUTING.md)

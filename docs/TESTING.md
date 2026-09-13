@@ -9,21 +9,31 @@ The Gradle 8.14.3 wrapper is included in `server/`.
 
 ## Run tests
 
+For the complete suite, including PostgreSQL integration and coverage:
+
+```bash
+docker compose --profile test run --rm tests
+```
+
+Run this command from the repository root. It uses an isolated test database.
+
 From `server/`:
 
 ```bash
-sh ./gradlew check
+sh ./gradlew test
 ```
 
 On Windows:
 
 ```powershell
-.\gradlew.bat check
+.\gradlew.bat test
 ```
 
 The HTML report is written to `server/build/reports/tests/test/index.html`.
 
 `check` also runs the Kover coverage gate (minimum 90% line coverage). Run `sh ./gradlew koverHtmlReport` for the coverage report in `server/build/reports/kover/html/`.
+
+Coverage tasks include the PostgreSQL tests and require the test database environment. Plain `test` runs the unit and dependency contract tests without PostgreSQL. API integration checks include ownership, reviewer permission, conflicting concurrent writes, audit rollback, persistence and input validation.
 
 ## Evidence review contract
 

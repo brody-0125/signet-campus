@@ -10,7 +10,7 @@ The repository includes the unmodified Gradle wrapper scripts and JAR, originall
 
 ## Evidence for resolved software
 
-- [142 resolved artifacts and SHA-256 hashes](docs/third-party/inventory.json).
+- [167 resolved artifacts and SHA-256 hashes](docs/third-party/inventory.json).
 - [Per-coordinate POM license declarations, including inherited parents](docs/DEPENDENCY_LICENSES.md).
 - [Original POMs and license/notice files extracted from the resolved JARs](docs/third-party/).
 - Reproduce extraction from `server` with `sh ./gradlew -I third-party.init.gradle thirdPartyInventory`. The script does not resolve license expressions or declare compatibility automatically.
