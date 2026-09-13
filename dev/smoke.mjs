@@ -43,6 +43,16 @@ if (process.argv[2]) {
   const record = await request('/api/submissions', learner, {
     achievementId: achievement.id, evidence: 'Synthetic keyboard navigation audit',
   }, 201);
+  const pathway = await request('/api/pathways', reviewer, {
+    name: 'Accessible campus (smoke)', description: 'Demonstrate keyboard access', achievementIds: [achievement.id],
+  }, 201);
+  await request('/api/pathways', null);
+  const enrollmentPath = `/api/pathways/${pathway.id}/enrollment`;
+  const progressPath = `/api/pathways/${pathway.id}/progress`;
+  const enrollment = await request(enrollmentPath, learner, {});
+  assert.deepEqual(await request(enrollmentPath, learner, {}), enrollment);
+  assert.equal(enrollment.completed, false);
+  await request(progressPath, reviewer, undefined, 404);
   const path = `/api/submissions/${record.submission.id}`;
   await request(`/api/achievements/${achievement.id}`, reviewer, {
     name: achievement.name, criteria: 'Different criteria', expectedVersion: achievement.version,
@@ -52,6 +62,7 @@ if (process.argv[2]) {
   assert.equal(approved.submission.status, 'APPROVED');
   const credential = await request(`${path}/credential`, learner, {});
   assert.equal(credential.credentialSubject.achievement.criteria.narrative, achievement.criteria);
+  assert.equal((await request(progressPath, learner)).completed, true);
   if (process.env.CAMPUS_EXPECTED_KEY_ID) assert.equal(credential.proof.verificationMethod, process.env.CAMPUS_EXPECTED_KEY_ID);
   assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
   const credentialPath = `/api/credentials/${credential.id.split('/').pop()}`;
@@ -64,6 +75,7 @@ if (process.argv[2]) {
   await request(credentialPath, null, undefined, 401);
   await request(`${credentialPath}/revoke`, learner, {}, 403);
   await request(`${credentialPath}/revoke`, reviewer, {}, 204);
+  assert.equal((await request(progressPath, learner)).completed, false);
   assert.equal((await request(`${credentialPath}/verify`, null, credential)).status, 'REVOKED');
   const after = await request('/api/revocations', null);
   assert.deepEqual(after.revokedCredentials.filter(entry => entry.id === credential.id), [{ id: credential.id, revoked: true }]);

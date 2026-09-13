@@ -58,8 +58,9 @@ class SubmissionApiTest : SigningTestSupport() {
     }
 
     @Test fun `only owner and reviewers can read private evidence`() {
-        mvc.perform(get("/api/achievements").with(auth()))
-            .andExpect(status().isOk).andExpect(jsonPath("$[0].id").value(achievement))
+        val catalog = mvc.perform(get("/api/achievements").with(auth()))
+            .andExpect(status().isOk).andReturn().response.contentAsString
+        assertTrue(json.readTree(catalog).any { it["id"].asText() == achievement })
         val id = submit()
         mvc.perform(get("/api/submissions/$id").with(auth())).andExpect(status().isOk)
         mvc.perform(get("/api/submissions/$id").with(auth(UUID.randomUUID().toString())))

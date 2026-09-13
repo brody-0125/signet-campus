@@ -14,6 +14,7 @@ import java.time.Clock
 
 @SpringBootApplication
 class CampusApplication {
+    @Bean fun pathwayService(repository: work.brodykim.campus.application.PathwayRepository) = work.brodykim.campus.application.PathwayService(repository)
     @Bean fun achievementCatalogService(catalog: AchievementCatalog) = AchievementCatalogService(catalog)
     @Bean fun submissionService(repository: SubmissionRepository) = SubmissionService(repository, Clock.systemUTC())
     @Bean fun credentialService(submissions: SubmissionRepository, credentials: CredentialRepository, crypto: CredentialCryptography) =

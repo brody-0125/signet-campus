@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 type Workspace = {
-  view: 'explore' | 'submissions'
+  view: 'explore' | 'submissions' | 'pathways'
   selectedId: string | null
   notice: string
   navigate: (view: Workspace['view']) => void

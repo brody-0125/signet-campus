@@ -15,6 +15,23 @@ const submission = { id: 'submission-1', achievementId: achievement.id, evidence
 const fetchMock = vi.fn()
 function response(body: unknown, status = 200) { return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } }) }
 function mount() { render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } })}><App /></QueryClientProvider>) }
+it('enrolls in a pathway and displays current credential progress', async () => {
+  const user = userEvent.setup()
+  const path = { id: 'path-1', name: 'Accessible campus', description: 'Build accessible skills', achievementIds: [achievement.id] }
+  let enrolled = false
+  fetchMock.mockImplementation(async (url: string, options?: RequestInit) => {
+    if (url.endsWith('/enrollment')) enrolled = true
+    if (url.endsWith('/progress') || url.endsWith('/enrollment')) return enrolled
+      ? response({ pathwayId: path.id, enrolledAt: '2026-09-14T00:00:00Z', earned: 1, total: 1, completed: true, requirements: [{ achievementId: achievement.id, earned: true }] })
+      : response({}, 404)
+    return response(url.includes('achievements') ? [achievement] : [path])
+  })
+  mount()
+  await user.click(screen.getByRole('button', { name: 'Pathways' }))
+  await user.click(await screen.findByRole('button', { name: 'Enroll' }))
+  expect(await screen.findByText('Complete · 1 of 1 achievements')).toBeInTheDocument()
+  expect(fetchMock).toHaveBeenCalledWith('/api/pathways/path-1/enrollment', expect.objectContaining({ method: 'POST', headers: expect.objectContaining({ Authorization: 'Bearer test-token' }) }))
+})
 it('lets a reviewer create an achievement with an authenticated request', async () => {
   useSession.setState({ reviewer: true })
   const user = userEvent.setup()
