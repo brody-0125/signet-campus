@@ -5,23 +5,7 @@
 <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.brody-0125</groupId>
   <artifactId>signet-spring-boot-starter</artifactId>
-  <version>v0.1.0</version>
-  <name>brody-0125/signet-spring-boot-starter</name>
-  <description>The definitive Spring Boot Starter for signet-core. providing robust auto-configuration for SVG/PNG baking and standardized API scaffolding.</description>
-  <url>https://github.com/brody-0125/signet-spring-boot-starter</url>
-  <inceptionYear>2026</inceptionYear>
-  <developers>
-    <developer>
-      <id>brody-0125</id>
-      <name>Seokhyeon Kim</name>
-      <email></email>
-    </developer>
-  </developers>
-  <scm>
-    <connection>scm:git://github.com/brody-0125/signet-spring-boot-starter.git</connection>
-    <developerConnection>scm:git://github.com/brody-0125/signet-spring-boot-starter.git</developerConnection>
-    <url>git://github.com/brody-0125/signet-spring-boot-starter.git</url>
-  </scm>
+  <version>v0.1.1</version>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -37,7 +21,7 @@
     <dependency>
       <groupId>com.github.brody-0125</groupId>
       <artifactId>signet-core</artifactId>
-      <version>8a98820f9c</version>
+      <version>v0.1.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
