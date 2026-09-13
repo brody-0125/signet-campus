@@ -6,7 +6,7 @@ Reviewed: 2026-09-14. Project version: 1.0.0. Scope: repository source, Gradle 8
 
 The root MIT License covers original Signet Campus work. It does not replace the licenses of dependencies, the Gradle wrapper, standard documents, or the license/notice/POM evidence preserved here. Upstream copyright and notice texts are retained under their original terms.
 
-The repository includes the unmodified Gradle wrapper scripts and JAR, originally from Gradle 8.14.3. See [the upstream distribution license](LICENSES/Gradle-LICENSE.txt), including its bundled-component notices. Source: [Gradle v8.14.3](https://github.com/gradle/gradle/tree/v8.14.3). Other runtime/test JARs are downloaded by Gradle; they are not committed or distributed as an application binary in this baseline.
+The repository includes the unmodified Gradle wrapper scripts and JAR, originally from Gradle 8.14.3. See [the upstream distribution license](LICENSES/Gradle-LICENSE.txt), including its bundled-component notices. Source: [Gradle v8.14.3](https://github.com/gradle/gradle/tree/v8.14.3). Other runtime/test JARs are downloaded by Gradle; they are not committed or distributed as an application binary in this repository.
 
 ## Evidence for resolved software
 
@@ -29,7 +29,7 @@ POM lists sometimes express alternatives without machine-readable AND/OR semanti
 
 ## Signet upstream metadata gaps
 
-The pinned [core `8a98820f9c`](https://github.com/brody-0125/signet-core/tree/8a98820f9c) and [starter `abaf5c173f`](https://github.com/brody-0125/signet-spring-boot-starter/tree/abaf5c173f) identify Apache-2.0 in their READMEs, but their published POMs have no license declaration. The inspected current clones also lack the LICENSE file to which their READMEs refer. The inventory therefore intentionally marks the POM declaration UNKNOWN; it must not silently convert missing metadata to MIT.
+The pinned [core `8a98820f9c`](https://github.com/brody-0125/signet-core/tree/8a98820f9c) and [starter `abaf5c173f`](https://github.com/brody-0125/signet-spring-boot-starter/tree/abaf5c173f) identify Apache-2.0 in their READMEs, but their published POMs have no license declaration. Their linked LICENSE files are absent from the repositories. The inventory therefore intentionally marks the POM declaration UNKNOWN; it must not silently convert missing metadata to MIT.
 
 Both upstream NOTICE files contain a misleading explanation that EPL secondary licensing allows Parsson to be distributed under Apache-2.0. That is not the secondary license designated in [Parsson 1.1.7's license](https://github.com/eclipse-ee4j/parsson/blob/1.1.7/LICENSE.md). Do not rely on that explanation. Parsson's original license and NOTICE from the resolved JAR are preserved at [its artifact evidence directory](docs/third-party/org.eclipse.parsson/parsson/1.1.7/).
 
@@ -42,4 +42,4 @@ Before publishing a bundled application or image: repair Signet license files/PO
 - MIT/BSD/EDL: retain the component's license, attribution and disclaimer; root MIT alone does not satisfy another component's notices.
 - For Parsson binary redistribution, the exact source is available at [tag 1.1.7](https://github.com/eclipse-ee4j/parsson/tree/1.1.7) and [Maven sources](https://repo.maven.apache.org/maven2/org/eclipse/parsson/parsson/1.1.7/parsson-1.1.7-sources.jar). No Parsson modifications are made here.
 
-Build plugins and the JDK/container base are not exhaustively represented by the runtime/test inventory. React, Zustand, TanStack and Vite are planned but not installed. Add their locked dependency inventories, assets/fonts, toolchain and base-image notices before shipping those artifacts. Re-run review whenever dependency versions or distribution form change.
+Build plugins and the JDK/container base are not exhaustively represented by the runtime/test inventory. Include dependency inventories, assets/fonts, toolchain and base-image notices for any additional distributed artifacts. Re-run review whenever dependency versions or distribution form change.

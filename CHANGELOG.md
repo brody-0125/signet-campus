@@ -2,11 +2,7 @@
 
 ## 1.0.0 — 2026-09-14
 
-Initial development baseline, not a production-complete service.
-
-- Define Signet Campus, the evidence-based campus skills credential project.
-- Establish Kotlin/Spring Boot dependency integration and real signing verification tests.
-- Define acceptance matrix and the test-first delivery workflow.
-- Add MIT license, Gradle attribution, resolved dependency inventory and standards/compliance documentation.
-
-Planned application workflows, frontend, persistence and Docker issuance/verification remain in the acceptance matrix.
+- Kotlin and Spring Boot integration with the published Signet starter.
+- Credential signing and verification contract tests.
+- Dependency inventory with artifact hashes and license notices.
+- MIT license and third-party attribution.
