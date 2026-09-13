@@ -7,8 +7,8 @@
     "publicClient": true,
     "directAccessGrantsEnabled": true,
     "standardFlowEnabled": true,
-    "redirectUris": ["http://localhost:5173/*"],
-    "webOrigins": ["http://localhost:5173"],
+    "redirectUris": ["http://localhost:5173/*", "https://localhost:8443/*"],
+    "webOrigins": ["http://localhost:5173", "https://localhost:8443"],
     "protocolMappers": [{
       "name": "campus-audience",
       "protocol": "openid-connect",

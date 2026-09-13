@@ -1,0 +1,37 @@
+services:
+  web:
+    build:
+      args:
+        VITE_OIDC_URL: https://localhost:8443/auth
+    ports: !override
+      - "127.0.0.1:8443:8443"
+    volumes:
+      - ./web/nginx.https.conf:/etc/nginx/conf.d/default.conf:ro
+      - tls-certificates:/etc/nginx/tls:ro
+    depends_on:
+      tls-init:
+        condition: service_completed_successfully
+  server:
+    ports: !reset []
+    environment:
+      CAMPUS_PUBLIC_URL: https://localhost:8443
+      OIDC_ISSUER: https://localhost:8443/auth/realms/signet-campus
+      OIDC_JWKS: http://identity:8080/auth/realms/signet-campus/protocol/openid-connect/certs
+      SIGNING_KEY_PATH: /run/secrets/campus-signing.jwk
+      VERIFICATION_KEYS: classpath:empty-jwks.json
+  db:
+    ports: !reset []
+  identity:
+    ports: !reset []
+    environment:
+      KC_HOSTNAME: https://localhost:8443/auth
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_PROXY_HEADERS: xforwarded
+  tls-init:
+    image: eclipse-temurin:17-jdk
+    entrypoint: ["sh", "/workspace/generate-tls-certificate.sh"]
+    volumes:
+      - ./dev/generate-tls-certificate.sh:/workspace/generate-tls-certificate.sh:ro
+      - tls-certificates:/certs
+volumes:
+  tls-certificates:

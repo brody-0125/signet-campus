@@ -40,7 +40,7 @@ New credentials include a signed `credentialStatus` reference with `type: 1EdTec
 
 The response contains `id`, `issuer` and `revokedCredentials`, following the protocol in the [1EdTech Revocation List Status Method](https://www.imsglobal.org/spec/vcrl/v1p0/). A missing ID means only that this issuer has not listed it as revoked. Verifiers must also validate the signature, issuer trust and validity period; list membership alone does not establish credential validity.
 
-The protocol requires HTTPS with TLS 1.2 or 1.3. The default localhost HTTP setup demonstrates behavior but does not satisfy that transport requirement. Production must terminate TLS at the public origin and preserve `/api/revocations` routing. Use the stable origin configured before issuance. The list currently contains all revoked IDs in one response; partitioned lists are not implemented.
+The protocol requires HTTPS with TLS 1.2 or 1.3. The default localhost HTTP setup demonstrates behavior but does not satisfy that transport requirement. The separate [HTTPS deployment](HTTPS.md) exercises both protocol versions with certificate validation. Production must terminate TLS at the public origin and preserve `/api/revocations` routing. Use the stable origin configured before issuance. The list currently contains all revoked IDs in one response; partitioned lists are not implemented.
 
 Previously issued documents remain unchanged. Documents without a status reference can still be checked through the Campus registry endpoint, but external verifiers cannot discover this list from those documents alone. Revoked legacy IDs are included in the list using their original stored credential IDs.
 
