@@ -15,6 +15,7 @@ The recipient identifier is a salted email hash. Each credential uses a separate
 | GET | `/api/credentials/{id}` | Owner; download credential JSON |
 | POST | `/api/credentials/{id}/verify` | Public; submit complete credential JSON for registry verification |
 | POST | `/api/credentials/{id}/revoke` | Reviewer; revoke idempotently |
+| GET | `/api/revocations` | Public; issuer's revocation list as JSON, with no-store caching |
 | GET | `/api/issuers/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb` | Public; controller document and Multikey verification method |
 
 Credential responses use `application/vc+ld+json` and `Cache-Control: no-store`. Verification accepts up to 131,072 characters and returns `status` and `valid`. Only `VALID` has `valid: true`.
@@ -31,7 +32,17 @@ Credential responses use `application/vc+ld+json` and `Cache-Control: no-store`.
 
 JSON member order is ignored, but extra properties are rejected even if JSON-LD processing would discard them. The verifier processes only the stored document after comparing the supplied document. It never retrieves caller-supplied URLs, contexts or keys.
 
-This endpoint verifies this Campus deployment's issued credentials. It is not a general verifier for other organizations or a claim of 1EdTech certification. Revocation uses the local registry; a portable standards-based status list for external verifiers is not yet published.
+This endpoint verifies this Campus deployment's issued credentials. It is not a general verifier for other organizations or a claim of 1EdTech certification.
+
+## Public revocation list
+
+New credentials include a signed `credentialStatus` reference with `type: 1EdTechRevocationList` and the URL of `/api/revocations`. External verifiers can GET that URL with `Accept: application/json` and look for the credential's full ID in `revokedCredentials`. Each entry contains only `id` and Boolean `revoked: true`; active credential IDs, learner details, review reasons and evidence are not published. The list is read from PostgreSQL for each request and carries `Cache-Control: no-store` so a new request reflects committed revocations.
+
+The response contains `id`, `issuer` and `revokedCredentials`, following the protocol in the [1EdTech Revocation List Status Method](https://www.imsglobal.org/spec/vcrl/v1p0/). A missing ID means only that this issuer has not listed it as revoked. Verifiers must also validate the signature, issuer trust and validity period; list membership alone does not establish credential validity.
+
+The protocol requires HTTPS with TLS 1.2 or 1.3. The default localhost HTTP setup demonstrates behavior but does not satisfy that transport requirement. Production must terminate TLS at the public origin and preserve `/api/revocations` routing. Use the stable origin configured before issuance. The list currently contains all revoked IDs in one response; partitioned lists are not implemented.
+
+Previously issued documents remain unchanged. Documents without a status reference can still be checked through the Campus registry endpoint, but external verifiers cannot discover this list from those documents alone. Revoked legacy IDs are included in the list using their original stored credential IDs.
 
 ## Keys and deployment
 

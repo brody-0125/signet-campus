@@ -28,6 +28,8 @@ if (process.argv[2]) {
   const credential = await request(`/api/submissions/${process.argv[2]}/credential`, learner);
   const verification = await request(`/api/credentials/${credential.id.split('/').pop()}/verify`, null, credential);
   assert.ok(['VALID', 'REVOKED'].includes(verification.status), `Persisted credential failed verification: ${verification.status}`);
+  const list = await request('/api/revocations', null);
+  assert.equal(list.revokedCredentials.some(entry => entry.id === credential.id && entry.revoked === true), verification.status === 'REVOKED');
   console.log(`Persisted approval verified: ${record.submission.id}`);
 } else {
   await request('/api/achievements', null);
@@ -44,12 +46,22 @@ if (process.argv[2]) {
   const credential = await request(`${path}/credential`, learner, {});
   assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
   const credentialPath = `/api/credentials/${credential.id.split('/').pop()}`;
+  const before = await request('/api/revocations', null);
+  assert.deepEqual(credential.credentialStatus, { id: before.id, type: '1EdTechRevocationList' });
+  assert.equal(before.issuer, credential.issuer.id);
+  assert.equal(before.revokedCredentials.some(entry => entry.id === credential.id), false);
   assert.equal((await request(`${credentialPath}/verify`, null, credential)).valid, true);
   assert.equal((await request(`${credentialPath}/verify`, null, { ...credential, name: 'Altered' })).valid, false);
   await request(credentialPath, null, undefined, 401);
   await request(`${credentialPath}/revoke`, learner, {}, 403);
   await request(`${credentialPath}/revoke`, reviewer, {}, 204);
   assert.equal((await request(`${credentialPath}/verify`, null, credential)).status, 'REVOKED');
+  const after = await request('/api/revocations', null);
+  assert.deepEqual(after.revokedCredentials.filter(entry => entry.id === credential.id), [{ id: credential.id, revoked: true }]);
+  const discovered = await fetch(credential.credentialStatus.id, { headers: { Accept: 'application/json' } });
+  assert.equal(discovered.status, 200);
+  assert.equal(discovered.headers.get('cache-control'), 'no-store');
+  assert.deepEqual(await discovered.json(), after);
   await request(`${path}/approve`, reviewer, { expectedVersion: 0 }, 409);
   assert.equal((await request(path, learner)).version, 1);
   console.log(`Submission, issuance, verification and revocation verified: ${record.submission.id}`);

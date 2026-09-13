@@ -1,6 +1,7 @@
 package work.brodykim.campus.adapter.web
 
 import org.springframework.http.CacheControl
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
@@ -11,7 +12,15 @@ import work.brodykim.campus.application.CredentialService
 import java.util.UUID
 
 @RestController
-class CredentialController(private val service: CredentialService, private val crypto: CredentialCryptography) {
+class CredentialController(private val service: CredentialService, private val crypto: CredentialCryptography,
+                           @param:Value("\${campus.public-url}") private val publicUrl: String) {
+    @GetMapping("/api/revocations", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun revocations() = ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(mapOf(
+        "id" to "${publicUrl.trimEnd('/')}/api/revocations",
+        "issuer" to crypto.publicProfile().getValue("id"),
+        "revokedCredentials" to service.revokedCredentialIds().map { mapOf("id" to it, "revoked" to true) },
+    ))
+
     @PostMapping("/api/submissions/{id}/credential")
     fun issue(authentication: JwtAuthenticationToken, @PathVariable id: UUID): ResponseEntity<String> {
         require(authentication.token.getClaim<Boolean>("email_verified") == true) { "Verified email required" }

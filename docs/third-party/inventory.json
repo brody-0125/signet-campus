@@ -243,25 +243,25 @@
         ]
     },
     {
-        "coordinate": "com.github.brody-0125:signet-core:v0.1.1",
+        "coordinate": "com.github.brody-0125:signet-core:v0.1.2",
         "scopes": [
             "runtimeClasspath",
             "testRuntimeClasspath"
         ],
-        "sha256": "80fe09633e2cfb585d3092c46465a83fb03a81e8bfe5bf556f64216d05573622",
+        "sha256": "e5e232331375c6dd910cb1e48d7df5f559f47c4dd240a8fcb7226ac9316a036e",
         "evidence": [
-            "signet-core-v0.1.1.pom"
+            "signet-core-v0.1.2.pom"
         ]
     },
     {
-        "coordinate": "com.github.brody-0125:signet-spring-boot-starter:v0.1.1",
+        "coordinate": "com.github.brody-0125:signet-spring-boot-starter:v0.1.2",
         "scopes": [
             "runtimeClasspath",
             "testRuntimeClasspath"
         ],
-        "sha256": "4d5088de26a15feaaa0eaec6f5ad4bafbd9f8db6fa7c3c740e1d743698fe9043",
+        "sha256": "3aff2baa6c6cd8e92a08ef4854c8d4f8747b2ae5e58a98710d1de4565885d687",
         "evidence": [
-            "signet-spring-boot-starter-v0.1.1.pom"
+            "signet-spring-boot-starter-v0.1.2.pom"
         ]
     },
     {

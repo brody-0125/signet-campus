@@ -5,7 +5,7 @@
 <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.brody-0125</groupId>
   <artifactId>signet-spring-boot-starter</artifactId>
-  <version>v0.1.1</version>
+  <version>v0.1.2</version>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -21,7 +21,7 @@
     <dependency>
       <groupId>com.github.brody-0125</groupId>
       <artifactId>signet-core</artifactId>
-      <version>v0.1.1</version>
+      <version>v0.1.2</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
