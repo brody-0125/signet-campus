@@ -29,7 +29,7 @@ POM lists sometimes express alternatives without machine-readable AND/OR semanti
 
 ## Signet upstream metadata gaps
 
-The pinned [core `8a98820f9c`](https://github.com/brody-0125/signet-core/tree/8a98820f9c) and [starter `abaf5c173f`](https://github.com/brody-0125/signet-spring-boot-starter/tree/abaf5c173f) identify Apache-2.0 in their READMEs, but their published POMs have no license declaration. Their linked LICENSE files are absent from the repositories. The inventory therefore intentionally marks the POM declaration UNKNOWN; it must not silently convert missing metadata to MIT.
+The pinned [core `8a98820f9c`](https://github.com/brody-0125/signet-core/tree/8a98820f9c) and [starter `v0.1.0`](https://github.com/brody-0125/signet-spring-boot-starter/tree/v0.1.0) identify Apache-2.0 in their READMEs, but their published POMs have no license declaration. Their linked LICENSE files are absent from the repositories. The inventory therefore intentionally marks the POM declaration UNKNOWN; it must not silently convert missing metadata to MIT.
 
 Both upstream NOTICE files contain a misleading explanation that EPL secondary licensing allows Parsson to be distributed under Apache-2.0. That is not the secondary license designated in [Parsson 1.1.7's license](https://github.com/eclipse-ee4j/parsson/blob/1.1.7/LICENSE.md). Do not rely on that explanation. Parsson's original license and NOTICE from the resolved JAR are preserved at [its artifact evidence directory](docs/third-party/org.eclipse.parsson/parsson/1.1.7/).
 

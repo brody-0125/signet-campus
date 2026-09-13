@@ -19,7 +19,7 @@ repositories {
 kotlin { jvmToolchain(17) }
 
 dependencies {
-    implementation("com.github.brody-0125:signet-spring-boot-starter:abaf5c173f")
+    implementation("com.github.brody-0125:signet-spring-boot-starter:v0.1.0")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

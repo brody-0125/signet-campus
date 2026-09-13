@@ -241,14 +241,14 @@
         ]
     },
     {
-        "coordinate": "com.github.brody-0125:signet-spring-boot-starter:abaf5c173f",
+        "coordinate": "com.github.brody-0125:signet-spring-boot-starter:v0.1.0",
         "scopes": [
             "runtimeClasspath",
             "testRuntimeClasspath"
         ],
-        "sha256": "5182533bff609ad3d8689ca12bff4249c491afd3ef79ff8d82d14560a1cab2d2",
+        "sha256": "098ebef7bd3086127faeab5d4b56e2c81d832322ce5ef9fc869b6ed7c093ef31",
         "evidence": [
-            "signet-spring-boot-starter-abaf5c173f.pom"
+            "signet-spring-boot-starter-v0.1.0.pom"
         ]
     },
     {
