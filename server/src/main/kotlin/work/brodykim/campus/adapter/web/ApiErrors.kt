@@ -9,9 +9,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import work.brodykim.campus.application.ReviewForbidden
 import work.brodykim.campus.application.SubmissionConflict
 import work.brodykim.campus.application.SubmissionNotFound
+import work.brodykim.campus.application.AchievementNotFound
+import work.brodykim.campus.application.AchievementConflict
 
 @RestControllerAdvice
 class ApiErrors {
+    @ExceptionHandler(AchievementNotFound::class)
+    fun missingAchievement() = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Achievement not found")
+
+    @ExceptionHandler(AchievementConflict::class)
+    fun lockedAchievement() = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Achievement changed or already has submissions; create a new achievement for new criteria")
     @ExceptionHandler(SubmissionNotFound::class)
     fun missing() = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Submission not found")
 

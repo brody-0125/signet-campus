@@ -10,11 +10,25 @@ vi.mock('./auth', async () => {
   const { create } = await import('zustand')
   return { useSession: create(() => ({ ready: true, authenticated: true, reviewer: false, name: 'Learner', error: null })), signIn: vi.fn(), signOut: vi.fn(), accessToken: async () => 'test-token' }
 })
-const achievement = { id: 'achievement-1', name: 'Digital Accessibility Awareness', criteria: 'Demonstrate keyboard access and text alternatives.' }
+const achievement = { id: 'achievement-1', name: 'Digital Accessibility Awareness', criteria: 'Demonstrate keyboard access and text alternatives.', version: 0 }
 const submission = { id: 'submission-1', achievementId: achievement.id, evidence: 'My keyboard audit', status: 'PENDING', submittedAt: '2026-09-14T00:00:00Z', revision: 0, review: null }
 const fetchMock = vi.fn()
 function response(body: unknown, status = 200) { return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } }) }
 function mount() { render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } })}><App /></QueryClientProvider>) }
+it('lets a reviewer create an achievement with an authenticated request', async () => {
+  useSession.setState({ reviewer: true })
+  const user = userEvent.setup()
+  fetchMock.mockImplementation(async (_url: string, options?: RequestInit) => response(options?.method === 'POST' ? achievement : [achievement]))
+  mount()
+  await user.click(await screen.findByRole('button', { name: 'Create achievement' }))
+  await user.type(screen.getByLabelText('Achievement name'), 'Keyboard access')
+  await user.type(screen.getByLabelText('Assessment criteria'), 'Audit every control')
+  await user.click(screen.getByRole('button', { name: 'Save achievement' }))
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledWith('/api/achievements', expect.objectContaining({
+    method: 'POST', headers: expect.objectContaining({ Authorization: 'Bearer test-token' }),
+    body: JSON.stringify({ name: 'Keyboard access', criteria: 'Audit every control' }),
+  })))
+})
 beforeEach(() => {
   useWorkspace.setState({ view: 'explore', selectedId: null, notice: '' })
   useSession.setState({ authenticated: true, reviewer: false })

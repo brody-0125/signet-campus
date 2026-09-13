@@ -15,7 +15,7 @@
 body { margin: 0; font-size: 16px; line-height: 1.3; }
 button, input, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
-button, a, textarea { outline-offset: 5px; }
+button, a, input, textarea { outline-offset: 5px; }
 :focus-visible { outline: 2px solid var(--primary); }
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; }
@@ -75,7 +75,9 @@ dialog::backdrop { background: rgb(23 27 35 / 35%); }
 .criteria p, .field-help { color: var(--muted); }
 label { display: block; margin-bottom: 8px; font-size: 18px; }
 .field-help { margin-bottom: 12px; font-size: 16px; }
-textarea { width: 100%; border: 1px solid #8c96a6; border-radius: 8px; resize: vertical; min-height: 100px; padding: 14px; color: inherit; background: white; }
+input, textarea { width: 100%; border: 1px solid #8c96a6; border-radius: 8px; padding: 14px; color: inherit; background: white; }
+textarea { resize: vertical; min-height: 100px; }
+input { margin-bottom: 20px; }
 .character-count { color: var(--muted); text-align: right; margin-top: 8px; }
 .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
 .error { background: #fff1f0; color: #a02a21; border: 1px solid #e6b9b4; border-radius: 8px; padding: 16px; margin-block: 16px; }
