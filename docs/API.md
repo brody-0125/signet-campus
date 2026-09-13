@@ -1,6 +1,6 @@
 # Submission API
 
-Requests use JSON and require an OIDC bearer token with audience `signet-campus`. The token subject identifies the learner; clients cannot assign submission ownership.
+Requests use JSON. The achievement catalog is public; submission endpoints require an OIDC bearer token with audience `signet-campus`. The token subject identifies the learner; clients cannot assign submission ownership.
 
 | Method | Path | Purpose |
 |---|---|---|

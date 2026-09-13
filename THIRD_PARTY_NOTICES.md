@@ -1,6 +1,12 @@
 # Third-party notices
 
-Reviewed: 2026-09-14. Project version: 1.0.0. Scope: repository source, Gradle 8.14.3 wrapper, resolved server runtime and test dependencies. This is an evidence-based inventory, not a claim that every future deployment is legally cleared.
+This document covers repository source, the Gradle wrapper, server dependencies, browser runtime dependencies and bundled fonts.
+
+## Browser bundle
+
+[Browser notices](web/public/THIRD_PARTY_NOTICES.txt) preserve the complete upstream license texts for React, React DOM, Scheduler, Zustand, TanStack Query, Keycloak JS and Inter. React, Zustand and TanStack components use MIT terms; Keycloak JS uses Apache-2.0; Inter uses SIL Open Font License 1.1. The generated browser bundle includes this notice file. Run `npm run build` in `web` to regenerate it from the locked runtime dependencies. `web/package-lock.json` also records development tools, package license declarations and integrity hashes. Development-only dependencies are not included in the browser bundle.
+
+The decorative artwork was generated for Signet Campus. The original application's MIT license does not replace font or dependency licenses. Docker base images retain their own bundled-component terms; their layer contents are not included in the browser notice inventory.
 
 ## License boundary
 

@@ -1,12 +1,12 @@
-# Local server
+# Local application
 
 ## Start
 
 ```bash
-docker compose up -d --build server
+docker compose up -d --build web
 ```
 
-The stack exposes the API at `http://localhost:8080`, Keycloak at `http://localhost:8081`, and PostgreSQL on `localhost:5432`. Ports bind to the loopback interface. PostgreSQL and Keycloak data use named volumes.
+Open the web interface at `http://localhost:5173`. The stack also exposes the API at `http://localhost:8080`, Keycloak at `http://localhost:8081`, and PostgreSQL on `localhost:5432`. Ports bind to the loopback interface. PostgreSQL and Keycloak data use named volumes.
 
 The included Keycloak realm contains synthetic local accounts:
 
@@ -52,7 +52,7 @@ Tests use a separate `campus_test` database in `test-db`; they do not truncate t
 | OIDC_ISSUER | Trusted JWT issuer URL |
 | OIDC_JWKS | JWK endpoint accessible from the server |
 
-Tokens must target the `signet-campus` audience. The `reviewer` realm role grants review permission. Public health endpoints expose readiness and liveness; API endpoints require bearer authentication. The service uses stateless sessions and graceful shutdown.
+Tokens must target the `signet-campus` audience. The `reviewer` realm role grants review permission. Health endpoints and the achievement catalog are public; submission endpoints require bearer authentication. The service uses stateless sessions and graceful shutdown. See [Web interface](WEB_INTERFACE.md) for browser authentication and frontend development.
 
 ```bash
 docker compose stop

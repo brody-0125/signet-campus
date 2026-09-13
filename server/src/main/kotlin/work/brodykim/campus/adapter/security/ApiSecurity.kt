@@ -2,6 +2,7 @@ package work.brodykim.campus.adapter.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -21,6 +22,7 @@ class ApiSecurity {
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         .authorizeHttpRequests {
             it.requestMatchers("/actuator/health/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/achievements").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().denyAll()
         }

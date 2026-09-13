@@ -27,7 +27,8 @@ if (process.argv[2]) {
   assert.equal(record.submission.status, 'APPROVED');
   console.log(`Persisted approval verified: ${record.submission.id}`);
 } else {
-  await request('/api/achievements', null, undefined, 401);
+  await request('/api/achievements', null);
+  await request('/api/submissions', null, undefined, 401);
   await request('/api/achievements', `${learner}corrupted`, undefined, 401);
   const [achievement] = await request('/api/achievements', learner);
   const record = await request('/api/submissions', learner, {
