@@ -44,6 +44,7 @@ if (process.argv[2]) {
   const approved = await request(`${path}/approve`, reviewer, { expectedVersion: 0 });
   assert.equal(approved.submission.status, 'APPROVED');
   const credential = await request(`${path}/credential`, learner, {});
+  if (process.env.CAMPUS_EXPECTED_KEY_ID) assert.equal(credential.proof.verificationMethod, process.env.CAMPUS_EXPECTED_KEY_ID);
   assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
   const credentialPath = `/api/credentials/${credential.id.split('/').pop()}`;
   const before = await request('/api/revocations', null);

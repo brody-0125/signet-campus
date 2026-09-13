@@ -53,6 +53,10 @@ Coverage tasks include the PostgreSQL tests and require the test database enviro
 
 Keys are generated in memory. Recipient addresses use synthetic example domains. These checks exercise the dependency contract; they do not cover issuer authorization, credential expiry or revocation policy.
 
+## Signing key rotation
+
+Signing-key rotation tests cover old-key verification, new-key issuance, removal of historical trust, unknown method rejection, public-only controller output and invalid key-set startup failures. The preparation utility can be checked from the repository root with `node --test dev/prepare-key-rotation.test.mjs`; this checks preservation of active files, accumulated public history and overwrite rejection. Set `CAMPUS_EXPECTED_KEY_ID` when running `node dev/smoke.mjs` to assert the verification method used for newly issued credentials during a rotation drill.
+
 ## Dependency inventory
 
 ```bash
