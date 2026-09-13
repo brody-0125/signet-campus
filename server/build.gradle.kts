@@ -32,3 +32,15 @@ dependencies {
 }
 
 tasks.test { useJUnitPlatform() }
+
+kover {
+    reports {
+        total {
+            verify {
+                rule { minBound(90) }
+            }
+        }
+    }
+}
+
+tasks.check { dependsOn("koverVerify") }

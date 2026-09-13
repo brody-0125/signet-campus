@@ -14,4 +14,4 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - run: sh ./gradlew test --no-daemon
+      - run: sh ./gradlew check --no-daemon

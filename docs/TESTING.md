@@ -12,16 +12,24 @@ The Gradle 8.14.3 wrapper is included in `server/`.
 From `server/`:
 
 ```bash
-sh ./gradlew test
+sh ./gradlew check
 ```
 
 On Windows:
 
 ```powershell
-.\gradlew.bat test
+.\gradlew.bat check
 ```
 
 The HTML report is written to `server/build/reports/tests/test/index.html`.
+
+`check` also runs the Kover coverage gate (minimum 90% line coverage). Run `sh ./gradlew koverHtmlReport` for the coverage report in `server/build/reports/kover/html/`.
+
+## Evidence review contract
+
+`EvidenceSubmissionTest` covers approval, rejection, resubmission ownership, self-review prevention, timestamp ordering, immutable decisions, issuance eligibility and evidence/reason length limits. See [Evidence review](EVIDENCE_REVIEW.md) for the transition rules.
+
+`DomainKonsistTest` checks that domain imports are restricted to domain types and the standard library.
 
 ## Credential contract
 
