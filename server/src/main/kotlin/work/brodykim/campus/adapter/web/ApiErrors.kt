@@ -14,6 +14,8 @@ import work.brodykim.campus.application.AchievementConflict
 
 @RestControllerAdvice
 class ApiErrors {
+    @ExceptionHandler(work.brodykim.campus.application.PrerequisitesRequired::class)
+    fun prerequisites() = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Earn every prerequisite badge before enrolling; credentials must be current and not revoked")
     @ExceptionHandler(work.brodykim.campus.application.PathwayNotFound::class)
     fun missingPathway() = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Pathway or enrollment not found")
     @ExceptionHandler(AchievementNotFound::class)

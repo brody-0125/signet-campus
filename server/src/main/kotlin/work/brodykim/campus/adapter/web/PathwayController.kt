@@ -9,7 +9,8 @@ import work.brodykim.campus.application.PathwayService
 import java.net.URI
 import java.util.UUID
 
-data class PathwayInput(val name: String, val description: String, val achievementIds: List<UUID>)
+data class PathwayInput(val name: String, val description: String, val achievementIds: List<UUID>,
+                        val prerequisiteAchievementIds: List<UUID> = emptyList())
 
 @RestController
 class PathwayController(private val service: PathwayService) {
@@ -17,7 +18,7 @@ class PathwayController(private val service: PathwayService) {
     @GetMapping("/api/pathways/{id}") fun get(@PathVariable id: UUID) = service.get(id)
     @PostMapping("/api/pathways")
     fun create(authentication: JwtAuthenticationToken, @RequestBody input: PathwayInput) =
-        service.create(actor(authentication), input.name, input.description, input.achievementIds).let {
+        service.create(actor(authentication), input.name, input.description, input.achievementIds, input.prerequisiteAchievementIds).let {
             ResponseEntity.created(URI("/api/pathways/${it.id}")).body(it)
         }
     @PostMapping("/api/pathways/{id}/enrollment")

@@ -15,6 +15,22 @@ const submission = { id: 'submission-1', achievementId: achievement.id, evidence
 const fetchMock = vi.fn()
 function response(body: unknown, status = 200) { return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } }) }
 function mount() { render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } })}><App /></QueryClientProvider>) }
+it('shows prerequisite criteria and explains why enrollment is blocked', async () => {
+  const user = userEvent.setup()
+  const path = { id: 'path-1', name: 'Advanced practice', description: 'Practice accessibility', achievementIds: [], prerequisiteAchievementIds: [achievement.id] }
+  fetchMock.mockImplementation(async (url: string, options?: RequestInit) => {
+    if (url.endsWith('/enrollment')) return response({}, 409)
+    if (url.endsWith('/progress')) return response({}, 404)
+    return response(url.includes('achievements') ? [achievement] : [path])
+  })
+  mount()
+  await user.click(screen.getByRole('button', { name: 'Pathways' }))
+  expect(await screen.findByText('Before you enroll')).toBeInTheDocument()
+  await user.click(await screen.findByRole('button', { name: 'Enroll' }))
+  expect(await screen.findByRole('alert')).toHaveTextContent('Earn every prerequisite badge before enrolling')
+  await user.click(screen.getByRole('button', { name: achievement.name }))
+  expect(await screen.findByText(achievement.criteria)).toBeInTheDocument()
+})
 it('enrolls in a pathway and displays current credential progress', async () => {
   const user = userEvent.setup()
   const path = { id: 'path-1', name: 'Accessible campus', description: 'Build accessible skills', achievementIds: [achievement.id] }

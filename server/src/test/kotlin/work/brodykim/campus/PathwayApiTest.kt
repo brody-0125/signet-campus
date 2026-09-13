@@ -35,10 +35,10 @@ class PathwayApiTest : SigningTestSupport() {
     private fun auth(actor: Actor = learner) = jwt().jwt { it.subject(actor.id.toString()) }
         .authorities(if (actor.reviewer) listOf(SimpleGrantedAuthority("ROLE_REVIEWER")) else emptyList())
     private fun achievement() = catalog.save(reviewer, null, "Audit", "Review keyboard navigation").id
-    private fun body(ids: List<UUID>) = json.writeValueAsString(mapOf("name" to " Accessible campus ",
-        "description" to " Demonstrate accessible content skills ", "achievementIds" to ids))
-    private fun create(ids: List<UUID>) = json.readTree(mvc.perform(post("/api/pathways").with(auth(reviewer))
-        .contentType(MediaType.APPLICATION_JSON).content(body(ids))).andExpect(status().isCreated)
+    private fun body(ids: List<UUID>, prerequisites: List<UUID> = emptyList()) = json.writeValueAsString(mapOf("name" to " Accessible campus ",
+        "description" to " Demonstrate accessible content skills ", "achievementIds" to ids, "prerequisiteAchievementIds" to prerequisites))
+    private fun create(ids: List<UUID>, prerequisites: List<UUID> = emptyList()) = json.readTree(mvc.perform(post("/api/pathways").with(auth(reviewer))
+        .contentType(MediaType.APPLICATION_JSON).content(body(ids, prerequisites))).andExpect(status().isCreated)
         .andReturn().response.contentAsString)
     private fun progress(id: String) = mvc.perform(get("/api/pathways/$id/progress").with(auth()))
         .andExpect(status().isOk).andExpect(header().string("Cache-Control", "no-store"))
@@ -93,6 +93,51 @@ class PathwayApiTest : SigningTestSupport() {
             assertEquals(results[0], results[1])
             assertTrue(results[0].completed)
         } finally { pool.shutdownNow() }
+    }
+
+    @Test fun `all prerequisites require current owned awards before first enrollment`() {
+        val first = achievement()
+        val second = achievement()
+        val created = create(listOf(achievement()), listOf(first, second))
+        assertEquals(2, created["prerequisiteAchievementIds"].size())
+        val id = created["id"].asText()
+        fun blocked() {
+            mvc.perform(post("/api/pathways/$id/enrollment").with(auth().jwt {
+                it.subject(learner.id.toString()).claim("email", "learner@example.test").claim("email_verified", true)
+            })).andExpect(status().isConflict)
+            assertEquals(0, jdbc.queryForObject("SELECT count(*) FROM pathway_enrollments WHERE pathway_id = ?", Int::class.java, UUID.fromString(id))!!)
+            assertEquals(0, jdbc.queryForObject("SELECT count(*) FROM notification_outbox WHERE pathway_id = ?", Int::class.java, UUID.fromString(id))!!)
+        }
+        blocked()
+        val one = award(first)
+        blocked()
+        val pending = submissions.submit(learner, second, "Prerequisite audit")
+        submissions.approve(reviewer, pending.submission.id, pending.version)
+        blocked()
+        val two = credentials.issue(learner, pending.submission.id, "learner@example.test")
+        jdbc.update("UPDATE credentials SET issued_at = now() - interval '2 years', valid_until = now() - interval '1 year' WHERE id = ?", two.id)
+        blocked()
+        jdbc.update("UPDATE credentials SET issued_at = now() + interval '1 day', valid_until = now() + interval '1 year' WHERE id = ?", two.id)
+        blocked()
+        jdbc.update("UPDATE credentials SET issued_at = now() - interval '1 hour', valid_until = now() + interval '1 year' WHERE id = ?", two.id)
+        mvc.perform(post("/api/pathways/$id/enrollment").with(auth(reviewer))).andExpect(status().isConflict)
+        mvc.perform(post("/api/pathways/$id/enrollment").with(auth())).andExpect(status().isOk)
+        credentials.revoke(reviewer, one.id)
+        mvc.perform(post("/api/pathways/$id/enrollment").with(auth())).andExpect(status().isOk)
+        progress(id).andExpect(jsonPath("$.total").value(1))
+        val newPath = create(listOf(achievement()), listOf(first))["id"].asText()
+        mvc.perform(post("/api/pathways/$newPath/enrollment").with(auth())).andExpect(status().isConflict)
+    }
+
+    @Test fun `invalid prerequisite sets roll back publication`() {
+        val required = achievement()
+        val prerequisite = achievement()
+        val before = jdbc.queryForObject("SELECT count(*) FROM pathways", Int::class.java)!!
+        for (ids in listOf(listOf(required), listOf(prerequisite, prerequisite), listOf(UUID.randomUUID()), List(51) { UUID.randomUUID() })) {
+            mvc.perform(post("/api/pathways").with(auth(reviewer)).contentType(MediaType.APPLICATION_JSON)
+                .content(body(listOf(required), ids))).andExpect(status().isBadRequest)
+        }
+        assertEquals(before, jdbc.queryForObject("SELECT count(*) FROM pathways", Int::class.java)!!)
     }
 
     @Test fun `progress counts distinct current awards and regresses after expiry or revocation`() {
