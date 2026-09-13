@@ -57,6 +57,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 ## Documentation
 
 - [Submission API](docs/API.md)
+- [Credential issuance and verification](docs/CREDENTIALS.md)
 - [Web interface and design system](docs/WEB_INTERFACE.md)
 - [Local development](docs/LOCAL_DEVELOPMENT.md)
 - [Evidence review](docs/EVIDENCE_REVIEW.md)

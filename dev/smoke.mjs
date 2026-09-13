@@ -25,6 +25,9 @@ const reviewer = await login('reviewer', 'local-reviewer-only');
 if (process.argv[2]) {
   const record = await request(`/api/submissions/${process.argv[2]}`, learner);
   assert.equal(record.submission.status, 'APPROVED');
+  const credential = await request(`/api/submissions/${process.argv[2]}/credential`, learner);
+  const verification = await request(`/api/credentials/${credential.id.split('/').pop()}/verify`, null, credential);
+  assert.ok(['VALID', 'REVOKED'].includes(verification.status), `Persisted credential failed verification: ${verification.status}`);
   console.log(`Persisted approval verified: ${record.submission.id}`);
 } else {
   await request('/api/achievements', null);
@@ -38,7 +41,16 @@ if (process.argv[2]) {
   await request(`${path}/approve`, learner, { expectedVersion: 0 }, 403);
   const approved = await request(`${path}/approve`, reviewer, { expectedVersion: 0 });
   assert.equal(approved.submission.status, 'APPROVED');
+  const credential = await request(`${path}/credential`, learner, {});
+  assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
+  const credentialPath = `/api/credentials/${credential.id.split('/').pop()}`;
+  assert.equal((await request(`${credentialPath}/verify`, null, credential)).valid, true);
+  assert.equal((await request(`${credentialPath}/verify`, null, { ...credential, name: 'Altered' })).valid, false);
+  await request(credentialPath, null, undefined, 401);
+  await request(`${credentialPath}/revoke`, learner, {}, 403);
+  await request(`${credentialPath}/revoke`, reviewer, {}, 204);
+  assert.equal((await request(`${credentialPath}/verify`, null, credential)).status, 'REVOKED');
   await request(`${path}/approve`, reviewer, { expectedVersion: 0 }, 409);
   assert.equal((await request(path, learner)).version, 1);
-  console.log(`Authenticated submission and review verified: ${record.submission.id}`);
+  console.log(`Submission, issuance, verification and revocation verified: ${record.submission.id}`);
 }

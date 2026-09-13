@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Assertions.*
 @Tag("postgres")
 @SpringBootTest
 @AutoConfigureMockMvc
-class SubmissionApiTest {
+class SubmissionApiTest : SigningTestSupport() {
     @Autowired lateinit var mvc: MockMvc
     @Autowired lateinit var jdbc: JdbcTemplate
     @Autowired lateinit var json: ObjectMapper
@@ -41,7 +41,7 @@ class SubmissionApiTest {
         check(jdbc.queryForObject("SELECT current_database()", String::class.java) == "campus_test") {
             "Integration tests require the isolated campus_test database"
         }
-        jdbc.execute("TRUNCATE submission_audit, submissions")
+        jdbc.execute("TRUNCATE credentials, submission_audit, submissions")
     }
 
     private fun submit(): String = json.readTree(mvc.perform(post("/api/submissions").with(auth())

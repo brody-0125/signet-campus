@@ -31,7 +31,11 @@ services:
       OIDC_JWKS: http://identity:8080/realms/signet-campus/protocol/openid-connect/certs
     ports:
       - "127.0.0.1:8080:8080"
+    volumes:
+      - signing-keys:/run/secrets:ro
     depends_on:
+      key-init:
+        condition: service_completed_successfully
       db:
         condition: service_healthy
       identity:
@@ -46,6 +50,12 @@ services:
     volumes:
       - ./dev/realm.json:/opt/keycloak/data/import/realm.json:ro
       - identity-data:/opt/keycloak/data
+  key-init:
+    image: node:24-alpine
+    command: ["node", "/workspace/generate-signing-key.mjs", "/keys/campus-signing.jwk"]
+    volumes:
+      - ./dev/generate-signing-key.mjs:/workspace/generate-signing-key.mjs:ro
+      - signing-keys:/keys
   tests:
     image: eclipse-temurin:17-jdk
     profiles: [test]
@@ -76,6 +86,7 @@ services:
       timeout: 3s
       retries: 20
 volumes:
+  signing-keys:
   campus-db:
   identity-data:
   gradle-cache:
