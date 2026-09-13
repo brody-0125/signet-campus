@@ -2,6 +2,8 @@
 
 Explore [learning pathways](docs/PATHWAYS.md), enroll and track progress toward a set of required achievements.
 
+Local [enrollment notifications](docs/NOTIFICATIONS.md) are captured in Mailpit at `http://localhost:8025`.
+
 Evidence submission and review for campus skills recognition, integrated with Open Badges credentials.
 
 ## Run locally

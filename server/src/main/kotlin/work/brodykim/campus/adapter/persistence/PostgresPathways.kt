@@ -28,8 +28,10 @@ class PostgresPathways(private val jdbc: JdbcTemplate) : PathwayRepository {
     }
 
     @Transactional
-    override fun enroll(id: UUID, learnerId: UUID): PathwayProgress {
-        jdbc.update("INSERT INTO pathway_enrollments (pathway_id, learner_id) VALUES (?, ?) ON CONFLICT DO NOTHING", id, learnerId)
+    override fun enroll(id: UUID, learnerId: UUID, email: String?): PathwayProgress {
+        val created = jdbc.update("INSERT INTO pathway_enrollments (pathway_id, learner_id) VALUES (?, ?) ON CONFLICT DO NOTHING", id, learnerId)
+        if (created == 1 && email != null) jdbc.update("""INSERT INTO notification_outbox (id, pathway_id, learner_id, recipient, pathway_name)
+            SELECT ?, id, ?, ?, name FROM pathways WHERE id = ?""", UUID.randomUUID(), learnerId, email, id)
         return checkNotNull(progress(id, learnerId))
     }
 

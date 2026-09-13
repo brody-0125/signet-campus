@@ -22,7 +22,8 @@ class PathwayController(private val service: PathwayService) {
         }
     @PostMapping("/api/pathways/{id}/enrollment")
     fun enroll(authentication: JwtAuthenticationToken, @PathVariable id: UUID) =
-        ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(service.enroll(actor(authentication), id))
+        ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(service.enroll(actor(authentication), id,
+            authentication.token.getClaimAsString("email").takeIf { authentication.token.getClaimAsBoolean("email_verified") == true }))
     @GetMapping("/api/pathways/{id}/progress")
     fun progress(authentication: JwtAuthenticationToken, @PathVariable id: UUID) =
         ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(service.progress(actor(authentication), id))

@@ -6,7 +6,7 @@ Every required achievement must have at least one current credential issued to t
 
 Completion describes current holdings, not a permanent award. It can return to incomplete after expiry or revocation. This view does not independently re-verify signatures or accept imported credentials. Use the credential verification endpoint to check a document's proof.
 
-Published pathway membership is immutable. Create a new pathway when the set of required achievements changes. Achievement criteria follow the [catalog policy](CATALOG.md), including freezing on first submission. Requirements may be pursued in any order. Ordered prerequisites, enrollment emails, withdrawal and a separate completion credential are not implemented yet.
+Published pathway membership is immutable. Create a new pathway when the set of required achievements changes. Achievement criteria follow the [catalog policy](CATALOG.md), including freezing on first submission. Requirements may be pursued in any order. [Enrollment emails](NOTIFICATIONS.md) are queued for verified account addresses and captured by local Mailpit. Ordered prerequisites, withdrawal and a separate completion credential are not implemented yet.
 
 ## API
 
