@@ -30,6 +30,8 @@ class PathwayApiTest : SigningTestSupport() {
     @Autowired lateinit var submissions: SubmissionService
     @Autowired lateinit var credentials: CredentialService
     @Autowired lateinit var pathways: PathwayService
+    @Autowired lateinit var completion: PathwayCredentialService
+    @Autowired lateinit var credentialRepository: CredentialRepository
     private val learner = Actor(UUID.randomUUID(), false)
     private val reviewer = Actor(UUID.randomUUID(), true)
     private fun auth(actor: Actor = learner) = jwt().jwt { it.subject(actor.id.toString()) }
@@ -162,5 +164,88 @@ class PathwayApiTest : SigningTestSupport() {
         progress(id).andExpect(jsonPath("$.earned").value(0))
         jdbc.update("UPDATE credentials SET issued_at = now() + interval '1 day', valid_until = now() + interval '1 year' WHERE id = ?", two.id)
         progress(id).andExpect(jsonPath("$.earned").value(0))
+    }
+
+    @Test fun `completion award requires enrollment and all current credentials`() {
+        val required = achievement()
+        val id = create(listOf(required))["id"].asText()
+        fun verified() = auth().jwt {
+            it.subject(learner.id.toString()).claim("email", "learner@example.test").claim("email_verified", true)
+        }
+        mvc.perform(post("/api/pathways/$id/credential")).andExpect(status().isUnauthorized)
+        mvc.perform(post("/api/pathways/$id/credential").with(verified())).andExpect(status().isNotFound)
+        mvc.perform(post("/api/pathways/$id/enrollment").with(auth())).andExpect(status().isOk)
+        mvc.perform(post("/api/pathways/$id/credential").with(verified())).andExpect(status().isConflict)
+        val component = award(required)
+        credentials.revoke(reviewer, component.id)
+        mvc.perform(post("/api/pathways/$id/credential").with(verified())).andExpect(status().isConflict)
+        mvc.perform(get("/api/pathways/$id/credential").with(auth())).andExpect(status().isNotFound)
+    }
+
+    @Test fun `completion award is private repeatable and independently revocable`() {
+        val required = achievement()
+        val component = award(required)
+        val id = create(listOf(required))["id"].asText()
+        pathways.enroll(learner, UUID.fromString(id))
+        fun issue() = mvc.perform(post("/api/pathways/$id/credential").with(auth().jwt {
+            it.subject(learner.id.toString()).claim("email", "learner@example.test").claim("email_verified", true)
+        })).andExpect(status().isOk).andExpect(header().string("Cache-Control", "no-store"))
+            .andExpect(content().contentType("application/vc+ld+json")).andReturn().response.contentAsString
+        mvc.perform(post("/api/pathways/$id/credential").with(auth())).andExpect(status().isBadRequest)
+        val document = issue()
+        val credentialId = json.readTree(document)["id"].asText().substringAfterLast('/')
+        assertNotEquals(component.id.toString(), credentialId)
+        assertEquals(json.readTree(document), json.readTree(issue()))
+        mvc.perform(get("/api/pathways/$id/credential").with(auth())).andExpect(status().isOk)
+            .andExpect(content().json(document))
+        mvc.perform(get("/api/pathways/$id/credential").with(auth(reviewer))).andExpect(status().isNotFound)
+        mvc.perform(get("/api/credentials/$credentialId").with(auth(reviewer))).andExpect(status().isNotFound)
+        fun verify(expected: String) = mvc.perform(post("/api/credentials/$credentialId/verify")
+            .contentType(MediaType.APPLICATION_JSON).content(document)).andExpect(status().isOk)
+            .andExpect(jsonPath("$.status").value(expected))
+        verify("VALID")
+        credentials.revoke(reviewer, component.id)
+        progress(id).andExpect(jsonPath("$.completed").value(false))
+        assertEquals(json.readTree(document), json.readTree(issue()))
+        verify("VALID")
+        mvc.perform(post("/api/credentials/$credentialId/revoke").with(auth())).andExpect(status().isForbidden)
+        mvc.perform(post("/api/credentials/$credentialId/revoke").with(auth(reviewer))).andExpect(status().isNoContent)
+        verify("REVOKED")
+        assertEquals(json.readTree(document), json.readTree(issue()))
+    }
+
+    @Test fun `concurrent completion converges without fabricated submissions and SQL rechecks eligibility`() {
+        val required = achievement()
+        val component = award(required)
+        val id = UUID.fromString(create(listOf(required))["id"].asText())
+        pathways.enroll(learner, id)
+        val before = jdbc.queryForObject("SELECT count(*) FROM submissions WHERE learner_id = ?", Int::class.java, learner.id)
+        val pool = Executors.newFixedThreadPool(2)
+        val record = try {
+            val records = pool.invokeAll(List(2) { Callable { completion.issue(learner, id, "learner@example.test") } }).map { it.get() }
+            assertEquals(records[0], records[1])
+            records.first()
+        } finally { pool.shutdownNow() }
+        assertNull(record.submissionId)
+        assertEquals(id, record.pathwayId)
+        assertEquals(before, jdbc.queryForObject("SELECT count(*) FROM submissions WHERE learner_id = ?", Int::class.java, learner.id))
+        assertEquals(1, jdbc.queryForObject("SELECT count(*) FROM credentials WHERE pathway_id = ? AND learner_id = ?", Int::class.java, id, learner.id))
+        val embeddedId = json.readTree(record.document)["credentialSubject"]["achievement"]["id"].asText()
+        assertTrue(embeddedId.endsWith("/api/pathways/$id"))
+        mvc.perform(get("/api/pathways/$id")).andExpect(status().isOk)
+
+        val otherPath = UUID.fromString(create(listOf(required))["id"].asText())
+        pathways.enroll(learner, otherPath)
+        pathways.enroll(reviewer, otherPath)
+        assertThrows(PathwayCompletionRequired::class.java) { completion.issue(reviewer, otherPath, "reviewer@example.test") }
+        for (dates in listOf("issued_at = now() - interval '2 years', valid_until = now() - interval '1 year'",
+            "issued_at = now() + interval '1 day', valid_until = now() + interval '1 year'")) {
+            jdbc.update("UPDATE credentials SET $dates WHERE id = ?", component.id)
+            assertThrows(PathwayCompletionRequired::class.java) { completion.issue(learner, otherPath, "learner@example.test") }
+            assertThrows(PathwayCompletionRequired::class.java) {
+                credentialRepository.savePathwayIfAbsent(record.copy(id = UUID.randomUUID(), pathwayId = otherPath))
+            }
+        }
+        assertNull(credentialRepository.findByPathway(otherPath, learner.id))
     }
 }

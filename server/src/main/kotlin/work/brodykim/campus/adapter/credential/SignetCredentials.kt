@@ -48,13 +48,20 @@ class SignetCredentials(private val signer: CredentialSigner, private val json: 
     }).associateBy { "$baseUrl/issuers/${issuer.id()}#${it.computeThumbprint()}" }
     private val mapType = object : TypeReference<Map<String, Any>>() {}
 
-    override fun issue(id: UUID, email: String, achievement: AchievementSummary, at: Instant, until: Instant): String {
+    override fun issue(id: UUID, email: String, achievement: AchievementSummary, at: Instant, until: Instant, pathway: Boolean): String {
         // A separate salt per credential limits cross-credential correlation; it is not a secret.
         val builder = CredentialBuilder(baseUrl, UUID.randomUUID().toString())
         val badge = BadgeAchievement(achievement.id, achievement.name, achievement.criteria, achievement.criteria,
             "Badge", null, listOf("accessibility"))
         val unsigned = builder.buildCredential(id, email, null, badge, issuer, at, until, null, null, null,
             CredentialBuilder.CredentialStatus("$baseUrl/revocations"), false)
+        if (pathway) {
+            @Suppress("UNCHECKED_CAST")
+            val subject = unsigned["credentialSubject"] as Map<String, Any>
+            @Suppress("UNCHECKED_CAST")
+            val embedded = subject["achievement"] as Map<String, Any>
+            unsigned["credentialSubject"] = subject + ("achievement" to (embedded + ("id" to "$baseUrl/pathways/${achievement.id}")))
+        }
         return json.writeValueAsString(signer.signWithDataIntegrity(unsigned, key, keyId))
     }
 

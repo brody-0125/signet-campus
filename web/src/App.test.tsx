@@ -48,6 +48,44 @@ it('enrolls in a pathway and displays current credential progress', async () => 
   expect(await screen.findByText('Complete · 1 of 1 achievements')).toBeInTheDocument()
   expect(fetchMock).toHaveBeenCalledWith('/api/pathways/path-1/enrollment', expect.objectContaining({ method: 'POST', headers: expect.objectContaining({ Authorization: 'Bearer test-token' }) }))
 })
+it('retrieves a pathway completion award after live progress becomes incomplete', async () => {
+  const user = userEvent.setup()
+  const path = { id: 'path-1', name: 'Accessible campus', description: 'Build accessible skills', achievementIds: [achievement.id] }
+  const credential = { id: 'http://localhost:5173/api/credentials/completion-1', type: ['VerifiableCredential', 'OpenBadgeCredential'] }
+  fetchMock.mockImplementation(async (url: string) => {
+    if (url.endsWith('/credential')) return response(credential)
+    if (url.endsWith('/verify')) return response({ status: 'VALID', valid: true })
+    if (url.endsWith('/progress')) return response({ pathwayId: path.id, earned: 0, total: 1, completed: false, requirements: [] })
+    return response(url.includes('achievements') ? [achievement] : [path])
+  })
+  mount()
+  await user.click(screen.getByRole('button', { name: 'Pathways' }))
+  expect(await screen.findByText('In progress · 0 of 1 achievements')).toBeInTheDocument()
+  const download = await screen.findByRole('link', { name: 'Download JSON' })
+  expect(JSON.parse(decodeURIComponent(download.getAttribute('href')!.split(',')[1]))).toEqual(credential)
+  await user.click(screen.getByRole('button', { name: 'Verify badge' }))
+  expect(await screen.findByRole('status')).toHaveTextContent('Verified: authentic, current and not revoked.')
+})
+it('issues a completion award and explains an unverified email failure', async () => {
+  const user = userEvent.setup()
+  const path = { id: 'path-1', name: 'Accessible campus', description: 'Build accessible skills', achievementIds: [achievement.id] }
+  let verified = false
+  fetchMock.mockImplementation(async (url: string, options?: RequestInit) => {
+    if (url.endsWith('/credential')) return options?.method === 'POST'
+      ? verified ? response({ id: 'https://example.test/api/credentials/completion-1' }) : response({}, 400)
+      : response({}, 404)
+    if (url.endsWith('/progress')) return response({ pathwayId: path.id, earned: 1, total: 1, completed: true, requirements: [] })
+    return response(url.includes('achievements') ? [achievement] : [path])
+  })
+  mount()
+  await user.click(screen.getByRole('button', { name: 'Pathways' }))
+  await user.click(await screen.findByRole('button', { name: 'Issue badge' }))
+  expect(await screen.findByRole('alert')).toHaveTextContent('A verified email address is required')
+  verified = true
+  await user.click(screen.getByRole('button', { name: 'Issue badge' }))
+  expect(await screen.findByRole('link', { name: 'Download JSON' })).toBeInTheDocument()
+  expect(fetchMock).toHaveBeenCalledWith('/api/pathways/path-1/credential', expect.objectContaining({ method: 'POST' }))
+})
 it('lets a reviewer create an achievement with an authenticated request', async () => {
   useSession.setState({ reviewer: true })
   const user = userEvent.setup()

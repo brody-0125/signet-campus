@@ -4,9 +4,17 @@ Pathways group achievements into a learning objective. Reviewers publish a name,
 
 Every required achievement must have at least one current credential issued to the enrolled learner. Pending, rejected or approved-but-unissued submissions do not count. Multiple credentials for the same achievement count once. Credentials earned before enrollment count while they remain current. The server calculates progress from its issuance registry on every request; revoked, expired and future-dated records are excluded. **Refresh progress** updates the browser after issuance or revocation elsewhere.
 
-Completion describes current holdings, not a permanent award. It can return to incomplete after expiry or revocation. This view does not independently re-verify signatures or accept imported credentials. Use the credential verification endpoint to check a document's proof.
+Progress describes current holdings and can return to incomplete after expiry or revocation. It is separate from a signed completion award. This view does not independently re-verify signatures or accept imported credentials. Use the credential verification endpoint to check a document's proof.
 
-Published pathway membership is immutable. Create a new pathway when its requirements or prerequisites change. Achievement criteria follow the [catalog policy](CATALOG.md), including freezing on first submission. Completion requirements may be pursued in any order. [Enrollment emails](NOTIFICATIONS.md) are queued for verified account addresses and captured by local Mailpit. Ordered steps within a pathway, withdrawal and a separate completion credential are not implemented yet.
+Published pathway membership is immutable. Create a new pathway when its requirements or prerequisites change. Achievement criteria follow the [catalog policy](CATALOG.md), including freezing on first submission. Completion requirements may be pursued in any order. [Enrollment emails](NOTIFICATIONS.md) are queued for verified account addresses and captured by local Mailpit. Ordered steps within a pathway and withdrawal are not implemented yet.
+
+## Completion awards
+
+An enrolled learner with every required current badge can select **Issue badge** under **Your pathway award**. A verified account email is required. The server issues a signed Open Badges credential with a separate pathway source; it does not create an evidence submission or imply an additional reviewer approval. The embedded achievement identifies the public pathway and lists its immutable required achievement IDs.
+
+The award records completion at the issuance decision and is valid for 365 days unless a reviewer explicitly revokes it. Later expiry or revocation of component badges changes live progress but does not automatically cancel the completion award. An incorrect award must be revoked separately. Existing awards remain downloadable even when live progress becomes incomplete. Repeated requests return the original document, including after its revocation or expiry; automatic renewal is not supported.
+
+Eligibility is checked again in the database INSERT using one statement snapshot and timestamp. A component revocation committed after that snapshot does not retroactively invalidate the decision. A unique constraint on pathway and learner prevents duplicate completion credentials across concurrent requests and server instances. Completion credentials share the existing signing, private download, public verification and revocation-list lifecycle. A credential has exactly one source: an approved submission or a pathway enrollment.
 
 ## Enrollment prerequisites
 
@@ -25,6 +33,8 @@ Existing pathways and requests that omit `prerequisiteAchievementIds` have no pr
 | POST | `/api/pathways` | Reviewer; `name`, `description`, `achievementIds`, optional `prerequisiteAchievementIds`; returns 201 and Location |
 | POST | `/api/pathways/{id}/enrollment` | Signed-in learner; idempotent enrollment; returns progress |
 | GET | `/api/pathways/{id}/progress` | Signed-in learner's own progress; 404 if not enrolled |
+| POST | `/api/pathways/{id}/credential` | Enrolled learner with verified email and current completion badges; idempotent signed award; 409 if incomplete |
+| GET | `/api/pathways/{id}/credential` | Learner's own existing completion award; 404 if absent |
 
 Names and descriptions are trimmed and limited to 120 and 5,000 characters. Empty completion sets, duplicate/unknown IDs, excessive sets or overlap between prerequisites and completion requirements return 400 and the creation transaction rolls back. Missing authentication returns 401; authoring without reviewer permission returns 403. Unknown pathways return 404; unmet enrollment prerequisites return 409. Public pathway responses include both `achievementIds` and `prerequisiteAchievementIds`.
 

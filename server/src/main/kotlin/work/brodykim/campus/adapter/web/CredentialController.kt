@@ -13,7 +13,19 @@ import java.util.UUID
 
 @RestController
 class CredentialController(private val service: CredentialService, private val crypto: CredentialCryptography,
+                           private val pathways: work.brodykim.campus.application.PathwayCredentialService,
                            @param:Value("\${campus.public-url}") private val publicUrl: String) {
+    @PostMapping("/api/pathways/{id}/credential")
+    fun issuePathway(authentication: JwtAuthenticationToken, @PathVariable id: UUID): ResponseEntity<String> {
+        require(authentication.token.getClaim<Boolean>("email_verified") == true) { "Verified email required" }
+        val email = authentication.token.getClaimAsString("email") ?: throw IllegalArgumentException("Email required")
+        return document(pathways.issue(actor(authentication), id, email).document)
+    }
+
+    @GetMapping("/api/pathways/{id}/credential")
+    fun pathwayCredential(authentication: JwtAuthenticationToken, @PathVariable id: UUID) =
+        document(pathways.get(actor(authentication), id).document)
+
     @GetMapping("/api/revocations", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun revocations() = ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(mapOf(
         "id" to "${publicUrl.trimEnd('/')}/api/revocations",

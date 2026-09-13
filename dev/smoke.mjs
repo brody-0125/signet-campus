@@ -52,6 +52,8 @@ if (process.argv[2]) {
   const enrollment = await request(enrollmentPath, learner, {});
   assert.deepEqual(await request(enrollmentPath, learner, {}), enrollment);
   assert.equal(enrollment.completed, false);
+  const completionPath = `/api/pathways/${pathway.id}/credential`;
+  await request(completionPath, learner, {}, 409);
   await request(progressPath, reviewer, undefined, 404);
   const path = `/api/submissions/${record.submission.id}`;
   const gatedInput = { name: 'Advanced accessibility (smoke)', description: 'Build on an existing keyboard audit badge',
@@ -68,6 +70,12 @@ if (process.argv[2]) {
   assert.equal(credential.credentialSubject.achievement.criteria.narrative, achievement.criteria);
   const gatedEnrollment = await request(`/api/pathways/${gatedPath.id}/enrollment`, learner, {});
   assert.equal((await request(progressPath, learner)).completed, true);
+  const completion = await request(completionPath, learner, {});
+  assert.equal(completion.credentialSubject.achievement.id, credential.id.split('/credentials/')[0] + `/pathways/${pathway.id}`);
+  assert.deepEqual(await request(completionPath, learner, {}), completion);
+  await request(completionPath, reviewer, undefined, 404);
+  const completionRecord = `/api/credentials/${completion.id.split('/').pop()}`;
+  assert.equal((await request(`${completionRecord}/verify`, null, completion)).valid, true);
   if (process.env.CAMPUS_EXPECTED_KEY_ID) assert.equal(credential.proof.verificationMethod, process.env.CAMPUS_EXPECTED_KEY_ID);
   assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
   const credentialPath = `/api/credentials/${credential.id.split('/').pop()}`;
@@ -84,6 +92,11 @@ if (process.argv[2]) {
   const blockedPath = await request('/api/pathways', reviewer, gatedInput, 201);
   await request(`/api/pathways/${blockedPath.id}/enrollment`, learner, {}, 409);
   assert.equal((await request(progressPath, learner)).completed, false);
+  assert.deepEqual(await request(completionPath, learner), completion);
+  assert.equal((await request(`${completionRecord}/verify`, null, completion)).valid, true);
+  await request(`${completionRecord}/revoke`, reviewer, {}, 204);
+  assert.equal((await request(`${completionRecord}/verify`, null, completion)).status, 'REVOKED');
+  assert.deepEqual(await request(completionPath, learner, {}), completion);
   assert.equal((await request(`${credentialPath}/verify`, null, credential)).status, 'REVOKED');
   const after = await request('/api/revocations', null);
   assert.deepEqual(after.revokedCredentials.filter(entry => entry.id === credential.id), [{ id: credential.id, revoked: true }]);
