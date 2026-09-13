@@ -1,0 +1,51 @@
+import groovy.json.JsonOutput
+import java.util.zip.ZipFile
+import java.security.MessageDigest
+
+// Collect evidence from resolved artifacts; POM license declarations may be inherited.
+allprojects {
+    afterEvaluate {
+        tasks.register('thirdPartyInventory') {
+            doLast {
+                def output = rootProject.file('../docs/third-party')
+                output.mkdirs()
+                def records = [:]
+                ['runtimeClasspath', 'testRuntimeClasspath'].each { scope ->
+                    configurations.getByName(scope).resolvedConfiguration.resolvedArtifacts.each { artifact ->
+                        def id = artifact.moduleVersion.id
+                        def coordinate = "${id.group}:${id.name}:${id.version}".toString()
+                        if (records.containsKey(coordinate)) {
+                            records[coordinate].scopes.add(scope)
+                            return
+                        }
+                        def folder = new File(output, "${id.group}/${id.name}/${id.version}")
+                        folder.mkdirs()
+                        def evidence = []
+                        def cachedVersion = artifact.file.parentFile.parentFile
+                        cachedVersion.eachFileRecurse { file ->
+                            if (file.name.endsWith('.pom')) {
+                                new File(folder, file.name).bytes = file.bytes
+                                evidence.add(file.name)
+                            }
+                        }
+                        new ZipFile(artifact.file).withCloseable { zip ->
+                            zip.entries().each { entry ->
+                                def basename = entry.name.tokenize('/').last()
+                                if (!entry.directory && basename ==~ /(?i)(license|notice|copying|copyright)(\.(txt|md|html))?/) {
+                                    def name = entry.name.replace('/', '__')
+                                    new File(folder, name).bytes = zip.getInputStream(entry).bytes
+                                    evidence.add(name)
+                                }
+                            }
+                        }
+                        records[coordinate] = [coordinate: coordinate, scopes: [scope],
+                            sha256: MessageDigest.getInstance('SHA-256').digest(artifact.file.bytes).encodeHex().toString(),
+                            evidence: evidence.sort()]
+                    }
+                }
+                new File(output, 'inventory.json').text = JsonOutput.prettyPrint(JsonOutput.toJson(records.sort().values())) + '\n'
+                println "Recorded ${records.size()} artifacts in ${output}"
+            }
+        }
+    }
+}

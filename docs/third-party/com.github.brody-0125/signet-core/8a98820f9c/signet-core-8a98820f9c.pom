@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <!-- do_not_remove: published-with-gradle-metadata -->
+<modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.brody-0125</groupId>
+  <artifactId>signet-core</artifactId>
+  <version>8a98820f9c</version>
+  <name>brody-0125/signet-core</name>
+  <description>Lightweight Java library for W3C VC 2.0 &amp; Open Badges 3.0. Fully supports EdDSA, ECDSA, and Selective Disclosure (ecdsa-sd-2023)</description>
+  <url>https://github.com/brody-0125/signet-core</url>
+  <inceptionYear>2026</inceptionYear>
+  <developers>
+    <developer>
+      <id>brody-0125</id>
+      <name>Seokhyeon Kim</name>
+      <email></email>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git://github.com/brody-0125/signet-core.git</connection>
+    <developerConnection>scm:git://github.com/brody-0125/signet-core.git</developerConnection>
+    <url>git://github.com/brody-0125/signet-core.git</url>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>com.nimbusds</groupId>
+      <artifactId>nimbus-jose-jwt</artifactId>
+      <version>10.7</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.crypto.tink</groupId>
+      <artifactId>tink</artifactId>
+      <version>1.20.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.apicatalog</groupId>
+      <artifactId>titanium-json-ld</artifactId>
+      <version>1.7.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.18.4</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.parsson</groupId>
+      <artifactId>parsson</artifactId>
+      <version>1.1.7</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.rdf4j</groupId>
+      <artifactId>rdf4j-model</artifactId>
+      <version>5.2.2</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.rdf4j</groupId>
+      <artifactId>rdf4j-rio-nquads</artifactId>
+      <version>5.2.2</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.setl</groupId>
+      <artifactId>rdf-urdna</artifactId>
+      <version>1.4</version>
+      <scope>runtime</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>titanium-json-ld-jre8</artifactId>
+          <groupId>com.apicatalog</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,1614 @@
+[
+    {
+        "coordinate": "ch.qos.logback:logback-classic:1.5.32",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "2d4cf592db78be2de4d6140434c2fec170dcb16a09e8c8b7b207dbf5e31b848a",
+        "evidence": [
+            "logback-classic-1.5.32.pom"
+        ]
+    },
+    {
+        "coordinate": "ch.qos.logback:logback-core:1.5.32",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "6a904d5778d0e361a9692f9cbe68b1b0620ae0f3eda2ec2ed09102755bf036c4",
+        "evidence": [
+            "logback-core-1.5.32.pom"
+        ]
+    },
+    {
+        "coordinate": "com.apicatalog:titanium-jcs:1.1.1",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "2e10d36721b19957ef414555b79507364a31554d282b5e41a54b0108cec8939a",
+        "evidence": [
+            "titanium-jcs-1.1.1.pom"
+        ]
+    },
+    {
+        "coordinate": "com.apicatalog:titanium-json-ld:1.7.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "739918b6618da79d99bd39bcf4f9d16cbcb2147a44b686ca8bdb9e4fed2ed231",
+        "evidence": [
+            "titanium-json-ld-1.7.0.pom"
+        ]
+    },
+    {
+        "coordinate": "com.apicatalog:titanium-rdf-api:1.0.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "1c414428e51cc08f3147f154d955860422e491c4856d2613bb63797a0450b161",
+        "evidence": [
+            "titanium-rdf-api-1.0.0.pom"
+        ]
+    },
+    {
+        "coordinate": "com.apicatalog:titanium-rdf-n-quads:1.0.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "325ba3413deb96b7cf7f8c64cd6ed23035e3f8133a7ebb401cd6b763dff889c6",
+        "evidence": [
+            "titanium-rdf-n-quads-1.0.2.pom"
+        ]
+    },
+    {
+        "coordinate": "com.fasterxml.jackson.core:jackson-annotations:2.19.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ab26383fa3c10c0df1ffd1bb035d81161c059b1af71927d73c24473c058baa16",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "jackson-annotations-2.19.4.pom"
+        ]
+    },
+    {
+        "coordinate": "com.fasterxml.jackson.core:jackson-core:2.19.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "466ae4dc4f7054f51525f4211df411d9a64d65cc169995d32bf49e20e6f586e5",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "jackson-core-2.19.4.pom"
+        ]
+    },
+    {
+        "coordinate": "com.fasterxml.jackson.core:jackson-databind:2.19.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b781c431be870deb0bf84421e99e774c256a701f4ba678df80248f55cd16ff74",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "jackson-databind-2.19.4.pom"
+        ]
+    },
+    {
+        "coordinate": "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.19.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c0e0dc3039f9a37a099b2602838f833ea8c15c56445a0eb5463d0c7e0c355da2",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "jackson-datatype-jdk8-2.19.4.pom"
+        ]
+    },
+    {
+        "coordinate": "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "070af4d7c345cf975ff783138050678e6194e5bb88ab489385d0311a5fcb1585",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "jackson-datatype-jsr310-2.19.4.pom"
+        ]
+    },
+    {
+        "coordinate": "com.fasterxml.jackson.module:jackson-module-kotlin:2.19.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "440a2533aa6523296a58c4798ad920cd77b1b819ccc6fbd9e96c81d53794ed90",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "jackson-module-kotlin-2.19.4.pom"
+        ]
+    },
+    {
+        "coordinate": "com.fasterxml.jackson.module:jackson-module-parameter-names:2.19.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "91a1f2f1b595c4d5c902a7d6d383354a3ba9bf87b19bdf1d473f55306f79c6e5",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "jackson-module-parameter-names-2.19.4.pom"
+        ]
+    },
+    {
+        "coordinate": "com.fasterxml:classmate:1.7.3",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "75fbda45456f123fb6e2028a6189442d8d0730b357adce4c0a6d7e789f70669b",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "classmate-1.7.3.pom"
+        ]
+    },
+    {
+        "coordinate": "com.github.ajalt.colormath:colormath-jvm:3.6.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "59f741adfe62053066782d8b1a45afd06685a4bc64b33277e54876b993ed885c",
+        "evidence": [
+            "colormath-jvm-3.6.0.pom"
+        ]
+    },
+    {
+        "coordinate": "com.github.ajalt.mordant:mordant-core-jvm:3.0.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "651c3bd74ff4e98db4d58e3dcf4b14e8099ee0d220e672f571f8cfeee4493905",
+        "evidence": [
+            "mordant-core-jvm-3.0.2.pom"
+        ]
+    },
+    {
+        "coordinate": "com.github.ajalt.mordant:mordant-jvm-ffm-jvm:3.0.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "10224784125c9f1782c1d4f1d38f3d54236fcc55c030a2ad00cbe4306e162ba4",
+        "evidence": [
+            "mordant-jvm-ffm-jvm-3.0.2.pom"
+        ]
+    },
+    {
+        "coordinate": "com.github.ajalt.mordant:mordant-jvm-graal-ffi-jvm:3.0.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "6dd4bebc164aeacddacc8f98e8f871e00fd21ce7bc2eb0d18230ea83bddfc86a",
+        "evidence": [
+            "mordant-jvm-graal-ffi-jvm-3.0.2.pom"
+        ]
+    },
+    {
+        "coordinate": "com.github.ajalt.mordant:mordant-jvm-jna-jvm:3.0.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "41063442c8891b2774536a9b87a5062a7fd20e6f1949974c6da72f49472d6f4d",
+        "evidence": [
+            "mordant-jvm-jna-jvm-3.0.2.pom"
+        ]
+    },
+    {
+        "coordinate": "com.github.ajalt.mordant:mordant-jvm:3.0.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "9ed3b976fcccc78da746d49866fa8ebb8f10530a93c544ea0420259a607dd95e",
+        "evidence": [
+            "mordant-jvm-3.0.2.pom"
+        ]
+    },
+    {
+        "coordinate": "com.github.brody-0125:signet-core:8a98820f9c",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a1b81c4d09e045bb86a92bd685aa3ec89811d5c3003811c7128700a5e4f44da6",
+        "evidence": [
+            "signet-core-8a98820f9c.pom"
+        ]
+    },
+    {
+        "coordinate": "com.github.brody-0125:signet-spring-boot-starter:abaf5c173f",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5182533bff609ad3d8689ca12bff4249c491afd3ef79ff8d82d14560a1cab2d2",
+        "evidence": [
+            "signet-spring-boot-starter-abaf5c173f.pom"
+        ]
+    },
+    {
+        "coordinate": "com.github.jsonld-java:jsonld-java:0.13.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d8101c31cb4d6d07e87f03855c32ed67dbf29174b1a1a3a38cff8246290d3dcf",
+        "evidence": [
+            "jsonld-java-0.13.4.pom"
+        ]
+    },
+    {
+        "coordinate": "com.google.code.findbugs:jsr305:3.0.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
+        "evidence": [
+            "jsr305-3.0.2.pom"
+        ]
+    },
+    {
+        "coordinate": "com.google.code.gson:gson:2.13.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "dd0ce1b55a3ed2080cb70f9c655850cda86c206862310009dcb5e5c95265a5e0",
+        "evidence": [
+            "gson-2.13.2.pom"
+        ]
+    },
+    {
+        "coordinate": "com.google.crypto.tink:tink:1.20.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a8147cea556a34291be1fbc96975dd3006228b653bdfffb8a82c959419ab151f",
+        "evidence": [
+            "tink-1.20.0.pom"
+        ]
+    },
+    {
+        "coordinate": "com.google.errorprone:error_prone_annotations:2.41.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a56e782b5b50811ac204073a355a21d915a2107fce13ec711331ad036f660fcc",
+        "evidence": [
+            "error_prone_annotations-2.41.0.pom"
+        ]
+    },
+    {
+        "coordinate": "com.google.guava:failureaccess:1.0.1",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a171ee4c734dd2da837e4b16be9df4661afab72a41adaf31eb84dfdaf936ca26",
+        "evidence": [
+            "failureaccess-1.0.1.pom"
+        ]
+    },
+    {
+        "coordinate": "com.google.guava:guava:32.1.3-jre",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "6d4e2b5a118aab62e6e5e29d185a0224eed82c85c40ac3d33cf04a270c3b3744",
+        "evidence": [
+            "META-INF__LICENSE",
+            "guava-32.1.3-jre.pom"
+        ]
+    },
+    {
+        "coordinate": "com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99",
+        "evidence": [
+            "listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.pom"
+        ]
+    },
+    {
+        "coordinate": "com.google.protobuf:protobuf-java:4.33.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "6c50b4323a101dfd7b8aea209337ac49ecf5d8e33e0b210b196fc654291ed2cc",
+        "evidence": [
+            "protobuf-java-4.33.0.pom"
+        ]
+    },
+    {
+        "coordinate": "com.jayway.jsonpath:json-path:2.9.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "11a9ee6f88bb31f1450108d1cf6441377dec84aca075eb6bb2343be157575bea",
+        "evidence": [
+            "json-path-2.9.0.pom"
+        ]
+    },
+    {
+        "coordinate": "com.lemonappdev:konsist:0.17.3",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ba7a5b08838c36d6b04395869680fb40110c1821aae3898d2932644eb372d744",
+        "evidence": [
+            "konsist-0.17.3.pom"
+        ]
+    },
+    {
+        "coordinate": "com.nimbusds:nimbus-jose-jwt:10.7",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "899791e2fc5512279348617bd30c64f22d9a1456d7c54619e1f8ff359dcb2cc5",
+        "evidence": [
+            "nimbus-jose-jwt-10.7.pom"
+        ]
+    },
+    {
+        "coordinate": "com.vaadin.external.google:android-json:0.0.20131108.vaadin1",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "dfb7bae2f404cfe0b72b4d23944698cb716b7665171812a0a4d0f5926c0fac79",
+        "evidence": [
+            "android-json-0.0.20131108.vaadin1.pom"
+        ]
+    },
+    {
+        "coordinate": "commons-codec:commons-codec:1.18.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ba005f304cef92a3dede24a38ad5ac9b8afccf0d8f75839d6c1338634cf7f6e4",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "commons-codec-1.18.0.pom"
+        ]
+    },
+    {
+        "coordinate": "commons-io:commons-io:2.18.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "f3ca0f8d63c40e23a56d54101c60d5edee136b42d84bfb85bc7963093109cf8b",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "commons-io-2.18.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.github.java-diff-utils:java-diff-utils:4.16",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "620403030d676a4a27f780a3acec7438dee1b1651a1c804fa6bb11bb07399a6f",
+        "evidence": [
+            "java-diff-utils-4.16.pom"
+        ]
+    },
+    {
+        "coordinate": "io.github.oshai:kotlin-logging-jvm:7.0.13",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c373f7f4c9efc85c4f70f11519f2a1b7878bc0ed75a325364d034af3fa21f776",
+        "evidence": [
+            "META-INF__LICENSE",
+            "kotlin-logging-jvm-7.0.13.pom"
+        ]
+    },
+    {
+        "coordinate": "io.github.pdvrieze.xmlutil:core-jvmcommon:0.91.1",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "e42c177ee673fee6ce4236013733bf9940e4c62aa31d9d4252597934a62d779e",
+        "evidence": [
+            "core-jvmcommon-0.91.1.pom"
+        ]
+    },
+    {
+        "coordinate": "io.github.pdvrieze.xmlutil:serialization-jvm:0.91.1",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5b4b1fb39e78913b6626d344c5de8f3a220c88493e4a29f68957f8711a106206",
+        "evidence": [
+            "serialization-jvm-0.91.1.pom"
+        ]
+    },
+    {
+        "coordinate": "io.kotest:kotest-assertions-core-jvm:6.0.4",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "1731e429afa50ec7dc030760879d43f266458baf69f248d234a51614ceeb329e",
+        "evidence": [
+            "kotest-assertions-core-jvm-6.0.4.pom"
+        ]
+    },
+    {
+        "coordinate": "io.kotest:kotest-assertions-shared-jvm:6.0.4",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "762f33b806fc40409cf53a8b237a3bf119234a5f7182a307a67d7bde2e6c9c3e",
+        "evidence": [
+            "kotest-assertions-shared-jvm-6.0.4.pom"
+        ]
+    },
+    {
+        "coordinate": "io.kotest:kotest-common-jvm:6.0.4",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b194ff0b91f35cebd19a0c8d4ef183f2a0a92f7f0cee0a6a02071cf4296451c0",
+        "evidence": [
+            "kotest-common-jvm-6.0.4.pom"
+        ]
+    },
+    {
+        "coordinate": "io.kotest:kotest-extensions-jvm:6.0.4",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ee316d49b6bc1f08f6610f838ea669ea0218d752e1e90c91e450d5c26c575061",
+        "evidence": [
+            "kotest-extensions-jvm-6.0.4.pom"
+        ]
+    },
+    {
+        "coordinate": "io.kotest:kotest-framework-engine-jvm:6.0.4",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5eeaeccbd786bddc5956909a9e301e3c13e42f73426748881d32e945a7d36f90",
+        "evidence": [
+            "kotest-framework-engine-jvm-6.0.4.pom"
+        ]
+    },
+    {
+        "coordinate": "io.kotest:kotest-runner-junit5-jvm:6.0.4",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b69ec79be2526459ab119134cbd2542d7d004997b2925a5d66c35e16d76307ac",
+        "evidence": [
+            "kotest-runner-junit5-jvm-6.0.4.pom"
+        ]
+    },
+    {
+        "coordinate": "io.micrometer:micrometer-commons:1.15.9",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "3fab2a0ff208d7cb52aee923c46db6451641037ec7c74d06cb03cc3689c39771",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "micrometer-commons-1.15.9.pom"
+        ]
+    },
+    {
+        "coordinate": "io.micrometer:micrometer-observation:1.15.9",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "9d2406587485b228abd64a90f7e8059a3fd0251f2289e931ae9c5286eaebfc1e",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "micrometer-observation-1.15.9.pom"
+        ]
+    },
+    {
+        "coordinate": "io.setl:rdf-urdna:1.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "e0c61b320b0834f85b071b4e542dd3fc6ed23e5c301e0bf127c0fd6dcf4c13ec",
+        "evidence": [
+            "rdf-urdna-1.4.pom"
+        ]
+    },
+    {
+        "coordinate": "jakarta.activation:jakarta.activation-api:2.1.4",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c9db52100ce6c8aac95cc39075f95720d2e561b11f8051b81c121ad4effd7004",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "META-INF__NOTICE.md",
+            "jakarta.activation-api-2.1.4.pom"
+        ]
+    },
+    {
+        "coordinate": "jakarta.annotation:jakarta.annotation-api:2.1.1",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5f65fdaf424eee2b55e1d882ba9bb376be93fb09b37b808be6e22e8851c909fe",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "META-INF__NOTICE.md",
+            "jakarta.annotation-api-2.1.1.pom"
+        ]
+    },
+    {
+        "coordinate": "jakarta.json:jakarta.json-api:2.1.3",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "bc934142805ea1d794f1440563965a3861a2a9fb7414ecd3fe44f26500734414",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "META-INF__NOTICE.md",
+            "jakarta.json-api-2.1.3.pom"
+        ]
+    },
+    {
+        "coordinate": "jakarta.validation:jakarta.validation-api:3.0.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "291c25e6910cc6a7ebd96d4c6baebf6d7c37676c5482c2d96146e901b62c1fc9",
+        "evidence": [
+            "jakarta.validation-api-3.0.2.pom"
+        ]
+    },
+    {
+        "coordinate": "jakarta.xml.bind:jakarta.xml.bind-api:4.0.4",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c507ca69a8c6dd11bf4afeec9e0d412c4fa3933fffb0a84680ea5727e8472124",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "META-INF__NOTICE.md",
+            "jakarta.xml.bind-api-4.0.4.pom"
+        ]
+    },
+    {
+        "coordinate": "net.bytebuddy:byte-buddy-agent:1.17.8",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5b17113e66e77ca6f8af07ff367c216df964a980f0e9f11e3b1aa793253aa64f",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "byte-buddy-agent-1.17.8.pom"
+        ]
+    },
+    {
+        "coordinate": "net.bytebuddy:byte-buddy:1.17.8",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "2b5ddc8c1f4234bdb7cb45338a8e10a13e0e3ca473e91d5d821d681127ea8ba1",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "byte-buddy-1.17.8.pom"
+        ]
+    },
+    {
+        "coordinate": "net.java.dev.jna:jna-platform:5.9.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "1903bc6d87f3ab92023957b91f45a9c8eb3515bad030356ce977201e5141b724",
+        "evidence": [
+            "META-INF__LICENSE",
+            "jna-platform-5.9.0.pom"
+        ]
+    },
+    {
+        "coordinate": "net.java.dev.jna:jna:5.14.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "34ed1e1f27fa896bca50dbc4e99cf3732967cec387a7a0d5e3486c09673fe8c6",
+        "evidence": [
+            "META-INF__LICENSE",
+            "jna-5.14.0.pom"
+        ]
+    },
+    {
+        "coordinate": "net.minidev:accessors-smart:2.5.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "9b8a7bc43861d6156c021166d941fb7dddbe4463e2fa5ee88077e4b01452a836",
+        "evidence": [
+            "accessors-smart-2.5.2.pom"
+        ]
+    },
+    {
+        "coordinate": "net.minidev:json-smart:2.5.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "4fbdedb0105cedc7f766b95c297d2e88fb6a560da48f3bbaa0cc538ea8b7bf71",
+        "evidence": [
+            "json-smart-2.5.2.pom"
+        ]
+    },
+    {
+        "coordinate": "no.hasmac:hasmac-json-ld:0.10.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "8f348e8de3f1a3c9ea94bf43f02f170925644a095cc3395ca0f4dfd9c3abbef3",
+        "evidence": [
+            "META-INF__LICENSE",
+            "hasmac-json-ld-0.10.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.apache.logging.log4j:log4j-api:2.24.3",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5b4a0a0cd0e751ded431c162442bdbdd53328d1f8bb2bae5fc1bbeee0f66d80f",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "log4j-api-2.24.3.pom"
+        ]
+    },
+    {
+        "coordinate": "org.apache.logging.log4j:log4j-to-slf4j:2.24.3",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c7f2b0c612a4eb05b1587d1c880eb4cf5f4f53850676a8ede8da2b8fabb4f73f",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "log4j-to-slf4j-2.24.3.pom"
+        ]
+    },
+    {
+        "coordinate": "org.apache.tomcat.embed:tomcat-embed-core:10.1.52",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "522f540d09d14c86e0d300d6c85d9604ccc951ade60678e16822410bad6658a8",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "tomcat-embed-core-10.1.52.pom"
+        ]
+    },
+    {
+        "coordinate": "org.apache.tomcat.embed:tomcat-embed-el:10.1.52",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "cbb6ed2e5746215273027e8a8083a4e2472e28c0132491f1e772f8fea5a5e0ac",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "tomcat-embed-el-10.1.52.pom"
+        ]
+    },
+    {
+        "coordinate": "org.apache.tomcat.embed:tomcat-embed-websocket:10.1.52",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "27b1f5c0c94d96cf8cc222219d189e092fab7b2ddee48e8320a60248aa9d0e75",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "tomcat-embed-websocket-10.1.52.pom"
+        ]
+    },
+    {
+        "coordinate": "org.assertj:assertj-core:3.27.7",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c4a445426c3c2861666863b842cc4ec7bbb1c4226fefd370b6d2fe83d6c4ff0f",
+        "evidence": [
+            "assertj-core-3.27.7.pom"
+        ]
+    },
+    {
+        "coordinate": "org.awaitility:awaitility:4.2.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "e831fee30ed401e2208f1bd5a0ef9add538d9cb1103c0e43216691b647bde9c6",
+        "evidence": [
+            "awaitility-4.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.parsson:parsson:1.1.7",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c21db018f8ac6cf79893f1af77f1cd337937bd12ae6fa3d4b10f5a00819ee56c",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "META-INF__NOTICE.md",
+            "parsson-1.1.7.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-common-annotation:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "136ee0d59366168ba459d605007f86a1c5a274dd342efac7c536133dbc4bef98",
+        "evidence": [
+            "rdf4j-common-annotation-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-common-exception:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "936a2867e7b0fcba2c72fade3726ffcd00b0b1fb12032765b1f8578bb6d9ec4c",
+        "evidence": [
+            "rdf4j-common-exception-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-common-io:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "20e34e9706eee5dedc85c92ccf4c2e6cb2f18573c407ad5f62a0e45076d47fb3",
+        "evidence": [
+            "rdf4j-common-io-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-common-iterator:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d64555b4d54aa6d25b4196de02b5acd9c073d0d87ad4234fe90313c35fe6a2c1",
+        "evidence": [
+            "rdf4j-common-iterator-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-common-order:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d904b090c020d0f689a0d85a504594e9e889d2063becd423823037b3293972da",
+        "evidence": [
+            "rdf4j-common-order-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-common-text:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "8731747c7b4240d1c8d30c406d96d2cc695a327dfbd998a91ebe6fe5a81448bd",
+        "evidence": [
+            "rdf4j-common-text-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-common-xml:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5bd98f84625a29fb11d8189ed59111931bd3fccf4cff4604f72c88524cd789db",
+        "evidence": [
+            "rdf4j-common-xml-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-model-api:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "54c17c87fe861c7e303237c58276849fec4bb2fd8c149343d7cbc5b6d65b85c8",
+        "evidence": [
+            "rdf4j-model-api-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-model-vocabulary:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "254b2628feaa163d48051a170965a769ed203d0eaea8dec8ddb8ac65fc2fc17f",
+        "evidence": [
+            "rdf4j-model-vocabulary-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-model:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d5b6ce69326ae6cf2c5ec9ce9debab520e2141a4ca3db879b7609cdf933a037e",
+        "evidence": [
+            "rdf4j-model-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-rio-api:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "00401c65b370c3b191bb1103e1f32de88b4ff394f8c7492b1545633749e6524e",
+        "evidence": [
+            "rdf4j-rio-api-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-rio-datatypes:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "fe07803af792b5967c1bba5b0d40914962465452fc863de6d40b9473d666773b",
+        "evidence": [
+            "rdf4j-rio-datatypes-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-rio-languages:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "9b31e96b7028558010e5d24e5c14493c7483441f4d9d63d4f0710870327427ad",
+        "evidence": [
+            "rdf4j-rio-languages-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-rio-nquads:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "bb756c499617f4e3c1f3e1eb0f494b8160704952430f0d68dabb8950dd5fc716",
+        "evidence": [
+            "rdf4j-rio-nquads-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.eclipse.rdf4j:rdf4j-rio-ntriples:5.2.2",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c151d23fc905e46d80a80318d368f832f248d514ec60589e85f03383a4ba6029",
+        "evidence": [
+            "rdf4j-rio-ntriples-5.2.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.hamcrest:hamcrest:3.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5d66b6a4a680755cb6ed7cb104fa7835ef644667586ff0737adeb977c39ecdbc",
+        "evidence": [
+            "META-INF__LICENSE",
+            "hamcrest-3.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.hibernate.validator:hibernate-validator:8.0.3.Final",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "2ad24670fd08e21d3f43d3105d5326bd5ef6b01e819c5cd103823866b954517e",
+        "evidence": [
+            "hibernate-validator-8.0.3.Final.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jboss.logging:jboss-logging:3.6.2.Final",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "f423e07bffce73bf2b6cc872f30981c06fe9cfd5a86a0b4f5fbdd11cfe0148e0",
+        "evidence": [
+            "jboss-logging-3.6.2.Final.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlin:kotlin-compiler-embeddable:2.2.21",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "9588fa696ac5507af764fd5660df6894185e12704ec1bc3f5cb772af4987f295",
+        "evidence": [
+            "kotlin-compiler-embeddable-2.2.21.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlin:kotlin-daemon-embeddable:2.2.21",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "91c0673c22e44b054ae0314d323860ebe1f3aff3f0ebc74fff82c4733dde09be",
+        "evidence": [
+            "kotlin-daemon-embeddable-2.2.21.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlin:kotlin-reflect:2.2.21",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "44380abf37d245ce5c0f294f43512d1c39a59642bfa463922c74e96877cf49f8",
+        "evidence": [
+            "kotlin-reflect-2.2.21.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlin:kotlin-script-runtime:2.2.21",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "2b1519b427b514d1536c1b425674b03fe914af637924028e9959c6625442df51",
+        "evidence": [
+            "kotlin-script-runtime-2.2.21.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.21",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b785922f11e6d91a6dd1d75cb0aef1ce37b83f8de0e3a2139139dfb823bb8a2c",
+        "evidence": [
+            "kotlin-stdlib-jdk7-2.2.21.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c62275c50ee591ca2f82c7ba42696b791600c25844f47e84bd9460302a0d5238",
+        "evidence": [
+            "kotlin-stdlib-jdk8-2.2.21.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.2.21",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "6558a3d233da56a20934b32159f9db5f86ed5816ef098f78a2c223dc6abb79dd",
+        "evidence": [
+            "kotlin-stdlib-2.2.21.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "f3d4f5de1c391bbcc20f3b3435ccbac013521e76b6902d7d59635ec15c1f797e",
+        "evidence": [
+            "kotlinx-coroutines-core-jvm-1.8.1.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-debug:1.8.1",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "245530319a17d7c9bc4a11526f42e95750e4ab3fc864c940d9ebe8f548ea1870",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "kotlinx-coroutines-debug-1.8.1.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d8cfb4c363c91c773353b115bd4a6b5a04608e7916fe235d3a9d87efcb996c01",
+        "evidence": [
+            "kotlinx-coroutines-jdk8-1.8.1.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.8.1",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "c4ef1deb31be3f81ed82ecf237220cc95886868a7ec527a418599dfff159dedb",
+        "evidence": [
+            "kotlinx-coroutines-test-jvm-1.8.1.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlinx:kotlinx-io-bytestring-jvm:0.7.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ea38a66b0ff46ed82dded9e81d2dce70e5fbe03bd6cc52b4fc8869381dea7b7d",
+        "evidence": [
+            "kotlinx-io-bytestring-jvm-0.7.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlinx:kotlinx-io-core-jvm:0.7.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "6ededc9be4d878aea80c7dd609f91bfc47fcd3d36cc91fd0f3f328fbd6656c8f",
+        "evidence": [
+            "kotlinx-io-core-jvm-0.7.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.6.3",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "29c821a8d4e25cbfe4f2ce96cdd4526f61f8f4e69a135f9612a34a81d93b65f1",
+        "evidence": [
+            "kotlinx-serialization-core-jvm-1.6.3.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains:annotations:13.0",
+        "scopes": [
+            "runtimeClasspath"
+        ],
+        "sha256": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478",
+        "evidence": [
+            "annotations-13.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.jetbrains:annotations:23.0.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "7b0f19724082cbfcbc66e5abea2b9bc92cf08a1ea11e191933ed43801eb3cd05",
+        "evidence": [
+            "annotations-23.0.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.junit.jupiter:junit-jupiter-api:5.12.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "0b9ca728e4bcd9adc57f29deb9556ff9ed5e08b4e8843b875aba4e4e3e04f092",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "junit-jupiter-api-5.12.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.junit.jupiter:junit-jupiter-engine:5.12.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "f576c06b8accde9985063b8bc80526cb980eec24dee0b7221fc8ddd7ace65800",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "junit-jupiter-engine-5.12.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.junit.jupiter:junit-jupiter-params:5.12.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b219ffa949b90a71aa3b6c2b606456b82bca0b2089b7459c8ff461156ff59b0f",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "junit-jupiter-params-5.12.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.junit.jupiter:junit-jupiter:5.12.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "3854b3ad434906b827fec474aa0d8da8b56e9e56d5fc7f2e20fc3f12ec4be894",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "junit-jupiter-5.12.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.junit.platform:junit-platform-commons:1.12.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "e683a01e85dfabea520c056ac6015a6162756e602ec653c0da85e233f0afbc18",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "junit-platform-commons-1.12.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.junit.platform:junit-platform-engine:1.12.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "cef0efcb5bd2e05e2b808d38bab5c655089c0c3001527376e74cb606a7911ec8",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "junit-platform-engine-1.12.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.junit.platform:junit-platform-launcher:1.12.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "dccf2c1fa0a977c53ad094ad859bfdddd524d97594b76307ad787de71985757f",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "junit-platform-launcher-1.12.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.junit.platform:junit-platform-suite-api:1.12.2",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "e17b2006290de11f6444a4f98b6d71bbbd7d6fccfc40fd85db413210cb2cbc8d",
+        "evidence": [
+            "META-INF__LICENSE.md",
+            "junit-platform-suite-api-1.12.2.pom"
+        ]
+    },
+    {
+        "coordinate": "org.mockito:mockito-core:5.17.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "dff59ad8c61b026ef86cc113f94f2301eb06caaf81dec30c78a96a1a65595c5e",
+        "evidence": [
+            "LICENSE",
+            "mockito-core-5.17.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.mockito:mockito-junit-jupiter:5.17.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5c5442f8aaaa8f03df03e4862a0d69205d1b41f5edbf7d5aa7a2486a61de49b7",
+        "evidence": [
+            "LICENSE",
+            "mockito-junit-jupiter-5.17.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.objenesis:objenesis:3.3",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "02dfd0b0439a5591e35b708ed2f5474eb0948f53abf74637e959b8e4ef69bfeb",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "objenesis-3.3.pom"
+        ]
+    },
+    {
+        "coordinate": "org.opentest4j:opentest4j:1.3.0",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "48e2df636cab6563ced64dcdff8abb2355627cb236ef0bf37598682ddf742f1b",
+        "evidence": [
+            "META-INF__COPYRIGHT",
+            "META-INF__LICENSE",
+            "opentest4j-1.3.0.pom"
+        ]
+    },
+    {
+        "coordinate": "org.ow2.asm:asm:9.7.1",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281",
+        "evidence": [
+            "asm-9.7.1.pom"
+        ]
+    },
+    {
+        "coordinate": "org.skyscreamer:jsonassert:1.5.3",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "719095c07d4203961320da593441d8b3b643c18eb1d81aa98ea933bb7eb351ba",
+        "evidence": [
+            "jsonassert-1.5.3.pom"
+        ]
+    },
+    {
+        "coordinate": "org.slf4j:jul-to-slf4j:2.0.17",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a7afcd23b9cfd1475e55c94f943b808c5922035e7e2c2a5c65a487a4106bc538",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "jul-to-slf4j-2.0.17.pom"
+        ]
+    },
+    {
+        "coordinate": "org.slf4j:slf4j-api:2.0.17",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "7b751d952061954d5abfed7181c1f645d336091b679891591d63329c622eb832",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "slf4j-api-2.0.17.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-autoconfigure:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "1bfb60bb35836b72119335fc575a91dcc2984ba4f7214deebb4ee8e44eb51efa",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-autoconfigure-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter-json:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "272f03677228c18884c795dcb8a0a3236fec2235d973c0fb9673737d97de0c32",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-json-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter-logging:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "5fffb9db8fd10f16f8721a2925d13a145ee0a8e9b91749c3a42f1bb6e892ade1",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-logging-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter-test:3.5.11",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "217d3f8d72a0032a839e28d01643d94bbb42577bc8c42e7337acdb490240be78",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-test-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter-tomcat:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "3b14b88ca09ff19a99dbe84ebc434eebd25ac5515d3c712106fe41330716dbca",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-tomcat-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter-validation:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "df99f17cb50fb7bc11c9f402f98d7ef326c87e6753c0a7bb8add8c58934ff8ec",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-validation-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter-web:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "f4373a1bb6921a6d5b188ebee74880a1c5c8de5e93e8443fc20ed677a1fca24d",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-web-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-starter:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "45aeb1460da2f990d220d3e326dce94b74c9a6d8e582bcf1f2dc6bfd49f24d28",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-starter-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-test-autoconfigure:3.5.11",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "97d0eead9e7b0fa8144173fa2719a5ebfaf7f51e57b34709b3444873a9f2bcb0",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-test-autoconfigure-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot-test:3.5.11",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ee7f9d28414d7c415d8a1c4a8c6befdd516abd7c95646c47153083737b85bf80",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-test-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework.boot:spring-boot:3.5.11",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ebf6229eb151c8eaa398671cc130439248f48c309afde9dcc81b8acfaa0f5f9f",
+        "evidence": [
+            "META-INF__LICENSE.txt",
+            "META-INF__NOTICE.txt",
+            "spring-boot-3.5.11.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-aop:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "2971f19ff56ec28a2833dbee3f5b8e9bce8a1015b18b2bef5ff070170d4b90f3",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-aop-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-beans:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "6cc57daaffa4a66fc2293062d7056b6f9ec122c65721c4b02e03ec810d4708af",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-beans-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-context:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "2e7feb5fd910cb4c77cf096c8dbb46701346e9a982b6aa60fb68b490966e4cb5",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-context-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-core:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "da9b13d75d42d7dd4e6a3a5a16c9bd703cc4a489eaa5effb860d67957c3752c2",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-core-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-expression:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "7e7ac47558ab9bc1077ebca196d9ec16ef44a5a0ac4eeaeb9e4342179a860028",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-expression-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-jcl:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "944b76bfa74677ead2fcb70f6660d84260ae064fcbfb718c5270568b5907947c",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-jcl-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-test:6.2.16",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "1306efb62f32e98e145694d55ba176b1119480df42fb19eea6a5ebb2265ad5a0",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-test-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-web:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ec5f1f3f288e4c91c88e9067b05dcff2b936721888a0c8026d3640738e263567",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-web-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.springframework:spring-webmvc:6.2.16",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "6be126bba6c6326901465dee7b4ceb8d97f1a2a59d7e5f5338e157f7239cfa97",
+        "evidence": [
+            "META-INF__license.txt",
+            "META-INF__notice.txt",
+            "spring-webmvc-6.2.16.pom"
+        ]
+    },
+    {
+        "coordinate": "org.xmlunit:xmlunit-core:2.10.4",
+        "scopes": [
+            "testRuntimeClasspath"
+        ],
+        "sha256": "208e0cee82aedd9183937e4b9ae44b83884179f724a706bef5795477acfcca91",
+        "evidence": [
+            "xmlunit-core-2.10.4.pom"
+        ]
+    },
+    {
+        "coordinate": "org.yaml:snakeyaml:2.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "ef779af5d29a9dde8cc70ce0341f5c6f7735e23edff9685ceaa9d35359b7bb7f",
+        "evidence": [
+            "snakeyaml-2.4.pom"
+        ]
+    }
+]

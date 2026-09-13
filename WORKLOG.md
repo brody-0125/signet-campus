@@ -18,7 +18,7 @@ LIB-01: recover Maven publication before implementing the service. Prove a Kotli
 - Starter: `abaf5c173ff6800f898e74dc73b4f01493559e00`, `fix/jitpack-publication`, pushed. [Branch](https://github.com/brody-0125/signet-spring-boot-starter/tree/fix/jitpack-publication). JitPack `abaf5c173f` reports ok and remote POM downloaded successfully.
 - Core: `64155ebb7b07457616d7e70a3f80475a96d3a49d`, `fix/cross-platform-conformance`, pushed. [Branch](https://github.com/brody-0125/signet-core/tree/fix/cross-platform-conformance). JitPack `64155eb` reports ok; remote POM downloaded.
 - Integration repo: `af89b94` establishes scope and acceptance matrix on `feature/campus-foundation`.
-- No merge or main push performed. Integration repository is local only.
+- No library merge or library main push performed. Integration repository was local at the end of iteration 1; see publication update below.
 
 ### Next iteration
 
@@ -41,3 +41,12 @@ LIB-01: recover Maven publication before implementing the service. Prove a Kotli
 With Java 17 installed: `cd server` then `./gradlew test` (Windows: `gradlew.bat test`).
 Or mount `server` to `/workspace` in `eclipse-temurin:17-jdk` and run `sh ./gradlew test --no-daemon` there.
 This is a dependency integration test, not an implemented web service. Do not mark ISSUE-01, VERIFY-01 or OPS-01 complete from it.
+
+## 2026-09-14 — repository publication
+
+- Name: Signet Campus; repository: `brody-0125/signet-campus`.
+- Set application version to 1.0.0 at the owner's request; this is a development baseline, not completed production functionality.
+- Added MIT for original work, Gradle wrapper attribution, third-party notices, exact artifact evidence and license declarations, standards/privacy/deployment review, contribution rules and security reporting.
+- Inventory verified: 142 unique coordinates, 81 runtime and 61 test-only; preserved scopes and SHA-256 hashes. Inherited POM licenses resolved; the two Signet artifacts have no POM license declarations and are explicitly flagged.
+- Containerized Kotlin contract test still passes after version update. No secret/key patterns found in the source publication review.
+- Initial integration `main` and `v1.0.0` establish this new repository's baseline; existing library main branches remain unchanged. Future implementation continues on feature/fix/refactor branches.
