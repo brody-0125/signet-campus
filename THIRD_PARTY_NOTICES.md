@@ -33,13 +33,11 @@ The repository includes the unmodified Gradle wrapper scripts and JAR, originall
 
 POM lists sometimes express alternatives without machine-readable AND/OR semantics. The table does not mechanically treat every listed license as cumulative. Actual artifact licenses take priority over a guessed SPDX expression.
 
-## Signet upstream metadata gaps
+## Signet libraries
 
-The pinned [core `v0.1.2`](https://github.com/brody-0125/signet-core/tree/v0.1.2) and [starter `v0.1.2`](https://github.com/brody-0125/signet-spring-boot-starter/tree/v0.1.2) identify Apache-2.0 in their READMEs, but their published POMs have no license declaration. Their linked LICENSE files are absent from the repositories. The inventory therefore intentionally marks the POM declaration UNKNOWN; it must not silently convert missing metadata to MIT.
+The pinned [core `v0.1.3`](https://github.com/brody-0125/signet-core/tree/v0.1.3) and [starter `v0.1.3`](https://github.com/brody-0125/signet-spring-boot-starter/tree/v0.1.3) use Apache-2.0. Their published POMs declare the license, and their JARs include `META-INF/LICENSE` and `META-INF/NOTICE`. These files are retained in the per-artifact evidence directories and must accompany redistributed covered artifacts.
 
-Both upstream NOTICE files contain a misleading explanation that EPL secondary licensing allows Parsson to be distributed under Apache-2.0. That is not the secondary license designated in [Parsson 1.1.7's license](https://github.com/eclipse-ee4j/parsson/blob/1.1.7/LICENSE.md). Do not rely on that explanation. Parsson's original license and NOTICE from the resolved JAR are preserved at [its artifact evidence directory](docs/third-party/org.eclipse.parsson/parsson/1.1.7/).
-
-Before publishing a bundled application or image: repair Signet license files/POM metadata/upstream explanation on separate fix branches, consume a verified corrected commit, and regenerate the inventory. The current source-only publication preserves this finding rather than asserting complete binary distribution clearance.
+Parsson retains its own EPL-2.0 terms and conditional secondary-license designation; Signet's Apache-2.0 license does not replace them. Parsson's original license and NOTICE from the resolved JAR are preserved at [its artifact evidence directory](docs/third-party/org.eclipse.parsson/parsson/1.1.7/).
 
 ## Distribution obligations
 
