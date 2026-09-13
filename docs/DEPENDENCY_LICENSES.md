@@ -25,7 +25,7 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | com.github.ajalt.mordant:mordant-jvm-jna-jvm:3.0.2 | test only | Apache-2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | com.github.ajalt.mordant:mordant-jvm:3.0.2 | test only | Apache-2.0 [https://www.apache.org/licenses/LICENSE-2.0] |
 | com.github.brody-0125:signet-core:8a98820f9c | runtime | UNKNOWN — no POM declaration; inspect artifact/upstream evidence |
-| com.github.brody-0125:signet-spring-boot-starter:abaf5c173f | runtime | UNKNOWN — no POM declaration; inspect artifact/upstream evidence |
+| com.github.brody-0125:signet-spring-boot-starter:v0.1.0 | runtime | UNKNOWN — no POM declaration; inspect artifact/upstream evidence |
 | com.github.jsonld-java:jsonld-java:0.13.4 | runtime | Revised BSD License [https://raw.github.com/jsonld-java/jsonld-java/master/LICENCE] |
 | com.google.code.findbugs:jsr305:3.0.2 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.google.code.gson:gson:2.13.2 | runtime | Apache-2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
