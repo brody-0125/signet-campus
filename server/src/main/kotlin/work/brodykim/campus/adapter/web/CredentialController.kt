@@ -14,7 +14,22 @@ import java.util.UUID
 @RestController
 class CredentialController(private val service: CredentialService, private val crypto: CredentialCryptography,
                            private val pathways: work.brodykim.campus.application.PathwayCredentialService,
+                           private val images: work.brodykim.campus.application.CredentialImages,
                            @param:Value("\${campus.public-url}") private val publicUrl: String) {
+    @GetMapping("/api/credentials/{id}/image/{format}")
+    fun image(authentication: JwtAuthenticationToken, @PathVariable id: UUID, @PathVariable format: String): ResponseEntity<ByteArray> {
+        val record = service.get(actor(authentication), id)
+        val imageFormat = when (format) {
+            "png" -> work.brodykim.campus.application.BadgeImageFormat.PNG
+            "svg" -> work.brodykim.campus.application.BadgeImageFormat.SVG
+            else -> throw IllegalArgumentException("Supported formats: png, svg")
+        }
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore())
+            .header("Content-Disposition", "attachment; filename=\"signet-campus-$id.$format\"")
+            .contentType(MediaType.parseMediaType(if (format == "png") "image/png" else "image/svg+xml"))
+            .body(images.export(record.document, imageFormat))
+    }
+
     @PostMapping("/api/pathways/{id}/credential")
     fun issuePathway(authentication: JwtAuthenticationToken, @PathVariable id: UUID): ResponseEntity<String> {
         require(authentication.token.getClaim<Boolean>("email_verified") == true) { "Verified email required" }

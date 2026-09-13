@@ -15,6 +15,12 @@ export type Submission = {
   version: number
 }
 export async function api<T>(path: string, body?: unknown, signal?: AbortSignal): Promise<T> {
+  return (await request(path, body, signal)).json()
+}
+export async function credentialImage(id: string, format: 'png' | 'svg'): Promise<Blob> {
+  return (await request(`/credentials/${id}/image/${format}`)).blob()
+}
+async function request(path: string, body?: unknown, signal?: AbortSignal): Promise<Response> {
   const headers: Record<string, string> = {}
   if (!['/achievements', '/pathways'].includes(path) || body !== undefined) headers.Authorization = `Bearer ${await accessToken()}`
   if (body !== undefined) headers['Content-Type'] = 'application/json'
@@ -47,5 +53,5 @@ export async function api<T>(path: string, body?: unknown, signal?: AbortSignal)
     }
     throw new Error(messages[response.status] || 'We could not complete your request. Please try again.')
   }
-  return response.json()
+  return response
 }

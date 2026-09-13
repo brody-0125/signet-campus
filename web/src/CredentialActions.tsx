@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { api, ApiError } from './api'
+import { api, ApiError, credentialImage } from './api'
 
 export function CredentialActions({ source, canIssue = true }: { source: { type: 'submissions' | 'pathways'; id: string }; canIssue?: boolean }) {
   const [issued, setCredential] = useState<Record<string, unknown> | null>(null)
@@ -12,6 +12,19 @@ export function CredentialActions({ source, canIssue = true }: { source: { type:
     } })
   const credential = issued || existing.data
   const issue = useMutation({ mutationFn: () => api<Record<string, unknown>>(path, {}), onSuccess: setCredential })
+  const image = useMutation({ mutationFn: async (format: 'png' | 'svg') => {
+    const id = String(credential?.id).split('/').pop()!
+    const blob = await credentialImage(id, format)
+    const url = URL.createObjectURL(blob)
+    try {
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `signet-campus-${id}.${format}`
+      document.body.append(link)
+      link.click()
+      link.remove()
+    } finally { setTimeout(() => URL.revokeObjectURL(url), 1000) }
+  } })
   const verification = useMutation({ mutationFn: () => {
     const id = String(credential?.id).split('/').pop()
     return api<{ status: string; valid: boolean }>(`/credentials/${id}/verify`, credential)
@@ -22,6 +35,9 @@ export function CredentialActions({ source, canIssue = true }: { source: { type:
     {existing.isError && <p className="error" role="alert">{existing.error.message} <button className="nav-link" onClick={() => void existing.refetch()}>Try again</button></p>}
     {credential ? <><p>Your signed credential is ready. Download it to keep your own copy.</p><div className="form-actions"><button className="button outline" onClick={() => verification.mutate()} disabled={verification.isPending}>Verify badge</button><a className="button primary" download="signet-campus-credential.json" href={`data:application/vc+ld+json;charset=utf-8,${encodeURIComponent(JSON.stringify(credential, null, 2))}`}>Download JSON</a></div></> : canIssue && (source.type === 'submissions' || existing.data === null) ? <><p>Issue your badge using the verified email address on your account.</p><div className="form-actions"><button className="button primary" onClick={() => issue.mutate()} disabled={issue.isPending}>{issue.isPending ? 'Issuing…' : 'Issue badge'}</button></div></> : !canIssue && existing.data === null && <p>Earn every required badge to claim this award.</p>}
     {issue.isError && <p className="error" role="alert">{issue.error.message}</p>}
+    {credential && <><p className="field-help">Image files include your signed credential. Anyone you send a file to can read its embedded badge details.</p>
+      <div className="form-actions">{(['png', 'svg'] as const).map(format => <button key={format} className="button outline" disabled={image.isPending} onClick={() => image.mutate(format)}>Download {format.toUpperCase()}</button>)}</div></>}
+    {image.isError && <p className="error" role="alert">{image.error.message}</p>}
     {verification.isError && <p className="error" role="alert">{verification.error.message}</p>}
     {verification.data && <p className="notice" role="status">{verification.data.valid ? 'Verified: authentic, current and not revoked.' : `Verification result: ${verification.data.status.replaceAll('_', ' ').toLowerCase()}.`}</p>}
   </div>

@@ -20,6 +20,39 @@ async function request(path, token, body, expected = 200) {
   return response.headers.get('content-type')?.includes('json') ? response.json() : null;
 }
 
+async function verifyImageExport(credential, token, format) {
+  const id = credential.id.split('/').pop();
+  const response = await fetch(`${api}/api/credentials/${id}/image/${format}`, { headers: { Authorization: `Bearer ${token}` } });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.equal(response.headers.get('content-type'), format === 'png' ? 'image/png' : 'image/svg+xml');
+  assert.equal(response.headers.get('content-disposition'), `attachment; filename="signet-campus-${id}.${format}"`);
+  const data = Buffer.from(await response.arrayBuffer());
+  let document;
+  if (format === 'png') {
+    assert.equal(data.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+    for (let offset = 8; offset + 12 <= data.length;) {
+      const length = data.readUInt32BE(offset);
+      assert.ok(offset + 12 + length <= data.length);
+      const chunk = data.subarray(offset + 8, offset + 8 + length);
+      if (data.toString('ascii', offset + 4, offset + 8) === 'iTXt' && chunk.subarray(0, 20).toString() === 'openbadgecredential\0') {
+        assert.equal(chunk.subarray(20, 24).toString('hex'), '00000000');
+        document = chunk.subarray(24).toString('utf8');
+        break;
+      }
+      offset += length + 12;
+    }
+  } else {
+    const svg = data.toString('utf8');
+    assert.ok(svg.includes('https://purl.imsglobal.org/ob/v3p0'));
+    const embedded = svg.match(/<openbadges:credential>([\s\S]*?)<\/openbadges:credential>/)?.[1];
+    assert.ok(embedded);
+    document = [...embedded.matchAll(/<!\[CDATA\[([\s\S]*?)\]\]>/g)].map(match => match[1]).join('').trim();
+  }
+  assert.ok(document, `No embedded credential in ${format}`);
+  assert.deepEqual(JSON.parse(document), credential);
+}
+
 const learner = await login('learner', 'local-learner-only');
 const reviewer = await login('reviewer', 'local-reviewer-only');
 if (process.argv[2]) {
@@ -76,6 +109,9 @@ if (process.argv[2]) {
   await request(completionPath, reviewer, undefined, 404);
   const completionRecord = `/api/credentials/${completion.id.split('/').pop()}`;
   assert.equal((await request(`${completionRecord}/verify`, null, completion)).valid, true);
+  for (const award of [credential, completion]) {
+    for (const format of ['png', 'svg']) await verifyImageExport(award, learner, format);
+  }
   if (process.env.CAMPUS_EXPECTED_KEY_ID) assert.equal(credential.proof.verificationMethod, process.env.CAMPUS_EXPECTED_KEY_ID);
   assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
   const credentialPath = `/api/credentials/${credential.id.split('/').pop()}`;
