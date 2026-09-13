@@ -26,7 +26,7 @@ Bowdoin은 Digital Accessibility Awareness 배지를 운영하며 배지에 발�
 
 | ID | 기능/출처 | 인수 조건 | 검증 | 상태 |
 |---|---|---|---|---|
-| LIB-01 | JitPack 배포 | 원격 POM/JAR 및 전이 의존성으로 빈 소비자 프로젝트 빌드 성공 | Gradle 배포·소비자 smoke | 진행 |
+| LIB-01 | JitPack 배포 | 원격 POM/JAR 및 전이 의존성으로 빈 소비자 프로젝트 빌드 성공 | Gradle 배포·소비자 smoke | starter 완료; 최신 core 소비 연결 예정 |
 | CAT-01 | 사례: 역량·취득 조건 | 발급자가 배지와 평가 기준을 등록하고 학습자가 열람 | Kotest/API/브라우저 | 예정 |
 | PATH-01 | 사례: 학습 경로 | 등록·선행 조건·진행률·완료 상태 일관성 | 도메인/DB/E2E | 예정 |
 | NOTIFY-01 | 사례: 등록 알림 | 로컬 Mailpit에서 경로 등록 알림 수신; 재시도 중 중복 억제 | outbox/SMTP 통합 | 예정 |
@@ -58,3 +58,5 @@ Bowdoin은 Digital Accessibility Awareness 배지를 운영하며 배지에 발�
 ## 다음 작업
 
 LIB-01 배포 실패 재현 → publication/LF/설명 수정 → 전체 starter 테스트 및 POM 확인 → fix 브랜치 커밋·push → JitPack 원격 소비 검증 → core 최신 기준 테스트 → ISSUE/VERIFY 수직 기능.
+
+첫 반복 결과와 실제 검증 수치, 이어서 할 작업은 [WORKLOG.md](WORKLOG.md)에 기록한다.
