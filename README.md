@@ -10,6 +10,8 @@ docker compose up -d --build web
 
 Open `http://localhost:5173` to explore achievements, submit evidence and follow reviews. The API runs at `http://localhost:8080` with PostgreSQL storage and Keycloak authentication. See [Local development](docs/LOCAL_DEVELOPMENT.md) for accounts, configuration and smoke tests.
 
+For an isolated deployment with HTTPS login, issuance and public revocation checks, follow [HTTPS deployment](docs/HTTPS.md). It serves the application at `https://localhost:8443` and keeps database, API and identity ports internal.
+
 ## Credential integration
 
 The Kotlin server module integrates the published Signet Spring Boot starter. Its contract test builds a credential, signs it with an Ed25519 Data Integrity proof, verifies the signature, and checks rejection of modified credentials and unrelated public keys.
