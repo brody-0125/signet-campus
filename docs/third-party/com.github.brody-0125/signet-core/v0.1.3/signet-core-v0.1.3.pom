@@ -5,23 +5,14 @@
 <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.brody-0125</groupId>
   <artifactId>signet-core</artifactId>
-  <version>v0.1.2</version>
-  <name>brody-0125/signet-core</name>
-  <description>Java library for W3C VC 2.0 &amp; Open Badges 3.0. supports EdDSA, ECDSA, and Selective Disclosure (ecdsa-sd-2023)</description>
-  <url>https://github.com/brody-0125/signet-core</url>
-  <inceptionYear>2026</inceptionYear>
-  <developers>
-    <developer>
-      <id>brody-0125</id>
-      <name>Seokhyeon Kim</name>
-      <email></email>
-    </developer>
-  </developers>
-  <scm>
-    <connection>scm:git://github.com/brody-0125/signet-core.git</connection>
-    <developerConnection>scm:git://github.com/brody-0125/signet-core.git</developerConnection>
-    <url>git://github.com/brody-0125/signet-core.git</url>
-  </scm>
+  <version>v0.1.3</version>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <dependencies>
     <dependency>
       <groupId>com.nimbusds</groupId>
