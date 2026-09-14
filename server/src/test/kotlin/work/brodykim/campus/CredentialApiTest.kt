@@ -49,6 +49,27 @@ class CredentialApiTest : SigningTestSupport() {
         .andExpect(status().isOk).andExpect(header().string("Cache-Control", "no-store"))
         .andReturn().response.contentAsString
 
+    @Test fun `email changes preserve ownership without granting access to a matching email on another subject`() {
+        val submissionId = submission()
+        val signed = issue(submissionId)
+        val id = json.readTree(signed)["id"].asText().substringAfterLast('/')
+        fun changed(subject: UUID = owner.id, verified: Boolean = false) = jwt().jwt {
+            it.subject(subject.toString()).claim("email", "personal@example.test").claim("email_verified", verified)
+        }.authorities(emptyList())
+        for (verified in listOf(false, true)) {
+            mvc.perform(get("/api/credentials/$id").with(changed(verified = verified)))
+                .andExpect(status().isOk).andExpect(content().string(signed))
+            mvc.perform(get("/api/submissions/$submissionId").with(changed(verified = verified)))
+                .andExpect(status().isOk)
+        }
+        mvc.perform(get("/api/credentials/$id").with(changed(UUID.randomUUID(), true)))
+            .andExpect(status().isNotFound)
+        mvc.perform(post("/api/submissions/${submission()}/credential").with(changed()))
+            .andExpect(status().isBadRequest)
+        mvc.perform(post("/api/credentials/$id/verify").contentType(MediaType.APPLICATION_JSON).content(signed))
+            .andExpect(jsonPath("$.status").value("VALID"))
+    }
+
     @Test fun `sharing is private by default owner controlled and immediately reversible`() {
         val signed = issue(submission())
         val id = json.readTree(signed)["id"].asText().substringAfterLast('/')

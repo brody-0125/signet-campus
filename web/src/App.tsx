@@ -8,6 +8,7 @@ import { EvidenceForm } from './EvidenceForm'
 import { Submissions } from './Submissions'
 import { Pathways } from './Pathways'
 import { SharedCredential } from './SharedCredential'
+import { Account } from './Account'
 
 export function AccessibilityIcon() {
   return <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="18" cy="7" r="3"/><path d="M7 14l11 2 11-2M18 16v7m0 0-5 10m5-10 5 10M12 15l1 9m11-9-1 9"/></svg>
@@ -34,6 +35,7 @@ function WorkspaceApp() {
         <button className="nav-link" aria-current={view === 'explore' ? 'page' : undefined} onClick={() => navigate('explore')}>Explore</button>
         <button className="nav-link" aria-current={view === 'pathways' ? 'page' : undefined} onClick={() => navigate('pathways')}>Pathways</button>
         <button className="nav-link" aria-current={view === 'submissions' ? 'page' : undefined} onClick={() => navigate('submissions')}>{session.reviewer ? 'Review queue' : 'My submissions'}</button>
+        {session.authenticated && <button className="nav-link" aria-current={view === 'account' ? 'page' : undefined} onClick={() => navigate('account')}>Account</button>}
       </nav>
       <button className="button outline" disabled={!session.ready || !!session.error} onClick={session.authenticated ? signOut : signIn}>{session.authenticated ? 'Sign out' : 'Sign in'}</button>
     </div></header>
@@ -53,7 +55,7 @@ function WorkspaceApp() {
           {achievements.data?.length === 0 && <p>No achievements are available yet.</p>}
           {achievements.data?.map(a => <article className="achievement-row" key={a.id}><div className="icon-tile"><AccessibilityIcon/></div><div className="row-copy"><h3>{a.name}</h3><p>{a.criteria}</p></div><button className="button outline" onClick={() => useWorkspace.setState({ selectedId: a.id })}>View criteria</button>{session.reviewer && <button className="button outline" aria-label={`Edit ${a.name}`} onClick={() => setEditing(a)}>Edit</button>}</article>)}
         </div></section>
-      </> : view === 'pathways' ? <Pathways achievements={achievements.data || []}/> : <Submissions achievements={achievements.data || []}/>}
+      </> : view === 'pathways' ? <Pathways achievements={achievements.data || []}/> : view === 'account' ? session.authenticated ? <Account/> : <p className="container">Sign in to manage your account.</p> : <Submissions achievements={achievements.data || []}/>}
     </main>
     <footer><div className="container"><a className="wordmark" href="#" onClick={() => navigate('explore')}>signet campus</a><p>Learning, made visible.</p></div></footer>
     {selected && <EvidenceForm achievement={selected} onClose={() => useWorkspace.setState({ selectedId: null })}/>}

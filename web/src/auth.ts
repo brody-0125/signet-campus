@@ -29,6 +29,7 @@ export async function signOut() {
   try { await keycloak.logout({ redirectUri: window.location.origin }) }
   catch { useSession.setState({ error: 'Unable to sign out. Please try again.' }) }
 }
+export function manageAccount() { return keycloak.accountManagement() }
 export async function accessToken() {
   try {
     await keycloak.updateToken(30)
