@@ -124,9 +124,19 @@ if (process.argv[2]) {
   assert.ok(sharing.url.endsWith(`/shared/${completion.id.split('/').pop()}`));
   assert.deepEqual(await request(sharedPath, null), completion);
   assert.equal((await request(`${completionRecord}/verify`, null, completion)).valid, true);
+  const archived = await request(`/api/achievements/${achievement.id}/archive`, reviewer, { expectedVersion: achievement.version, archived: true });
+  assert.equal(archived.archived, true);
+  assert.equal((await request('/api/achievements', null)).some(item => item.id === achievement.id), false);
+  assert.equal((await request(`/api/achievements/${achievement.id}`, null)).archived, true);
+  await request('/api/submissions', learner, { achievementId: achievement.id, evidence: 'Paused work' }, 423);
+  assert.equal((await request(`/api/pathways/${pathway.id}`, null)).paused, true);
+  await request(enrollmentPath, reviewer, {}, 423);
+  assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
   for (const award of [credential, completion]) {
     for (const format of ['png', 'svg']) await verifyImageExport(award, learner, format);
   }
+  const restored = await request(`/api/achievements/${achievement.id}/archive`, reviewer, { expectedVersion: archived.version, archived: false });
+  assert.equal(restored.archived, false);
   if (process.env.CAMPUS_EXPECTED_KEY_ID) assert.equal(credential.proof.verificationMethod, process.env.CAMPUS_EXPECTED_KEY_ID);
   assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
   const credentialPath = `/api/credentials/${credential.id.split('/').pop()}`;

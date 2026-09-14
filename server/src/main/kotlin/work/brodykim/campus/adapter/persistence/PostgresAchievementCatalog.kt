@@ -8,8 +8,8 @@ import java.util.UUID
 
 @Repository
 class PostgresAchievementCatalog(private val jdbc: JdbcTemplate) : AchievementCatalog {
-    override fun list(): List<AchievementSummary> = jdbc.query("SELECT id, name, criteria, version, published FROM achievements ORDER BY name, id") { rs, _ ->
-        AchievementSummary(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("criteria"), rs.getLong("version"), rs.getBoolean("published"))
+    override fun list(): List<AchievementSummary> = jdbc.query("SELECT id, name, criteria, version, published, archived FROM achievements ORDER BY name, id") { rs, _ ->
+        AchievementSummary(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("criteria"), rs.getLong("version"), rs.getBoolean("published"), rs.getBoolean("archived"))
     }
     override fun create(achievement: AchievementSummary): AchievementSummary {
         jdbc.update("INSERT INTO achievements (id, name, criteria) VALUES (?, ?, ?)", achievement.id, achievement.name, achievement.criteria)
@@ -18,9 +18,9 @@ class PostgresAchievementCatalog(private val jdbc: JdbcTemplate) : AchievementCa
 
     @Transactional
     override fun update(achievement: AchievementSummary): AchievementSummary {
-        val current = jdbc.queryForList("SELECT version, published FROM achievements WHERE id = ? FOR UPDATE", achievement.id)
+        val current = jdbc.queryForList("SELECT version, published, archived FROM achievements WHERE id = ? FOR UPDATE", achievement.id)
             .singleOrNull() ?: throw AchievementNotFound()
-        if (current["version"] != achievement.version || jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM submissions WHERE achievement_id = ?)",
+        if (current["version"] != achievement.version || current["archived"] == true || jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM submissions WHERE achievement_id = ?)",
                 Boolean::class.java, achievement.id) == true) throw AchievementConflict()
         jdbc.update("UPDATE achievements SET name = ?, criteria = ?, version = version + 1 WHERE id = ?",
             achievement.name, achievement.criteria, achievement.id)
@@ -34,5 +34,14 @@ class PostgresAchievementCatalog(private val jdbc: JdbcTemplate) : AchievementCa
         if (current["version"] != expectedVersion || current["published"] == true) throw AchievementConflict()
         return jdbc.query("UPDATE achievements SET published = true, version = version + 1 WHERE id = ? RETURNING id, name, criteria, version",
             { rs, _ -> AchievementSummary(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("criteria"), rs.getLong("version"), true) }, id).single()
+    }
+
+    @Transactional
+    override fun archive(id: UUID, expectedVersion: Long, archived: Boolean): AchievementSummary {
+        val current = jdbc.queryForList("SELECT version, published, archived FROM achievements WHERE id = ? FOR UPDATE", id)
+            .singleOrNull() ?: throw AchievementNotFound()
+        if (current["version"] != expectedVersion || current["published"] != true || current["archived"] == archived) throw AchievementConflict()
+        return jdbc.query("UPDATE achievements SET archived = ?, version = version + 1 WHERE id = ? RETURNING id, name, criteria, version",
+            { rs, _ -> AchievementSummary(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("criteria"), rs.getLong("version"), true, archived) }, archived, id).single()
     }
 }

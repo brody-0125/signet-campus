@@ -24,7 +24,7 @@ export function EvidenceForm({ achievement, onClose, existing }: { achievement: 
   return <Dialog title={achievement.name} onClose={onClose}>
     <div className="criteria"><h3>Achievement criteria</h3><p>{achievement.criteria}</p></div>
     {existing?.submission.review?.reason && <p className="notice">Reviewer feedback: {existing.submission.review.reason}</p>}
-    {authenticated ? <form onSubmit={submit}>
+    {achievement.archived ? <p className="notice">This achievement is archived. New and revised evidence are paused. Contact the issuer about restoration; your existing work is retained.</p> : authenticated ? <form onSubmit={submit}>
       <label htmlFor="evidence">Your evidence</label><p className="field-help" id="evidence-help">Describe your work and include links that your reviewer can access. Your evidence is visible to you and reviewers.</p>
       <textarea id="evidence" required maxLength={4000} rows={7} value={evidence} onChange={e => setEvidence(e.target.value)} aria-describedby="evidence-help evidence-count"/>
       <p id="evidence-count" className="character-count">{evidence.length} / 4,000 characters</p>

@@ -57,7 +57,7 @@ class SubmissionServiceTest : StringSpec({
 })
 
 private class MemorySubmissions : SubmissionRepository {
-    override fun achievements(): List<AchievementSummary> = emptyList()
+    override fun achievements(includeArchived: Boolean): List<AchievementSummary> = emptyList()
     override fun list(learnerId: UUID?, offset: Int, limit: Int): List<StoredSubmission> = records.values
         .filter { if (learnerId == null) it.submission.status == ReviewStatus.PENDING else it.submission.learnerId == learnerId }
         .drop(offset).take(limit)

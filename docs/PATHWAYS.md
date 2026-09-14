@@ -40,6 +40,8 @@ Names and descriptions are trimmed and limited to 120 and 5,000 characters. Empt
 
 Progress returns `pathwayId`, `enrolledAt`, `requirements` (achievement ID and earned flag), `earned`, `total` and `completed`. Enrollment and progress responses use `Cache-Control: no-store`. The learner identity comes from the bearer token; callers cannot select another learner. Public catalog responses contain no enrollment or learner data.
 
+Public pathway records also contain `paused`. An archived requirement or prerequisite pauses new enrollment (423), while existing enrollment and progress remain available. Already-enrolled learners with all required current badges can still claim the completion award. Other unfinished work waits for achievement restoration. Creating a new pathway with an archived achievement also returns 423. See [archive and restore](CATALOG.md#archive-and-restore).
+
 A database primary key on pathway and learner makes enrollment idempotent across server instances. Requirement foreign keys prevent dangling achievements. Progress uses one SQL statement and one statement timestamp for a consistent view of credential validity.
 
 ## Background

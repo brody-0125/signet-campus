@@ -1,7 +1,7 @@
 import { accessToken } from './auth'
 
-export type Achievement = { id: string; name: string; criteria: string; version: number; published: boolean }
-export type Pathway = { id: string; name: string; description: string; achievementIds: string[]; prerequisiteAchievementIds?: string[] }
+export type Achievement = { id: string; name: string; criteria: string; version: number; published: boolean; archived: boolean }
+export type Pathway = { id: string; name: string; description: string; achievementIds: string[]; prerequisiteAchievementIds?: string[]; paused?: boolean }
 export type PathwayProgress = { pathwayId: string; enrolledAt: string; earned: number; total: number; completed: boolean; requirements: { achievementId: string; earned: boolean }[] }
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message) }
@@ -22,7 +22,7 @@ export async function credentialImage(id: string, format: 'png' | 'svg'): Promis
 }
 async function request(path: string, body?: unknown, signal?: AbortSignal): Promise<Response> {
   const headers: Record<string, string> = {}
-  const publicRequest = (body === undefined && (['/achievements', '/pathways'].includes(path) || path.startsWith('/shared/credentials/')))
+  const publicRequest = (body === undefined && (['/achievements', '/achievements?includeArchived=true', '/pathways'].includes(path) || path.startsWith('/shared/credentials/')))
     || (body !== undefined && /^\/credentials\/[^/]+\/verify$/.test(path))
   if (!publicRequest) headers.Authorization = `Bearer ${await accessToken()}`
   if (body !== undefined) headers['Content-Type'] = 'application/json'
@@ -31,6 +31,7 @@ async function request(path: string, body?: unknown, signal?: AbortSignal): Prom
     ...(body === undefined ? {} : { method: 'POST', body: JSON.stringify(body) }),
   })
   if (!response.ok) {
+    if (response.status === 423) throw new ApiError(423, 'Work is paused because an achievement is archived. Contact the issuer about restoration. Previously issued badges remain available.')
     if (path.startsWith('/shared/credentials/')) throw new ApiError(response.status, 'This shared credential is unavailable. It may be private or sharing may have stopped.')
     if (path.endsWith('/credential')) {
       if (response.status === 400) throw new ApiError(400, 'A verified email address is required on your account to issue a badge.')

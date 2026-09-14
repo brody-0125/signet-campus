@@ -18,6 +18,7 @@ function PathwayCard({ pathway, achievements }: { pathway: Pathway; achievements
     onSuccess: value => client.setQueryData(queryKey, value) })
   return <article className="pathway-card">
     <h2>{pathway.name}</h2><p>{pathway.description}</p>
+    {pathway.paused && <p className="notice">Enrollment is paused because a required achievement is archived. Existing progress and badges are retained. Contact the issuer about restoration to continue unfinished work.</p>}
     {!!pathway.prerequisiteAchievementIds?.length && <div className="criteria"><h3>Before you enroll</h3>
       <p className="field-help">Earn these badges first. They must be current when you enroll.</p>
       <ul>{pathway.prerequisiteAchievementIds.map(id => <li key={id}><button className="nav-link" onClick={() => useWorkspace.setState({ selectedId: id })}>{achievements.find(a => a.id === id)?.name || 'Achievement'}</button></li>)}</ul>
@@ -32,7 +33,7 @@ function PathwayCard({ pathway, achievements }: { pathway: Pathway; achievements
       {progress.isError && <p className="error" role="alert">{progress.error.message}</p>}
       {progress.data && <><p className="pathway-summary">{progress.data.completed ? 'Complete' : 'In progress'} · {progress.data.earned} of {progress.data.total} achievements</p>
         <progress aria-label={`${pathway.name} progress`} value={progress.data.earned} max={progress.data.total}/></>}
-      {progress.data === null && <button className="button primary" disabled={enroll.isPending} onClick={() => enroll.mutate()}>{enroll.isPending ? 'Enrolling…' : 'Enroll'}</button>}
+      {progress.data === null && <button className="button primary" disabled={enroll.isPending || pathway.paused} onClick={() => enroll.mutate()}>{enroll.isPending ? 'Enrolling…' : 'Enroll'}</button>}
       {(progress.data || progress.isError) && <button className="button outline" disabled={progress.isFetching} onClick={() => void progress.refetch()}>Refresh progress</button>}
       {enroll.isError && <p className="error" role="alert">{enroll.error.message}</p>}
       {progress.data && <CredentialActions source={{ type: 'pathways', id: pathway.id }} canIssue={progress.data.completed}/>}
@@ -78,6 +79,6 @@ export function Pathways({ achievements }: { achievements: Achievement[] }) {
     {pathways.isError && <div role="alert"><p>Pathways could not be loaded.</p><button className="button outline" onClick={() => void pathways.refetch()}>Try again</button></div>}
     {pathways.data?.length === 0 && <p className="empty-state">No pathways have been published yet.</p>}
     {pathways.data?.map(p => <PathwayCard key={p.id} pathway={p} achievements={achievements}/>)}
-    {creating && session.reviewer && <PathwayForm achievements={achievements} onClose={() => setCreating(false)}/>}
+    {creating && session.reviewer && <PathwayForm achievements={achievements.filter(a => !a.archived)} onClose={() => setCreating(false)}/>}
   </section>
 }

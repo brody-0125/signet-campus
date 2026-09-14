@@ -18,7 +18,7 @@ class CredentialServiceTest : StringSpec({
     val approved = pending.approve(reviewer.id, now)
     fun service(submission: EvidenceSubmission, store: MemoryCredentials = MemoryCredentials(), clock: Instant = now): CredentialService {
         val submissions = object : SubmissionRepository {
-            override fun achievements() = listOf(achievement)
+            override fun achievements(includeArchived: Boolean) = listOf(achievement)
             override fun list(learnerId: UUID?, offset: Int, limit: Int) = emptyList<StoredSubmission>()
             override fun find(id: UUID) = if (id == submission.id) StoredSubmission(submission, 1) else null
             override fun create(submission: EvidenceSubmission): StoredSubmission = error("Unused")

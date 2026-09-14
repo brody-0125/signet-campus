@@ -41,6 +41,9 @@ class PostgresCredentials(private val jdbc: JdbcTemplate) : CredentialRepository
 
     @Transactional
     override fun saveIfAbsent(record: IssuedCredential): IssuedCredential {
+        findBySubmission(requireNotNull(record.submissionId))?.let { return it }
+        val achievementId = jdbc.queryForObject("SELECT achievement_id FROM submissions WHERE id = ?", UUID::class.java, record.submissionId)
+        jdbc.requireActiveAchievement(requireNotNull(achievementId))
         jdbc.update("""INSERT INTO credentials (id, submission_id, learner_id, document, issued_at, valid_until)
             SELECT ?, id, learner_id, ?::jsonb, ?, ? FROM submissions WHERE id = ? AND learner_id = ? AND status = 'APPROVED'
             ON CONFLICT (submission_id) DO NOTHING""", record.id, record.document, Timestamp.from(record.issuedAt),

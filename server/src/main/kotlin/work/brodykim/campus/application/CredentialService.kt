@@ -64,7 +64,7 @@ class CredentialService(private val submissions: SubmissionRepository, private v
         submission.requireApproved()
         repository.findBySubmission(submissionId)?.let { return it }
         require(verifiedEmail.isNotBlank() && verifiedEmail.length <= 254 && '@' in verifiedEmail)
-        val achievement = submissions.achievements().first { it.id == submission.achievementId }
+        val achievement = submissions.achievements(includeArchived = true).first { it.id == submission.achievementId }
         val id = UUID.randomUUID()
         val at = clock.instant().truncatedTo(ChronoUnit.SECONDS)
         val until = at.plus(365, ChronoUnit.DAYS)
