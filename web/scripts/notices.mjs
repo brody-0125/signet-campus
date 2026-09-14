@@ -3,6 +3,7 @@ import { readFile, readdir, writeFile } from 'node:fs/promises'
 const lock = JSON.parse(await readFile(new URL('../package-lock.json', import.meta.url), 'utf8'))
 const root = new URL('../', import.meta.url)
 const sections = ['Signet Campus browser bundle — third-party notices\n\nOriginal application code is MIT licensed. The following components retain their upstream licenses. Decorative artwork was generated for Signet Campus.']
+for (const name of ['LICENSE', 'NOTICE']) sections.push(`Signet Campus ${name}\n${await readFile(new URL(`../../${name}`, import.meta.url), 'utf8')}`)
 for (const [path, entry] of Object.entries(lock.packages).sort(([a], [b]) => a.localeCompare(b))) {
   if (!path || entry.dev) continue
   const directory = new URL(`${path}/`, root)

@@ -31,7 +31,7 @@ On Windows:
 
 The HTML report is written to `server/build/reports/tests/test/index.html`.
 
-`check` also runs the Kover coverage gate (minimum 90% line coverage). Run `sh ./gradlew koverHtmlReport` for the coverage report in `server/build/reports/kover/html/`.
+`check` also verifies the [packaged licenses and covered source](DISTRIBUTION.md), and runs the Kover coverage gate (minimum 90% line coverage). Run `sh ./gradlew koverHtmlReport` for the coverage report in `server/build/reports/kover/html/`.
 
 Coverage tasks include the PostgreSQL tests and require the test database environment. Plain `test` runs the unit and dependency contract tests without PostgreSQL. API integration checks include ownership, reviewer permission, conflicting concurrent writes, audit rollback, persistence and input validation.
 

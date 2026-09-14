@@ -22,7 +22,7 @@ Public credential sharing requires appropriate privacy controls, including priva
 
 ## Before a binary or container release
 
-1. Resolve the Signet upstream licensing metadata issues listed in [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md).
+1. Run the [distribution artifact checks](DISTRIBUTION.md). Signet libraries publish Apache-2.0 license metadata and embedded LICENSE/NOTICE files; preserve them with the covered artifacts.
 2. Generate the exact distribution inventory, including frontend assets/fonts, build tools where redistributed and container base layers. Preserve all required license/NOTICE files in the artifact and make covered source available as required.
 3. Review vulnerability advisories, dependency locks, signing-key provisioning and third-party service terms. An inventory hash is provenance evidence, not a vulnerability scan.
 4. Review encryption export/import rules for the actual distribution destinations when applicable.

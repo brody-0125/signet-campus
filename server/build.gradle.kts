@@ -1,3 +1,10 @@
+import java.util.zip.ZipFile
+import java.util.zip.ZipInputStream
+import java.util.zip.GZIPInputStream
+import java.io.DataInputStream
+import java.security.MessageDigest
+import java.util.Arrays
+
 plugins {
     kotlin("jvm") version "2.2.21"
     kotlin("plugin.spring") version "2.2.21"
@@ -62,4 +69,48 @@ kover {
     }
 }
 
-tasks.check { dependsOn("koverVerify") }
+tasks.check { dependsOn("koverVerify", "verifyDistributionNotices") }
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    from(files("../LICENSE", "../NOTICE", "../THIRD_PARTY_NOTICES.md")) { into("META-INF") }
+    from("../docs") {
+        include("COMPLIANCE.md", "DEPENDENCY_LICENSES.md", "DISTRIBUTION.md", "third-party/**", "covered-source/**")
+        into("META-INF/docs")
+    }
+    from("../LICENSES/MPL-2.0.txt") { into("META-INF/LICENSES") }
+}
+
+tasks.register("verifyDistributionNotices") {
+    dependsOn("bootJar")
+    doLast {
+        val archive = tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar").get().archiveFile.get().asFile
+        ZipFile(archive).use { jar ->
+            for (name in listOf("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md")) {
+                val entry = checkNotNull(jar.getEntry("META-INF/$name")) { "Missing distribution notice: $name" }
+                check(jar.getInputStream(entry).use { it.readBytes() }.contentEquals(file("../$name").readBytes()))
+            }
+            for (name in listOf("docs/third-party/inventory.json", "docs/DISTRIBUTION.md", "docs/covered-source/README.md", "docs/covered-source/public_suffix_list.dat", "LICENSES/MPL-2.0.txt")) {
+                checkNotNull(jar.getEntry("META-INF/$name")) { "Missing distribution evidence: $name" }
+            }
+            val source = jar.getInputStream(jar.getEntry("META-INF/docs/covered-source/public_suffix_list.dat")).use { it.readBytes() }
+            val digest = MessageDigest.getInstance("SHA-256").digest(source).joinToString("") { "%02x".format(it) }
+            check(digest == "e8b273972eb5a70e888bd3e7d7c5b9b04e600a59d69def9136a74d70ae6fcdd3") { "Public Suffix List source changed" }
+            val rules = source.toString(Charsets.UTF_8).lineSequence().filter { it.isNotBlank() && !it.startsWith("//") }.toList()
+            val (exceptions, normal) = rules.partition { it.startsWith("!") }
+            fun encoded(lines: List<String>): ByteArray = lines
+                .sortedWith { left, right -> Arrays.compareUnsigned(left.toByteArray(Charsets.UTF_8), right.toByteArray(Charsets.UTF_8)) }
+                .joinToString("\n", postfix = "\n").toByteArray(Charsets.UTF_8)
+            val compiled = ZipInputStream(jar.getInputStream(checkNotNull(jar.getEntry("BOOT-INF/lib/okhttp-4.12.0.jar")))).use { nested ->
+                check(generateSequence { nested.nextEntry }.any { it.name == "okhttp3/internal/publicsuffix/publicsuffixes.gz" })
+                nested.readBytes()
+            }
+            DataInputStream(GZIPInputStream(compiled.inputStream())).use { input ->
+                for (expected in listOf(encoded(normal), encoded(exceptions.map { it.removePrefix("!") }))) {
+                    check(input.readInt() == expected.size) { "Public Suffix List rule size differs from runtime artifact" }
+                    check(input.readNBytes(expected.size).contentEquals(expected)) { "Covered source does not reproduce runtime rules" }
+                }
+                check(input.read() == -1)
+            }
+        }
+    }
+}
