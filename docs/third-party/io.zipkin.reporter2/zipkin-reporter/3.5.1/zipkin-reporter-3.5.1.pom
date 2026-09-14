@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright The OpenZipkin Authors
+    SPDX-License-Identifier: Apache-2.0
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.zipkin.reporter2</groupId>
+    <artifactId>zipkin-reporter-parent</artifactId>
+    <version>3.5.1</version>
+  </parent>
+
+  <artifactId>zipkin-reporter</artifactId>
+  <name>Zipkin Reporter: Core</name>
+
+  <properties>
+    <!-- Matches Export-Package in bnd.bnd -->
+    <module.name>zipkin2.reporter</module.name>
+
+    <main.basedir>${project.basedir}/..</main.basedir>
+  </properties>
+
+  <dependencies>
+    <!-- This dependency can be excluded for those not using
+         zipkin2.reporter.AsyncReporter, which uses zipkin2 types. -->
+    <dependency>
+      <groupId>io.zipkin.zipkin2</groupId>
+      <artifactId>zipkin</artifactId>
+      <version>${zipkin2.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <!-- remove exclusion when this matches the version of junit jupiter we want -->
+          <artifactId>junit-jupiter-api</artifactId>
+          <groupId>org.junit.jupiter</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <properties>
+        <!-- The core jar needs to be Java 1.6 bytecode -->
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.release>6</maven.compiler.release>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>${maven-enforcer-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>enforce-java</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <!-- The only LTS JDK we support that can compile 1.6 bytecode is 11.
+                         https://www.oracle.com/java/technologies/javase/12-relnote-issues.html -->
+                    <requireJavaVersion>
+                      <version>[11,12)</version>
+                    </requireJavaVersion>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

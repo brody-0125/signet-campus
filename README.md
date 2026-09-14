@@ -83,6 +83,8 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 
 Credential integration uses [1EdTech Open Badges 3.0](https://www.imsglobal.org/spec/ob/v3p0) and [W3C Verifiable Credentials Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/). Signet Campus is not certified by 1EdTech. See [NOTICE](NOTICE) for attribution.
 
+Optional local Prometheus metrics and Zipkin traces are documented in [Operational telemetry](docs/TELEMETRY.md).
+
 ## License
 
 Original code and documentation are licensed under the [MIT License](LICENSE). Third-party components, the Gradle wrapper and preserved upstream notices retain their original licenses. See [Third-party notices](THIRD_PARTY_NOTICES.md).

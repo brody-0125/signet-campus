@@ -37,6 +37,10 @@ jobs:
           docker compose -p signet-campus-tls -f compose.yml -f compose.https.yml run --rm --entrypoint cat tls-init /certs/server.crt > secrets/tls.crt
           timeout 120 bash -c 'until curl --cacert secrets/tls.crt -fsS https://localhost:8443/api/achievements >/dev/null && curl --cacert secrets/tls.crt -fsS https://localhost:8443/auth/realms/signet-campus/.well-known/openid-configuration >/dev/null; do sleep 2; done'
       - run: node --test dev/https.test.mjs
+      - run: node --test dev/management-ingress.test.mjs
+        env:
+          CAMPUS_WEB: https://localhost:8443
+          NODE_EXTRA_CA_CERTS: ${{ github.workspace }}/secrets/tls.crt
       - run: node dev/smoke.mjs
         env:
           NODE_EXTRA_CA_CERTS: ${{ github.workspace }}/secrets/tls.crt
@@ -71,6 +75,15 @@ jobs:
       - run: node dev/notifications-smoke.mjs
       - run: node --test dev/recovery.test.mjs
       - run: node --test dev/proxy-resolution.test.mjs
+      - run: docker compose -f compose.yml -f compose.telemetry.yml up -d web prometheus zipkin
+      - name: Wait for local telemetry
+        run: |
+          timeout 120 bash -c 'until curl -fsS http://localhost:5173/api/achievements >/dev/null && curl -fsS http://localhost:9411/health >/dev/null && curl -fsS http://localhost:9090/-/ready >/dev/null; do sleep 2; done'
+      - run: node --test dev/management-ingress.test.mjs dev/telemetry.test.mjs
+      - name: Issuance survives tracing collector outage
+        run: |
+          docker compose -f compose.yml -f compose.telemetry.yml stop zipkin
+          node dev/smoke.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
