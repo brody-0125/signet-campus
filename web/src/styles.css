@@ -143,3 +143,29 @@ input { margin-bottom: 20px; }
   .form-actions .button { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+.sample-switch { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; }
+.sample-switch [aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: white; }
+.sample-intro { display: flex; align-items: flex-start; gap: 24px; margin: 32px 0; }
+.sample-intro p { line-height: 1.6; color: var(--muted); }
+.sample-label { display: inline-block; color: var(--primary); font-size: 12px; letter-spacing: .1em; border: 1px solid #b6c8fb; border-radius: 6px; padding: 8px 10px; white-space: nowrap; }
+.sample-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.sample-card { background: white; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.sample-art { position: relative; min-height: 196px; background: #edf2ff; color: var(--primary); display: grid; place-items: center; border-bottom: 1px solid var(--border); }
+.sample-card:nth-child(2) .sample-art { background: #eaf4f7; color: #286174; }
+.sample-card:nth-child(3) .sample-art { background: #f1f0fa; color: #545080; }
+.sample-symbol { font-size: 76px; letter-spacing: -.06em; }
+.sample-number { position: absolute; top: 18px; left: 20px; font-size: 14px; }
+.sample-category { position: absolute; bottom: 18px; right: 20px; font-size: 11px; letter-spacing: .12em; }
+.sample-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px; flex: 1; }
+.sample-copy h3 { font-size: 25px; line-height: 1.2; letter-spacing: -.025em; }
+.sample-copy p { line-height: 1.5; color: var(--muted); }
+.sample-copy .sample-meta { font-size: 13px; }
+.sample-copy .button { margin-top: auto; width: 100%; display: flex; justify-content: space-between; }
+.sample-disclaimer { color: var(--muted); font-size: 14px; line-height: 1.5; margin-top: 24px; }
+.sample-detail-summary { margin-block: 20px; line-height: 1.5; }
+.sample-criteria { padding-left: 20px; line-height: 1.6; }
+.sample-criteria li + li { margin-top: 12px; }
+.sample-review { background: #edf2ff; padding: 20px; border-radius: 8px; }
+.sample-review p { margin-top: 12px; line-height: 1.6; }
+@media (max-width: 900px) { .sample-grid { gap: 16px; } .sample-copy { padding: 18px; } }
+@media (max-width: 640px) { .sample-grid { grid-template-columns: 1fr; } .sample-intro { flex-direction: column; gap: 16px; } .sample-art { min-height: 170px; } }
