@@ -4,7 +4,7 @@ import java.time.Instant
 import java.util.UUID
 
 data class Pathway(val id: UUID, val name: String, val description: String, val achievementIds: List<UUID>,
-                   val prerequisiteAchievementIds: List<UUID> = emptyList())
+                   val prerequisiteAchievementIds: List<UUID> = emptyList(), val paused: Boolean = false)
 data class PathwayRequirement(val achievementId: UUID, val earned: Boolean)
 data class PathwayProgress(val pathwayId: UUID, val enrolledAt: Instant, val requirements: List<PathwayRequirement>) {
     val earned: Int get() = requirements.count { it.earned }

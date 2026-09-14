@@ -14,7 +14,7 @@ export function Submissions({ achievements }: { achievements: Achievement[] }) {
   const [selected, setSelected] = useState<Submission | null>(null)
   const [editing, setEditing] = useState(false)
   const query = useQuery({ queryKey: ['submissions', offset], queryFn: ({ signal }) => api<Submission[]>(`/submissions?offset=${offset}&limit=20`, undefined, signal), enabled: authenticated })
-  const achievement = (id: string) => achievements.find(a => a.id === id) || { id, name: 'Achievement', criteria: 'Review the achievement criteria in Explore.', version: 0, published: true }
+  const achievement = (id: string) => achievements.find(a => a.id === id) || { id, name: 'Achievement', criteria: 'Review the achievement criteria in Explore.', version: 0, published: true, archived: false }
   const close = () => { setSelected(null); setEditing(false) }
   return <section className="container workspace" aria-labelledby="workspace-title">
     <div className="section-heading"><div><h1 id="workspace-title">{reviewer ? 'Review queue' : 'My submissions'}</h1><p className="section-intro">{reviewer ? 'Give thoughtful feedback. Recognize the work.' : 'Your work, and what comes next.'}</p></div>{authenticated && <button className="button outline" onClick={() => void query.refetch()} disabled={query.isFetching}>Refresh</button>}</div>
@@ -42,14 +42,14 @@ function ReviewDetails({ item, achievement, reviewer, onClose, onEdit }: { item:
   return <Dialog title={achievement.name} onClose={onClose}>
     <p className="status-label">{statusLabel[item.submission.status]}</p>
     <div className="criteria"><h3>Achievement criteria</h3><p>{achievement.criteria}</p></div>
-    <h3>Submitted evidence</h3><p className="evidence-content">{item.submission.evidence}</p>
+    {achievement.archived && <p className="notice">This achievement is archived. New work and first badge issuance are paused until restoration. Existing badges remain available.</p>}<h3>Submitted evidence</h3><p className="evidence-content">{item.submission.evidence}</p>
     {item.submission.review?.reason && <div className="criteria"><h3>Reviewer feedback</h3><p>{item.submission.review.reason}</p></div>}
     {reviewer && item.submission.status === 'PENDING' && <>
       <label htmlFor="feedback">Feedback for requested changes</label><textarea id="feedback" rows={3} maxLength={1000} value={reason} onChange={e => setReason(e.target.value)}/><p className="field-help">Required when requesting changes. Up to 1,000 characters.</p>
       {mutation.isError && <p className="error" role="alert">{mutation.error.message}</p>}
       <div className="form-actions"><button className="button outline" disabled={!reason.trim() || mutation.isPending} onClick={() => mutation.mutate('reject')}>Request changes</button><button className="button primary" disabled={mutation.isPending} onClick={() => mutation.mutate('approve')}>{mutation.isPending ? 'Saving…' : 'Approve evidence'}</button></div>
     </>}
-    {!reviewer && item.submission.status === 'REJECTED' && <button className="button primary" onClick={onEdit}>Update evidence</button>}
-    {!reviewer && item.submission.status === 'APPROVED' && <CredentialActions source={{ type: 'submissions', id: item.submission.id }}/>}
+    {!reviewer && !achievement.archived && item.submission.status === 'REJECTED' && <button className="button primary" onClick={onEdit}>Update evidence</button>}
+    {!reviewer && item.submission.status === 'APPROVED' && <CredentialActions canIssue={!achievement.archived} paused={achievement.archived} source={{ type: 'submissions', id: item.submission.id }}/>}
   </Dialog>
 }

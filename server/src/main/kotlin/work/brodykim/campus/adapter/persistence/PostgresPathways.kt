@@ -12,20 +12,21 @@ class PostgresPathways(private val jdbc: JdbcTemplate) : PathwayRepository {
     override fun find(id: UUID): Pathway? = read("WHERE p.id = ?", id).singleOrNull()
     private fun read(where: String, vararg args: Any): List<Pathway> = jdbc.query(
         """SELECT p.id, p.name, p.description, array_agg(r.achievement_id ORDER BY r.position) AS requirements,
-            ARRAY(SELECT achievement_id FROM pathway_prerequisites WHERE pathway_id = p.id ORDER BY position) AS prerequisites
+            ARRAY(SELECT achievement_id FROM pathway_prerequisites WHERE pathway_id = p.id ORDER BY position) AS prerequisites,
+            EXISTS (SELECT 1 FROM achievements a WHERE a.archived AND a.id IN (
+                SELECT achievement_id FROM pathway_requirements WHERE pathway_id = p.id
+                UNION SELECT achievement_id FROM pathway_prerequisites WHERE pathway_id = p.id)) AS paused
             FROM pathways p JOIN pathway_requirements r ON r.pathway_id = p.id
             $where GROUP BY p.id ORDER BY p.name, p.id""", { rs, _ ->
             Pathway(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("description"),
                 (rs.getArray("requirements").array as Array<*>).map { it as UUID },
-                (rs.getArray("prerequisites").array as Array<*>).map { it as UUID })
+                (rs.getArray("prerequisites").array as Array<*>).map { it as UUID }, rs.getBoolean("paused"))
         }, *args)
 
     @Transactional
     override fun create(pathway: Pathway): Pathway {
         for (id in (pathway.achievementIds + pathway.prerequisiteAchievementIds).sorted()) {
-            require(jdbc.queryForList("SELECT id FROM achievements WHERE id = ? AND published FOR SHARE", UUID::class.java, id).isNotEmpty()) {
-                "Only published achievements can be used in pathways"
-            }
+            jdbc.requireActiveAchievement(id)
         }
         jdbc.update("INSERT INTO pathways (id, name, description) VALUES (?, ?, ?)", pathway.id, pathway.name, pathway.description)
         pathway.achievementIds.forEachIndexed { index, id ->
@@ -39,6 +40,9 @@ class PostgresPathways(private val jdbc: JdbcTemplate) : PathwayRepository {
 
     @Transactional
     override fun enroll(id: UUID, learnerId: UUID, email: String?): PathwayProgress {
+        progress(id, learnerId)?.let { return it }
+        val pathway = find(id) ?: throw PathwayNotFound()
+        (pathway.achievementIds + pathway.prerequisiteAchievementIds).sorted().forEach { jdbc.requireActiveAchievement(it) }
         val created = jdbc.update("""INSERT INTO pathway_enrollments (pathway_id, learner_id)
             SELECT ?::uuid, ?::uuid WHERE NOT EXISTS (
                 SELECT 1 FROM pathway_prerequisites p WHERE p.pathway_id = ? AND NOT EXISTS (

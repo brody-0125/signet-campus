@@ -108,6 +108,24 @@ beforeEach(() => {
   vi.stubGlobal('fetch', fetchMock)
   fetchMock.mockImplementation(async (url: string) => response(url.includes('achievements') ? [achievement] : []))
 })
+it('explains archival before applying the saved version and offers restoration', async () => {
+  useSession.setState({ reviewer: true })
+  const user = userEvent.setup()
+  let archived = false
+  fetchMock.mockImplementation(async (_url: string, options?: RequestInit) => {
+    if (options?.method === 'POST') archived = JSON.parse(options.body as string).archived
+    const entry = { ...achievement, archived, version: archived ? 1 : 0 }
+    return response(options?.method === 'POST' ? entry : [entry])
+  })
+  mount()
+  await user.click(await screen.findByRole('button', { name: `Archive ${achievement.name}` }))
+  expect(screen.getByRole('dialog')).toHaveTextContent('Existing badges are not revoked')
+  await user.click(screen.getByRole('button', { name: 'Archive achievement' }))
+  expect(await screen.findByRole('button', { name: `Restore ${achievement.name}` })).toBeInTheDocument()
+  await user.click(screen.getByRole('button', { name: `Restore ${achievement.name}` }))
+  await user.click(screen.getByRole('button', { name: 'Restore achievement' }))
+  expect(await screen.findByRole('button', { name: `Archive ${achievement.name}` })).toBeInTheDocument()
+})
 it('publishes a reviewer draft with its saved version and removes draft controls', async () => {
   useSession.setState({ reviewer: true })
   const user = userEvent.setup()
@@ -142,6 +160,37 @@ it('opens reviewer criteria even when the separate public catalog request fails'
   mount()
   await user.click(await screen.findByRole('button', { name: 'View criteria' }))
   expect(await screen.findByRole('dialog')).toHaveTextContent(achievement.criteria)
+})
+it('keeps an archived achievement badge downloadable without starting new issuance', async () => {
+  useWorkspace.setState({ view: 'submissions' })
+  const user = userEvent.setup()
+  fetchMock.mockImplementation(async (url: string) => response(url.endsWith('/credential') ? { id: 'http://localhost/api/credentials/existing' }
+    : url.includes('achievements') ? [{ ...achievement, archived: true }] : [{ submission: { ...submission, status: 'APPROVED' }, version: 1 }]))
+  mount()
+  await user.click(await screen.findByRole('button', { name: 'View submission' }))
+  expect(await screen.findByRole('link', { name: 'Download JSON' })).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: 'Issue badge' })).not.toBeInTheDocument()
+  expect(screen.getByText(/New work and first badge issuance are paused/)).toBeInTheDocument()
+})
+it('disables enrollment and explains a pathway paused by an archived requirement', async () => {
+  useWorkspace.setState({ view: 'pathways' })
+  fetchMock.mockImplementation(async (url: string) => url.endsWith('/progress') ? response({}, 404)
+    : response(url.includes('achievements') ? [{ ...achievement, archived: true }] : [{ id: 'paused-path', name: 'Paused pathway', description: 'Preserved requirements', achievementIds: [achievement.id], paused: true }]))
+  mount()
+  expect(await screen.findByRole('button', { name: 'Enroll' })).toBeDisabled()
+  expect(screen.getByText(/Enrollment is paused because/)).toBeInTheDocument()
+})
+it('allows retrying historical metadata without losing the submissions view', async () => {
+  useWorkspace.setState({ view: 'submissions' })
+  const user = userEvent.setup()
+  let failed = true
+  fetchMock.mockImplementation(async (url: string) => url.includes('includeArchived') ? failed ? response({}, 503) : response([achievement]) : response([]))
+  mount()
+  expect(await screen.findByRole('alert')).toHaveTextContent('Achievement details could not be loaded')
+  failed = false
+  await user.click(screen.getByRole('button', { name: 'Retry achievement details' }))
+  await waitFor(() => expect(screen.queryByRole('alert')).not.toBeInTheDocument())
+  expect(screen.getByRole('heading', { name: 'My submissions' })).toBeInTheDocument()
 })
 it('opens account management and keeps sign out available after a failed redirect', async () => {
   const user = userEvent.setup()

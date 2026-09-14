@@ -6,13 +6,13 @@ import java.util.UUID
 
 data class Actor(val id: UUID, val reviewer: Boolean)
 data class StoredSubmission(val submission: EvidenceSubmission, val version: Long)
-data class AchievementSummary(val id: UUID, val name: String, val criteria: String, val version: Long = 0, val published: Boolean = false)
+data class AchievementSummary(val id: UUID, val name: String, val criteria: String, val version: Long = 0, val published: Boolean = false, val archived: Boolean = false)
 class SubmissionNotFound : RuntimeException("Submission not found")
 class ReviewForbidden : RuntimeException("Reviewer permission required")
 class SubmissionConflict : RuntimeException("Submission changed; reload before retrying")
 
 interface SubmissionRepository {
-    fun achievements(): List<AchievementSummary>
+    fun achievements(includeArchived: Boolean = false): List<AchievementSummary>
     fun list(learnerId: UUID?, offset: Int, limit: Int): List<StoredSubmission>
     fun create(submission: EvidenceSubmission): StoredSubmission
     fun find(id: UUID): StoredSubmission?
@@ -20,7 +20,7 @@ interface SubmissionRepository {
 }
 
 class SubmissionService(private val repository: SubmissionRepository, private val clock: Clock) {
-    fun achievements(): List<AchievementSummary> = repository.achievements()
+    fun achievements(includeArchived: Boolean = false): List<AchievementSummary> = repository.achievements(includeArchived)
     fun list(actor: Actor, offset: Int, limit: Int): List<StoredSubmission> {
         require(offset >= 0 && limit in 1..100) { "Invalid pagination" }
         return repository.list(if (actor.reviewer) null else actor.id, offset, limit)

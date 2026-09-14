@@ -12,11 +12,12 @@ import work.brodykim.campus.application.SubmissionService
 
 data class AchievementInput(val name: String, val criteria: String, val expectedVersion: Long = 0)
 data class PublicationInput(val expectedVersion: Long)
+data class ArchivalInput(val expectedVersion: Long, val archived: Boolean? = null)
 
 @RestController
 class AchievementController(private val service: SubmissionService, private val catalog: AchievementCatalogService) {
     @GetMapping("/api/achievements")
-    fun list() = service.achievements()
+    fun list(@RequestParam(defaultValue = "false") includeArchived: Boolean) = service.achievements(includeArchived)
 
     @GetMapping("/api/reviewer/achievements")
     fun manage(authentication: JwtAuthenticationToken) = ResponseEntity.ok().header("Cache-Control", "no-store")
@@ -27,7 +28,7 @@ class AchievementController(private val service: SubmissionService, private val 
         .body(catalog.list(actor(authentication)).firstOrNull { it.id == id } ?: throw AchievementNotFound())
 
     @GetMapping("/api/achievements/{id}")
-    fun get(@PathVariable id: UUID) = service.achievements().firstOrNull { it.id == id } ?: throw AchievementNotFound()
+    fun get(@PathVariable id: UUID) = service.achievements(includeArchived = true).firstOrNull { it.id == id } ?: throw AchievementNotFound()
 
     @PostMapping("/api/achievements")
     fun create(authentication: JwtAuthenticationToken, @RequestBody input: AchievementInput) =
@@ -42,6 +43,10 @@ class AchievementController(private val service: SubmissionService, private val 
     @PostMapping("/api/achievements/{id}/publish")
     fun publish(authentication: JwtAuthenticationToken, @PathVariable id: UUID, @RequestBody input: PublicationInput) =
         catalog.publish(actor(authentication), id, input.expectedVersion)
+
+    @PostMapping("/api/achievements/{id}/archive")
+    fun archive(authentication: JwtAuthenticationToken, @PathVariable id: UUID, @RequestBody input: ArchivalInput) =
+        catalog.archive(actor(authentication), id, input.expectedVersion, requireNotNull(input.archived))
 
     private fun actor(authentication: JwtAuthenticationToken) = Actor(UUID.fromString(authentication.token.subject),
         authentication.authorities.any { it.authority == "ROLE_REVIEWER" })
