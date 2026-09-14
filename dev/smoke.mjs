@@ -55,6 +55,10 @@ async function verifyImageExport(credential, token, format) {
 
 const learner = await login('learner', 'local-learner-only');
 const reviewer = await login('reviewer', 'local-reviewer-only');
+for (const token of [learner, reviewer]) {
+  const account = await fetch(`${issuer}/account/`, { headers: { Authorization: `Bearer ${token}` } });
+  assert.equal(account.status, 200, 'Demo users need their own Keycloak account-management permissions');
+}
 if (process.argv[2]) {
   const record = await request(`/api/submissions/${process.argv[2]}`, learner);
   assert.equal(record.submission.status, 'APPROVED');

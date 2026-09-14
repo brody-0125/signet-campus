@@ -3,12 +3,12 @@ import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { App } from './App'
-import { useSession } from './auth'
+import { manageAccount, useSession } from './auth'
 import { useWorkspace } from './store'
 
 vi.mock('./auth', async () => {
   const { create } = await import('zustand')
-  return { useSession: create(() => ({ ready: true, authenticated: true, reviewer: false, name: 'Learner', error: null })), signIn: vi.fn(), signOut: vi.fn(), accessToken: async () => 'test-token' }
+  return { useSession: create(() => ({ ready: true, authenticated: true, reviewer: false, name: 'Learner', error: null })), signIn: vi.fn(), signOut: vi.fn(), manageAccount: vi.fn(), accessToken: async () => 'test-token' }
 })
 const achievement = { id: 'achievement-1', name: 'Digital Accessibility Awareness', criteria: 'Demonstrate keyboard access and text alternatives.', version: 0 }
 const submission = { id: 'submission-1', achievementId: achievement.id, evidence: 'My keyboard audit', status: 'PENDING', submittedAt: '2026-09-14T00:00:00Z', revision: 0, review: null }
@@ -103,9 +103,27 @@ it('lets a reviewer create an achievement with an authenticated request', async 
 beforeEach(() => {
   window.history.replaceState({}, '', '/')
   useWorkspace.setState({ view: 'explore', selectedId: null, notice: '' })
-  useSession.setState({ authenticated: true, reviewer: false })
+  useSession.setState({ ready: true, authenticated: true, reviewer: false })
+  vi.mocked(manageAccount).mockReset()
   vi.stubGlobal('fetch', fetchMock)
   fetchMock.mockImplementation(async (url: string) => response(url.includes('achievements') ? [achievement] : []))
+})
+it('opens account management and keeps sign out available after a failed redirect', async () => {
+  const user = userEvent.setup()
+  mount()
+  await user.click(screen.getByRole('button', { name: 'Account' }))
+  expect(screen.getByRole('heading', { name: 'Keep access to your badges' })).toBeInTheDocument()
+  vi.mocked(manageAccount).mockRejectedValueOnce(new Error('Unavailable'))
+  await user.click(screen.getByRole('button', { name: 'Manage account' }))
+  expect(await screen.findByRole('alert')).toHaveTextContent('Unable to open account settings')
+  expect(screen.getByRole('button', { name: 'Sign out' })).toBeEnabled()
+  await user.click(screen.getByRole('button', { name: 'Manage account' }))
+  expect(manageAccount).toHaveBeenCalledTimes(2)
+})
+it('does not show account controls to anonymous visitors', () => {
+  useSession.setState({ authenticated: false })
+  mount()
+  expect(screen.queryByRole('button', { name: 'Account' })).not.toBeInTheDocument()
 })
 it('opens criteria and saves evidence through the API, then shows the pending submission', async () => {
   const user = userEvent.setup()

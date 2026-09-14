@@ -69,6 +69,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 - [Portable PNG and SVG badges](docs/PORTABLE_BADGES.md)
 - [Private and public credential sharing](docs/SHARING.md)
 - [Web interface and design system](docs/WEB_INTERFACE.md)
+- [Account access and email changes](docs/ACCOUNT.md)
 - [Local development](docs/LOCAL_DEVELOPMENT.md)
 - [Backup and recovery](docs/RECOVERY.md)
 - [Evidence review](docs/EVIDENCE_REVIEW.md)
