@@ -65,3 +65,7 @@ docker compose stop
 ```
 
 Stopping containers preserves application data. Avoid removing named volumes when retaining local credentials or evidence.
+
+## Vercel web preview
+
+Import the repository with its root directory unchanged. The root `vercel.json` installs `web/` dependencies, runs the Vite build and publishes only `web/dist`. The deployment uses static hosting; it does not deploy the Kotlin API, PostgreSQL or Keycloak. Local end-to-end badge workflows use Docker Compose. A connected service deployment additionally needs an HTTPS API route at `/api` and a configured public OIDC provider.
