@@ -1,95 +1,78 @@
 # Signet Campus
 
-Explore [learning pathways](docs/PATHWAYS.md), enroll and track progress toward a set of required achievements.
+Signet Campus turns campus accessibility work into portable Open Badges credentials. Learners submit evidence, reviewers assess it against published criteria, and approved work earns a signed badge. Learning pathways group badges into a larger achievement.
 
-Local [enrollment notifications](docs/NOTIFICATIONS.md) are captured in Mailpit at `http://localhost:8025`.
-
-Evidence submission and review for campus skills recognition, integrated with Open Badges credentials.
+The use case is inspired by [Bowdoin's digital badge pathways and personal-account guidance](https://bowdoin.teamdynamix.com/TDClient/1814/Portal/KB/Article/157578/Understand-the-Digital-Badge-Learning-Pathway-Subscription-Email). Campus defines its own assessment, prerequisite and completion policies; it is not a Bowdoin service. The included program starts with accessible documents and keyboard access.
 
 ## Run locally
 
-```bash
+Install Docker with Compose v2. The optional overlays require Compose 2.24.4 or newer. Network access is needed for container images, npm, Maven Central and JitPack. A host JDK is not required for Docker builds.
+
+```sh
+git clone https://github.com/brody-0125/signet-campus.git
+cd signet-campus
 docker compose up -d --build web
 ```
 
-Open `http://localhost:5173` to explore achievements, submit evidence and follow reviews. The API runs at `http://localhost:8080` with PostgreSQL storage and Keycloak authentication. See [Local development](docs/LOCAL_DEVELOPMENT.md) for accounts, configuration and smoke tests.
+Allow the API and identity provider to finish starting, then open [Signet Campus](http://localhost:5173). The API is at port 8080, Keycloak at 8081 and the local email inbox at [Mailpit](http://localhost:8025). Published ports bind to loopback. Database, identity and signing keys persist in named volumes.
 
-For an isolated deployment with HTTPS login, issuance and public revocation checks, follow [HTTPS deployment](docs/HTTPS.md). It serves the application at `https://localhost:8443` and keeps database, API and identity ports internal.
+| Demo account | Password | Access |
+|---|---|---|
+| `learner` | `local-learner-only` | Submit evidence and receive badges |
+| `reviewer` | `local-reviewer-only` | Manage achievements/pathways and review evidence |
 
-## Credential integration
+These are synthetic local accounts. You can also select **Sign in → Register** and verify a synthetic address through Mailpit. Registration does not grant reviewer privileges. See [local configuration](docs/LOCAL_DEVELOPMENT.md) and [account access](docs/ACCOUNT.md) for existing realms and durable personal sign-in.
 
-Reviewers can [create and edit achievements](docs/CATALOG.md) from Explore. Criteria become immutable after the first evidence submission to preserve the basis of assessment and issuance.
+## Use the application
 
-The Kotlin server module integrates the published Signet Spring Boot starter. Its contract test builds a credential, signs it with an Ed25519 Data Integrity proof, verifies the signature, and checks rejection of modified credentials and unrelated public keys.
+1. In **Explore**, inspect an achievement's criteria and submit evidence.
+2. As a reviewer, open **Review queue** to approve the work or request changes. Learners can revise rejected evidence.
+3. As the learner, open the approved submission and select **Issue badge**. Verify it and download JSON, PNG or SVG. Public sharing is optional and private by default.
+4. In **Pathways**, inspect prerequisites, enroll and earn every required current badge. Eligible learners can issue a separate completion award.
 
-## Requirements
-
-- Java 17
-- Access to Maven Central and JitPack
-
-Gradle is included through the wrapper.
-
-## Run the tests
-
-```bash
-git clone https://github.com/brody-0125/signet-campus.git
-cd signet-campus/server
-sh ./gradlew test
-```
-
-On Windows, run `.\gradlew.bat test` from `server/`.
-
-To run tests in Docker from the repository root:
-
-```bash
-docker run --rm -v "$PWD:/workspace" -w /workspace/server eclipse-temurin:17-jdk sh ./gradlew test --no-daemon
-```
-
-See [Testing](docs/TESTING.md) for covered behaviors, report locations and dependency inventory generation.
-
-## Dependencies
-
-| Component | Version |
+| Capability | Details |
 |---|---|
-| Kotlin | 2.2.21 |
-| Spring Boot | 3.5.11 |
-| Gradle | 8.14.3 |
-| Signet Spring Boot starter | `v0.1.6` |
-| Kotest | 6.0.4 |
-| Konsist | 0.17.3 |
-| Kover | 0.9.3 |
-| kotlin-logging | 7.0.13 |
+| Catalog lifecycle | [Draft, publish, archive, restore and next editions](docs/CATALOG.md); criteria freeze on first submission |
+| Assessment | [Owner-only evidence, reviewer decisions, resubmission and optimistic concurrency](docs/EVIDENCE_REVIEW.md) |
+| Credentials | [Ed25519 signing, registry verification, revocation and key rotation](docs/CREDENTIALS.md) |
+| Portability | [Embedded PNG/SVG credentials](docs/PORTABLE_BADGES.md), [explicit public sharing](docs/SHARING.md) and independent verification |
+| Learning pathways | [Prerequisites, enrollment, progress and completion awards](docs/PATHWAYS.md) |
+| Notifications | [Transactional outbox, retries and local SMTP](docs/NOTIFICATIONS.md) |
+| Personal access | [Registration, verified email, account settings and institutional unlinking](docs/ACCOUNT.md) |
 
-The [dependency inventory](docs/third-party/inventory.json) records resolved runtime and test artifacts, scopes and SHA-256 hashes. [License declarations](docs/DEPENDENCY_LICENSES.md) and [third-party notices](THIRD_PARTY_NOTICES.md) accompany the inventory.
+## Technology and architecture
 
-## Documentation
+The web client uses React, Zustand, TanStack Query and Vite. The server uses Kotlin 2.2.21, Spring Boot 3.5.11, Gradle 8.14.3 and hexagonal boundaries checked by Konsist. Kotest and PostgreSQL integration tests cover domain and API behavior; Kover enforces a 90% line-coverage gate. Logging uses kotlin-logging with optional Micrometer/OpenTelemetry instrumentation.
 
-- [Submission API](docs/API.md)
-- [Credential issuance and verification](docs/CREDENTIALS.md)
-- [Portable PNG and SVG badges](docs/PORTABLE_BADGES.md)
-- [Private and public credential sharing](docs/SHARING.md)
-- [Web interface and design system](docs/WEB_INTERFACE.md)
-- [Account access and email changes](docs/ACCOUNT.md)
-- [Local development](docs/LOCAL_DEVELOPMENT.md)
-- [Backup and recovery](docs/RECOVERY.md)
-- [Identity database recovery](docs/IDENTITY_RECOVERY.md)
-- [Independent credential verification](docs/INTEROPERABILITY.md)
-- [Evidence review](docs/EVIDENCE_REVIEW.md)
-- [Testing](docs/TESTING.md)
-- [Contributing](CONTRIBUTING.md)
-- [Security reporting](SECURITY.md)
-- [Changelog](CHANGELOG.md)
-- [Application distributions and source availability](docs/DISTRIBUTION.md)
-- [Standards and distribution requirements](docs/COMPLIANCE.md)
+The server consumes JitPack releases `com.github.brody-0125:signet-spring-boot-starter:v0.1.6` and its transitive Signet Core `v0.1.5`. Dependencies use semantic release tags. See [architecture](docs/ARCHITECTURE.md), [the resolved dependency inventory](docs/third-party/inventory.json) and [license declarations](docs/DEPENDENCY_LICENSES.md).
 
-## Standards
+The [HTTPS overlay](docs/HTTPS.md) serves an isolated deployment at port 8443. [Replica tests](docs/REPLICAS.md) exercise two API processes and worker crash recovery. [Telemetry](docs/TELEMETRY.md), [application backup/restore](docs/RECOVERY.md) and [identity recovery](docs/IDENTITY_RECOVERY.md) document operational behavior. Local Compose uses development credentials and identity settings; the architecture guide describes the service deployment boundaries and required infrastructure.
 
-Credential integration uses [1EdTech Open Badges 3.0](https://www.imsglobal.org/spec/ob/v3p0) and [W3C Verifiable Credentials Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/). Signet Campus is not certified by 1EdTech. See [NOTICE](NOTICE) for attribution.
+## Verify
 
-For cross-instance issuance and notification crash recovery, run the [replica rehearsal](docs/REPLICAS.md).
+Run from the repository root. Node 24 and npm are needed for web and acceptance tools.
 
-Optional local Prometheus metrics and Zipkin traces are documented in [Operational telemetry](docs/TELEMETRY.md).
+```sh
+docker compose --profile test run --rm tests
+npm ci --prefix web
+npm test --prefix web
+npm run build --prefix web
+```
 
-## License
+With the local application and identity provider running:
 
-Original code and documentation are licensed under the [MIT License](LICENSE). Third-party components, the Gradle wrapper and preserved upstream notices retain their original licenses. See [Third-party notices](THIRD_PARTY_NOTICES.md).
+```sh
+npm ci --prefix dev --ignore-scripts
+node dev/prepare-verification-resources.mjs
+node --test dev/independent-verification.test.mjs
+```
+
+The independent verifier checks actual issued badges and pathway awards with a separate JavaScript cryptographic implementation, including Unicode, tampering, images and revocation. Acceptance tests create synthetic records. See [testing](docs/TESTING.md) for all gates and fixture commands, and [interoperability](docs/INTEROPERABILITY.md) for exact coverage and compatibility.
+
+## Standards and license
+
+Campus implements credential features from [1EdTech Open Badges 3.0](https://www.imsglobal.org/spec/ob/v3p0) and [W3C Verifiable Credentials Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/). It is not certified by 1EdTech. [NOTICE](NOTICE) retains standards attribution.
+
+Original code and documentation use the [MIT License](LICENSE). Dependencies, fonts, covered third-party source and preserved upstream notices retain their own terms. [Third-party notices](THIRD_PARTY_NOTICES.md), [distribution contents and source availability](docs/DISTRIBUTION.md), and [standards requirements](docs/COMPLIANCE.md) accompany the project.
+
+See [the submission API](docs/API.md), [contributing](CONTRIBUTING.md), [security reporting](SECURITY.md) and [changelog](CHANGELOG.md).
