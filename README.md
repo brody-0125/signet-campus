@@ -70,6 +70,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 - [Private and public credential sharing](docs/SHARING.md)
 - [Web interface and design system](docs/WEB_INTERFACE.md)
 - [Local development](docs/LOCAL_DEVELOPMENT.md)
+- [Backup and recovery](docs/RECOVERY.md)
 - [Evidence review](docs/EVIDENCE_REVIEW.md)
 - [Testing](docs/TESTING.md)
 - [Contributing](CONTRIBUTING.md)

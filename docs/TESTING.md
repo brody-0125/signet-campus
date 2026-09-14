@@ -57,6 +57,10 @@ Keys are generated in memory. Recipient addresses use synthetic example domains.
 
 Signing-key rotation tests cover old-key verification, new-key issuance, removal of historical trust, unknown method rejection, public-only controller output and invalid key-set startup failures. The preparation utility can be checked from the repository root with `node --test dev/prepare-key-rotation.test.mjs`; this checks preservation of active files, accumulated public history and overwrite rejection. Set `CAMPUS_EXPECTED_KEY_ID` when running `node dev/smoke.mjs` to assert the verification method used for newly issued credentials during a rotation drill.
 
+## Recovery rehearsal
+
+After starting the local Compose stack and creating synthetic credentials with `node dev/smoke.mjs`, run `node --test dev/recovery.test.mjs`. It restores the database and copied keys into an isolated server, checks all public table rows and existing credential verification, and leaves the source services running. See [Backup and recovery](RECOVERY.md) for prerequisites, limits and the operator procedure.
+
 ## Dependency inventory
 
 ```bash
