@@ -94,6 +94,7 @@ test('restore credentials and copied signing keys into an isolated service with 
     `;
     docker(['run', '--rm', '-i', '--network', prefix, 'node:24-alpine', 'node', '--input-type=module', '-e', verify], JSON.stringify(records));
     assert.ok(inspect(api).Config.Env.includes('NOTIFICATIONS_ENABLED=false'));
+    assert.equal(fingerprint(target, 'campus_recovery', 'notification_outbox'), before[tables.indexOf('notification_outbox')], 'Recovery must not advance or retry mail deliveries');
     console.log(`Recovery verified: ${tables.length} tables, ${records.length} credential records, signatures and sharing; no host ports or SMTP access`);
   } finally {
     const cleanup = created.reverse().map(name => command(['rm', '-f', name]).status);
