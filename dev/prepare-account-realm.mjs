@@ -1,7 +1,5 @@
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 const realm = JSON.parse(await readFile(new URL('./realm.json', import.meta.url)));
-realm.verifyEmail = true;
-realm.smtpServer = { host: 'mailpit', port: '1025', from: 'accounts@example.test', fromDisplayName: 'Signet Campus', ssl: 'false', starttls: 'false', auth: 'false' };
 realm.clients[0].redirectUris = ['http://localhost:5183/*'];
 realm.clients[0].webOrigins = ['http://localhost:5183'];
 await mkdir(new URL('../secrets/', import.meta.url), { recursive: true });
