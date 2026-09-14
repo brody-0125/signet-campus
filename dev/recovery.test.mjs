@@ -44,6 +44,32 @@ test('restore credentials and copied signing keys into an isolated service with 
     return sql(container, database, `SELECT count(*), md5(coalesce(string_agg(row_to_json(t)::text, E'\\n' ORDER BY row_to_json(t)::text), '')) FROM ${table} t`);
   };
   const before = tables.map(table => fingerprint(sourceDb, 'campus', table));
+  const verify = `
+    import assert from 'node:assert/strict';
+    let input = ''; for await (const chunk of process.stdin) input += chunk;
+    const { records, baseUrl } = JSON.parse(input);
+    const statuses = [];
+    for (const record of records) {
+      const response = await fetch(baseUrl + '/api/credentials/' + record.id + '/verify', {
+        method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(record.document), signal: AbortSignal.timeout(10000)
+      });
+      assert.equal(response.status, 200);
+      const status = (await response.json()).status;
+      const expected = record.revoked_at ? 'REVOKED' : new Date(record.issued_at) > new Date() ? 'NOT_YET_VALID' : new Date(record.valid_until) <= new Date() ? 'EXPIRED' : 'VALID';
+      if (status !== 'INVALID_PROOF') assert.equal(status, expected);
+      statuses.push(status);
+      const shared = await fetch(baseUrl + '/api/shared/credentials/' + record.id);
+      assert.equal(shared.status, record.shared ? 200 : 404);
+      assert.equal(shared.headers.get('cache-control'), 'no-store');
+    }
+    process.stdout.write(JSON.stringify(statuses));
+  `;
+
+  const verifyAt = (network, name) => JSON.parse(docker(['run', '--rm', '-i', '--network', network, 'node:24-alpine', 'node', '--input-type=module', '-e', verify], JSON.stringify({ records, baseUrl: 'http://' + name + ':8080' })));
+  const sourceStatuses = verifyAt(Object.keys(server.NetworkSettings.Networks)[0], server.Name.slice(1));
+  assert.ok(sourceStatuses.some(status => status !== 'INVALID_PROOF'), 'Provide at least one credential with a verifiable signature before rehearsing recovery');
+  const invalid = sourceStatuses.filter(status => status === 'INVALID_PROOF').length;
+  if (invalid) console.log('Source requires issuer review: ' + invalid + ' pre-existing INVALID_PROOF credential(s); recovery must preserve these findings');
   try {
     docker(['network', 'create', '--internal', prefix]); networkCreated = true;
     docker(['volume', 'create', keys]); keysCreated = true;
@@ -72,31 +98,33 @@ test('restore credentials and copied signing keys into an isolated service with 
       '-e', 'DATABASE_USER=campus', '-e', 'DATABASE_PASSWORD=local-recovery-only', '-e', 'NOTIFICATIONS_ENABLED=false', server.Image]);
     created.push(api);
     const publicCheck = `
-      const response = await fetch('http://${api}:8080/actuator/health/readiness', {signal: AbortSignal.timeout(1500)});
+      const response = await fetch('http://${api}:8080/api/achievements', {signal: AbortSignal.timeout(1500)});
       if (!response.ok) process.exit(1);
     `;
     await waitFor(() => command(['run', '--rm', '--network', prefix, 'node:24-alpine', 'node', '--input-type=module', '-e', publicCheck]).status === 0);
-    const verify = `
-      import assert from 'node:assert/strict';
-      let input = ''; for await (const chunk of process.stdin) input += chunk;
-      const records = JSON.parse(input);
-      for (const record of records) {
-        const response = await fetch('http://${api}:8080/api/credentials/' + record.id + '/verify', {
-          method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(record.document), signal: AbortSignal.timeout(10000)
-        });
-        assert.equal(response.status, 200);
-        const status = (await response.json()).status;
-        const expected = record.revoked_at ? 'REVOKED' : new Date(record.issued_at) > new Date() ? 'NOT_YET_VALID' : new Date(record.valid_until) <= new Date() ? 'EXPIRED' : 'VALID';
-        assert.equal(status, expected);
-        const shared = await fetch('http://${api}:8080/api/shared/credentials/' + record.id);
-        assert.equal(shared.status, record.shared ? 200 : 404);
-        assert.equal(shared.headers.get('cache-control'), 'no-store');
-      }
-    `;
-    docker(['run', '--rm', '-i', '--network', prefix, 'node:24-alpine', 'node', '--input-type=module', '-e', verify], JSON.stringify(records));
+    const restoredStatuses = verifyAt(prefix, api);
+    assert.deepEqual(restoredStatuses, sourceStatuses, 'Recovery changed credential verification; check copied keys and documents');
+    // A replacement key must not masquerade as a successful recovery of existing signatures.
+    docker(['run', '--rm', '--network', 'none', '--mount', `type=volume,src=${keys},dst=/backup`, 'node:24-alpine', 'node', '--input-type=module', '-e', `
+      import { generateKeyPairSync } from 'node:crypto';
+      import { writeFileSync, chownSync } from 'node:fs';
+      const path = '/backup/recovery-negative.jwk';
+      writeFileSync(path, JSON.stringify(generateKeyPairSync('ed25519').privateKey.export({ format: 'jwk' })), { flag: 'wx', mode: 0o600 });
+      chownSync(path, 10001, 10001);
+    `]);
+    const wrongKeyApi = `${prefix}-wrong-key`;
+    docker(['run', '-d', '--name', wrongKeyApi, '--network', prefix, '--mount', `type=volume,src=${keys},dst=/run/secrets,readonly`,
+      ...environment.filter(value => !/^(SIGNING_KEY_PATH=|VERIFICATION_KEYS=)/.test(value)).flatMap(value => ['-e', value]),
+      '-e', `DATABASE_URL=jdbc:postgresql://${target}:5432/campus_recovery`, '-e', 'DATABASE_USER=campus', '-e', 'DATABASE_PASSWORD=local-recovery-only',
+      '-e', 'NOTIFICATIONS_ENABLED=false', '-e', 'SIGNING_KEY_PATH=/run/secrets/recovery-negative.jwk', '-e', 'VERIFICATION_KEYS=classpath:empty-jwks.json', server.Image]);
+    created.push(wrongKeyApi);
+    await waitFor(() => command(['run', '--rm', '--network', prefix, 'node:24-alpine', 'node', '--input-type=module', '-e', publicCheck.replace(api, wrongKeyApi)]).status === 0);
+    const wrongKeyStatuses = verifyAt(prefix, wrongKeyApi);
+    assert.ok(wrongKeyStatuses.every(status => status === 'INVALID_PROOF'), 'An unrelated key must not verify restored credentials');
+    assert.notDeepEqual(wrongKeyStatuses, sourceStatuses, 'Recovery comparison must detect lost verification keys');
     assert.ok(inspect(api).Config.Env.includes('NOTIFICATIONS_ENABLED=false'));
     assert.equal(fingerprint(target, 'campus_recovery', 'notification_outbox'), before[tables.indexOf('notification_outbox')], 'Recovery must not advance or retry mail deliveries');
-    console.log(`Recovery verified: ${tables.length} tables, ${records.length} credential records, signatures and sharing; no host ports or SMTP access`);
+    console.log(`Recovery verified: ${tables.length} tables, ${records.length} credential records, matching verification and sharing; ${invalid} pre-existing invalid proof(s); replacement key rejected; no host ports or SMTP access`);
   } finally {
     const cleanup = created.reverse().map(name => command(['rm', '-f', name]).status);
     if (keysCreated) cleanup.push(command(['volume', 'rm', keys]).status);
