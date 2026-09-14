@@ -1,7 +1,9 @@
 name: signet-campus
 services:
   web:
-    build: ./web
+    build:
+      context: .
+      dockerfile: web/Dockerfile
     ports:
       - "127.0.0.1:5173:8080"
     depends_on:
@@ -22,7 +24,9 @@ services:
       timeout: 3s
       retries: 20
   server:
-    build: ./server
+    build:
+      context: .
+      dockerfile: server/Dockerfile
     environment:
       DATABASE_URL: jdbc:postgresql://db:5432/campus
       DATABASE_USER: campus

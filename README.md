@@ -79,6 +79,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 - [Contributing](CONTRIBUTING.md)
 - [Security reporting](SECURITY.md)
 - [Changelog](CHANGELOG.md)
+- [Application distributions and source availability](docs/DISTRIBUTION.md)
 - [Standards and distribution requirements](docs/COMPLIANCE.md)
 
 ## Standards
