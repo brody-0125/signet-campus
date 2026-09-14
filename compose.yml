@@ -17,7 +17,7 @@ services:
     volumes:
       - campus-db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U campus -d campus"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U campus -d campus"]
       interval: 3s
       timeout: 3s
       retries: 20
@@ -95,7 +95,7 @@ services:
     tmpfs:
       - /var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U campus -d campus_test"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U campus -d campus_test"]
       interval: 3s
       timeout: 3s
       retries: 20
