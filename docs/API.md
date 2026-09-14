@@ -14,7 +14,7 @@ Requests use JSON. Published achievements are public; drafts are visible only th
 
 ## Submit
 
-List requests accept a non-negative offset and a limit from 1 to 100. Results use submission time and ID ordering.
+List requests accept a non-negative offset and a limit from 1 to 100. Learner results use newest submission time first, with descending ID as a stable tie-breaker. The reviewer queue contains pending submissions ordered oldest first, with ascending ID for ties. Resubmitting updates the submission time: it moves the work to the top of the learner list and the back of the pending reviewer queue.
 
 ```json
 {

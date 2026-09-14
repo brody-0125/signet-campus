@@ -74,6 +74,39 @@ class SubmissionApiTest : SigningTestSupport() {
         mvc.perform(get("/api/submissions?offset=-1").with(auth())).andExpect(status().isBadRequest)
     }
 
+    @Test fun `learners see newest submissions while reviewer pages retain FIFO and stable ties`() {
+        val ids = List(3) { submit() }.sorted()
+        ids.forEachIndexed { index, id ->
+            jdbc.update("UPDATE submissions SET submitted_at = ?::timestamptz WHERE id = ?::uuid",
+                if (index == 2) "2021-01-01T00:00:00Z" else "2020-01-01T00:00:00Z", id)
+        }
+        fun page(offset: Int, reviewing: Boolean): List<String> = json.readTree(mvc.perform(
+            get("/api/submissions?offset=$offset&limit=2").with(if (reviewing) auth(reviewer, true) else auth()))
+            .andExpect(status().isOk).andReturn().response.contentAsString).map { it["submission"]["id"].asText() }
+        assertEquals(ids.reversed(), page(0, false) + page(2, false))
+        assertEquals(ids, page(0, true) + page(2, true))
+        mvc.perform(post("/api/submissions/${ids[2]}/approve").with(auth(reviewer, true))
+            .contentType(MediaType.APPLICATION_JSON).content("""{"expectedVersion":0}"""))
+            .andExpect(status().isOk)
+        assertEquals(ids.take(2), page(0, true))
+    }
+
+    @Test fun `resubmission returns to the top for its learner and the back of the reviewer queue`() {
+        val old = submit()
+        val pending = submit()
+        jdbc.update("UPDATE submissions SET submitted_at = '2020-01-01'::timestamptz")
+        mvc.perform(post("/api/submissions/$old/reject").with(auth(reviewer, true))
+            .contentType(MediaType.APPLICATION_JSON).content("""{"expectedVersion":0,"reason":"Add keyboard evidence"}"""))
+            .andExpect(status().isOk)
+        mvc.perform(post("/api/submissions/$old/resubmit").with(auth())
+            .contentType(MediaType.APPLICATION_JSON).content("""{"expectedVersion":1,"evidence":"Keyboard audit with remediation"}"""))
+            .andExpect(status().isOk)
+        mvc.perform(get("/api/submissions?limit=1").with(auth()))
+            .andExpect(jsonPath("$[0].submission.id").value(old))
+        mvc.perform(get("/api/submissions?limit=1").with(auth(reviewer, true)))
+            .andExpect(jsonPath("$[0].submission.id").value(pending))
+    }
+
     @Test fun `only reviewers may approve and stale versions conflict`() {
         val id = submit()
         val body = """{"expectedVersion":0}"""

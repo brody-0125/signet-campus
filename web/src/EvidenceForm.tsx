@@ -5,7 +5,7 @@ import { signIn, useSession } from './auth'
 import { useWorkspace } from './store'
 import { Dialog } from './Dialog'
 
-export function EvidenceForm({ achievement, onClose, existing }: { achievement: Achievement; onClose: () => void; existing?: Submission }) {
+export function EvidenceForm({ achievement, onClose, existing, onSubmitted }: { achievement: Achievement; onClose: () => void; existing?: Submission; onSubmitted?: () => void }) {
   const authenticated = useSession(s => s.authenticated)
   const ready = useSession(s => s.ready)
   const [evidence, setEvidence] = useState(existing?.submission.evidence || '')
@@ -17,6 +17,7 @@ export function EvidenceForm({ achievement, onClose, existing }: { achievement: 
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: ['submissions'] })
       useWorkspace.setState({ view: 'submissions', selectedId: null, notice: 'Evidence submitted for review.' })
+      onSubmitted?.()
       onClose()
     },
   })
