@@ -3,6 +3,22 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
+  accounts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci
+        working-directory: web
+      - run: npx playwright install --with-deps chromium
+        working-directory: web
+      - run: node dev/prepare-account-realm.mjs
+      - run: docker compose -p signet-campus-accounts -f compose.yml -f compose.accounts.yml up -d --build web
+      - run: node --test dev/account-continuity.test.mjs
+      - if: always()
+        run: docker compose -p signet-campus-accounts -f compose.yml -f compose.accounts.yml down -v
   https:
     runs-on: ubuntu-latest
     env:

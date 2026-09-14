@@ -41,6 +41,8 @@ Parsson retains its own EPL-2.0 terms and conditional secondary-license designat
 
 ## Distribution obligations
 
+Browser integration tests use unmodified Playwright and playwright-core 1.63.0 (Apache-2.0), installed as development dependencies. Original license, NOTICE and bundled third-party notices are preserved under `LICENSES/playwright/` and `LICENSES/playwright-core/`. They are not part of the application's browser bundle. Browser executables downloaded by Playwright retain their own licenses; they are CI/local tooling and are not distributed by this repository. Preserve their upstream notices if separately redistributing browser binaries.
+
 The mail integration adds Spring Mail (Apache-2.0), Angus Activation and Jakarta Activation (EDL-1.0), and Angus Jakarta Mail 2.0.5. Jakarta Mail's bundled NOTICE specifies EPL-2.0 with a conditional GPL-2.0/ClassPath secondary license; this project retains the EPL-2.0 route and all embedded license/notice texts. Unmodified corresponding source is available from [Maven Central](https://repo.maven.apache.org/maven2/org/eclipse/angus/jakarta.mail/2.0.5/jakarta.mail-2.0.5-sources.jar). Keep this source-availability statement and the artifact's notices with any binary redistribution.
 
 The local Compose service uses unmodified [Mailpit v1.31.1](https://github.com/axllent/mailpit/tree/v1.31.1), licensed under MIT. Its [license](LICENSES/Mailpit-LICENSE.txt) is retained here; container layers and bundled third-party components retain their respective terms. Mailpit is a separate local development service, not part of the browser bundle or application JAR.
