@@ -50,7 +50,8 @@ test('restore credentials and copied signing keys into an isolated service with 
     docker(['run', '-d', '--name', target, '--network', prefix, '--tmpfs', '/var/lib/postgresql/data',
       '-e', 'POSTGRES_USER=campus', '-e', 'POSTGRES_PASSWORD=local-recovery-only', '-e', 'POSTGRES_DB=campus_recovery', db.Image]);
     created.push(target);
-    await waitFor(() => command(['exec', target, 'pg_isready', '-U', 'campus', '-d', 'campus_recovery']).status === 0);
+    // PostgreSQL's temporary initialization server accepts Unix sockets before its final restart.
+    await waitFor(() => command(['exec', target, 'pg_isready', '-h', '127.0.0.1', '-U', 'campus', '-d', 'campus_recovery']).status === 0);
 
     const restore = ['exec', '-i', target, 'pg_restore', '-U', 'campus', '-d', 'campus_recovery', '--no-owner', '--no-acl', '--single-transaction'];
     assert.notEqual(command(restore, Buffer.alloc(0)).status, 0, 'Empty input must fail');
