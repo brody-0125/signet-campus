@@ -1,0 +1,37 @@
+# Disposable PostgreSQL-backed account recovery rehearsal; use the documented project name.
+services:
+  identity:
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: identity-db
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: local-identity-only
+    volumes: !override
+      - ./secrets/account-realm.json:/opt/keycloak/data/import/realm.json:ro
+      - ./secrets/institution-realm.json:/opt/keycloak/data/import/institution-realm.json:ro
+    depends_on:
+      identity-db:
+        condition: service_healthy
+  identity-db:
+    image: postgres:17-alpine
+    environment: &identity-database
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: local-identity-only
+    volumes:
+      - identity-source-db:/var/lib/postgresql/data
+    healthcheck: &identity-health
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U keycloak -d keycloak"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  identity-restored-db:
+    image: postgres:17-alpine
+    environment: *identity-database
+    volumes:
+      - identity-restored-db:/var/lib/postgresql/data
+    healthcheck: *identity-health
+volumes:
+  identity-source-db:
+  identity-restored-db:

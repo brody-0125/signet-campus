@@ -18,6 +18,8 @@ The temporary server has notifications disabled, no published ports and an inter
 
 ## Create an operator backup
 
+For a separate PostgreSQL-backed account-store restore that checks fresh authentication and new badge issuance, see [Identity database recovery](IDENTITY_RECOVERY.md).
+
 The following commands use a POSIX shell in the repository root and the default local database credentials. For a service deployment, use its protected credentials and approved encrypted backup destination instead. Archive only trusted databases. Protect `secrets/` with restrictive access controls; on Windows use equivalent NTFS ACLs. Never commit or publish backups.
 
 ```sh

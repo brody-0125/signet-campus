@@ -1,0 +1,9 @@
+services:
+  identity:
+    # No realm import: all accounts, client configuration and realm keys come from the backup.
+    command: ["start-dev"]
+    environment:
+      KC_DB_URL_HOST: identity-restored-db
+    depends_on: !override
+      identity-restored-db:
+        condition: service_healthy
