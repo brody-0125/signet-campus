@@ -1,0 +1,14 @@
+{
+  "name": "signet-campus-acceptance",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "devDependencies": {
+    "@digitalbazaar/data-integrity": "2.5.0",
+    "@digitalbazaar/eddsa-rdfc-2022-cryptosuite": "1.3.0",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "jsonld-signatures": "11.6.0"
+  }
+}

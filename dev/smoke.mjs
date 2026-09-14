@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 
 const api = process.env.CAMPUS_API ?? 'http://localhost:8080';
 const issuer = process.env.CAMPUS_ISSUER ?? 'http://localhost:8081/realms/signet-campus';
+const independent = process.env.CAMPUS_INDEPENDENT_VERIFY === 'true'
+  ? await (await import('./independent-verification.mjs')).createVerifier(api) : null;
 async function login(username, password) {
   const response = await fetch(`${issuer}/protocol/openid-connect/token`, {
     method: 'POST',
@@ -51,6 +53,7 @@ async function verifyImageExport(credential, token, format) {
   }
   assert.ok(document, `No embedded credential in ${format}`);
   assert.deepEqual(JSON.parse(document), credential);
+  if (independent) await independent(JSON.parse(document), 'VALID');
 }
 
 const learner = await login('learner', 'local-learner-only');
@@ -73,7 +76,7 @@ if (process.argv[2]) {
   await request('/api/submissions', null, undefined, 401);
   await request('/api/achievements', `${learner}corrupted`, undefined, 401);
   await request('/api/achievements', learner, { name: 'Unauthorized', criteria: 'Audit' }, 403);
-  const authored = await request('/api/achievements', reviewer, { name: 'Keyboard audit (smoke)', criteria: 'Audit focus order' }, 201);
+  const authored = await request('/api/achievements', reviewer, { name: process.env.CAMPUS_SMOKE_NAME ?? 'Keyboard audit (smoke)', criteria: 'Audit focus order' }, 201);
   assert.equal(authored.published, false);
   await request(`/api/achievements/${authored.id}`, null, undefined, 404);
   const edited = await request(`/api/achievements/${authored.id}`, reviewer, {
@@ -85,7 +88,7 @@ if (process.argv[2]) {
     achievementId: achievement.id, evidence: 'Synthetic keyboard navigation audit',
   }, 201);
   const pathway = await request('/api/pathways', reviewer, {
-    name: 'Accessible campus (smoke)', description: 'Demonstrate keyboard access', achievementIds: [achievement.id],
+    name: `${process.env.CAMPUS_SMOKE_NAME ?? 'Accessible campus'} (pathway)`, description: 'Demonstrate keyboard access', achievementIds: [achievement.id],
   }, 201);
   await request('/api/pathways', null);
   const enrollmentPath = `/api/pathways/${pathway.id}/enrollment`;
@@ -141,6 +144,7 @@ if (process.argv[2]) {
   await request(enrollmentPath, reviewer, {}, 423);
   assert.deepEqual(await request(`${path}/credential`, learner, {}), credential);
   for (const award of [credential, completion]) {
+    if (independent) await independent(award, 'VALID', true);
     for (const format of ['png', 'svg']) await verifyImageExport(award, learner, format);
   }
   const restored = await request(`/api/achievements/${achievement.id}/archive`, reviewer, { expectedVersion: archived.version, archived: false });
@@ -170,6 +174,7 @@ if (process.argv[2]) {
   await request(sharedPath, null, undefined, 404);
   assert.deepEqual(await request(completionPath, learner, {}), completion);
   assert.equal((await request(`${credentialPath}/verify`, null, credential)).status, 'REVOKED');
+  if (independent) for (const award of [credential, completion]) await independent(award, 'REVOKED');
   const after = await request('/api/revocations', null);
   assert.deepEqual(after.revokedCredentials.filter(entry => entry.id === credential.id), [{ id: credential.id, revoked: true }]);
   const discovered = await fetch(credential.credentialStatus.id, { headers: { Accept: 'application/json' } });

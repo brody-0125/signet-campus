@@ -19,7 +19,7 @@ repositories {
 kotlin { jvmToolchain(17) }
 
 dependencies {
-    implementation("com.github.brody-0125:signet-spring-boot-starter:v0.1.4")
+    implementation("com.github.brody-0125:signet-spring-boot-starter:v0.1.6")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-mail")
