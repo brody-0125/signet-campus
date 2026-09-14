@@ -19,13 +19,13 @@ import java.util.UUID
 class PostgresSubmissions(private val jdbc: JdbcTemplate) : SubmissionRepository {
     private val logger = KotlinLogging.logger {}
 
-    override fun achievements(): List<AchievementSummary> = jdbc.query("SELECT id, name, criteria, version FROM achievements ORDER BY name, id") { rs, _ ->
-        AchievementSummary(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("criteria"), rs.getLong("version"))
+    override fun achievements(): List<AchievementSummary> = jdbc.query("SELECT id, name, criteria, version FROM achievements WHERE published ORDER BY name, id") { rs, _ ->
+        AchievementSummary(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("criteria"), rs.getLong("version"), true)
     }
     @Transactional
     override fun create(submission: EvidenceSubmission): StoredSubmission {
         // Shared locks allow concurrent submissions but serialize them against catalog edits.
-        require(jdbc.queryForList("SELECT id FROM achievements WHERE id = ? FOR SHARE", UUID::class.java, submission.achievementId).isNotEmpty()) {
+        require(jdbc.queryForList("SELECT id FROM achievements WHERE id = ? AND published FOR SHARE", UUID::class.java, submission.achievementId).isNotEmpty()) {
             "Achievement not found"
         }
         jdbc.update("INSERT INTO submissions (id, learner_id, achievement_id, evidence, submitted_at) VALUES (?, ?, ?, ?, ?)",

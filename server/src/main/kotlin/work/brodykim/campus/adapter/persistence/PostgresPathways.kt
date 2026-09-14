@@ -22,6 +22,11 @@ class PostgresPathways(private val jdbc: JdbcTemplate) : PathwayRepository {
 
     @Transactional
     override fun create(pathway: Pathway): Pathway {
+        for (id in (pathway.achievementIds + pathway.prerequisiteAchievementIds).sorted()) {
+            require(jdbc.queryForList("SELECT id FROM achievements WHERE id = ? AND published FOR SHARE", UUID::class.java, id).isNotEmpty()) {
+                "Only published achievements can be used in pathways"
+            }
+        }
         jdbc.update("INSERT INTO pathways (id, name, description) VALUES (?, ?, ?)", pathway.id, pathway.name, pathway.description)
         pathway.achievementIds.forEachIndexed { index, id ->
             jdbc.update("INSERT INTO pathway_requirements (pathway_id, achievement_id, position) VALUES (?, ?, ?)", pathway.id, id, index)

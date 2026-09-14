@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { AchievementForm } from './AchievementForm'
+import { AchievementForm, PublishAchievement } from './AchievementForm'
 import { api, type Achievement } from './api'
 import { signIn, signOut, useSession } from './auth'
 import { useWorkspace } from './store'
@@ -25,7 +25,9 @@ function WorkspaceApp() {
   const notice = useWorkspace(s => s.notice)
   const navigate = useWorkspace(s => s.navigate)
   const session = useSession()
-  const achievements = useQuery({ queryKey: ['achievements'], queryFn: ({ signal }) => api<Achievement[]>('/achievements', undefined, signal) })
+  const achievements = useQuery({ queryKey: ['achievements', 'public'], queryFn: ({ signal }) => api<Achievement[]>('/achievements', undefined, signal) })
+  const reviewerAchievements = useQuery({ queryKey: ['achievements', 'reviewer'], queryFn: ({ signal }) => api<Achievement[]>('/reviewer/achievements', undefined, signal), enabled: session.ready && session.authenticated && session.reviewer })
+  const catalog = session.reviewer ? reviewerAchievements : achievements
   const selected = achievements.data?.find(a => a.id === selectedId)
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
@@ -50,10 +52,10 @@ function WorkspaceApp() {
         <section className="catalog" id="achievements" aria-labelledby="catalog-title"><div className="container">
           <h2 id="catalog-title">Find your next achievement</h2><p className="section-intro">Start with the criteria. Show what you can do.</p>
           {session.reviewer && <button className="button primary" onClick={() => setEditing('new')}>Create achievement</button>}
-          {achievements.isPending && <p role="status">Loading achievements…</p>}
-          {achievements.isError && <div role="alert"><p>Achievements could not be loaded.</p><button className="button outline" onClick={() => void achievements.refetch()}>Try again</button></div>}
-          {achievements.data?.length === 0 && <p>No achievements are available yet.</p>}
-          {achievements.data?.map(a => <article className="achievement-row" key={a.id}><div className="icon-tile"><AccessibilityIcon/></div><div className="row-copy"><h3>{a.name}</h3><p>{a.criteria}</p></div><button className="button outline" onClick={() => useWorkspace.setState({ selectedId: a.id })}>View criteria</button>{session.reviewer && <button className="button outline" aria-label={`Edit ${a.name}`} onClick={() => setEditing(a)}>Edit</button>}</article>)}
+          {catalog.isPending && <p role="status">Loading achievements…</p>}
+          {catalog.isError && <div role="alert"><p>Achievements could not be loaded.</p><button className="button outline" onClick={() => void catalog.refetch()}>Try again</button></div>}
+          {catalog.data?.length === 0 && <p>No achievements are available yet.</p>}
+          {catalog.data?.map(a => <article className="achievement-row" key={a.id}><div className="icon-tile"><AccessibilityIcon/></div><div className="row-copy"><h3>{a.name}</h3><p>{a.criteria}</p>{!a.published && <p className="field-help">Draft · Only reviewers can see this achievement</p>}</div>{a.published && <button className="button outline" onClick={() => useWorkspace.setState({ selectedId: a.id })}>View criteria</button>}{session.reviewer && <button className="button outline" aria-label={`Edit ${a.name}`} onClick={() => setEditing(a)}>Edit</button>}{session.reviewer && !a.published && <PublishAchievement achievement={a}/>}</article>)}
         </div></section>
       </> : view === 'pathways' ? <Pathways achievements={achievements.data || []}/> : view === 'account' ? session.authenticated ? <Account/> : <p className="container">Sign in to manage your account.</p> : <Submissions achievements={achievements.data || []}/>}
     </main>

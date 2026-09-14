@@ -14,7 +14,7 @@ export function Submissions({ achievements }: { achievements: Achievement[] }) {
   const [selected, setSelected] = useState<Submission | null>(null)
   const [editing, setEditing] = useState(false)
   const query = useQuery({ queryKey: ['submissions', offset], queryFn: ({ signal }) => api<Submission[]>(`/submissions?offset=${offset}&limit=20`, undefined, signal), enabled: authenticated })
-  const achievement = (id: string) => achievements.find(a => a.id === id) || { id, name: 'Achievement', criteria: 'Review the achievement criteria in Explore.', version: 0 }
+  const achievement = (id: string) => achievements.find(a => a.id === id) || { id, name: 'Achievement', criteria: 'Review the achievement criteria in Explore.', version: 0, published: true }
   const close = () => { setSelected(null); setEditing(false) }
   return <section className="container workspace" aria-labelledby="workspace-title">
     <div className="section-heading"><div><h1 id="workspace-title">{reviewer ? 'Review queue' : 'My submissions'}</h1><p className="section-intro">{reviewer ? 'Give thoughtful feedback. Recognize the work.' : 'Your work, and what comes next.'}</p></div>{authenticated && <button className="button outline" onClick={() => void query.refetch()} disabled={query.isFetching}>Refresh</button>}</div>
