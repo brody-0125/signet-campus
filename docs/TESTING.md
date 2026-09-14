@@ -68,3 +68,7 @@ sh ./gradlew -I third-party.init.gradle thirdPartyInventory
 ```
 
 The collector writes resolved runtime/test coordinates, artifact SHA-256 hashes, POMs and embedded license notices to `docs/third-party/`. Review POM parent licenses and update `docs/DEPENDENCY_LICENSES.md` when changing dependencies.
+
+## New learner registration
+
+Run `node --test dev/registration.test.mjs` against the [isolated account fixture](ACCOUNT.md#local-verified-email-flow). It exercises native registration, mandatory email confirmation, enrollment and credential issuance, fresh-login ownership, account-console access, and denial of reviewer privileges and another learner's private credential. It uses only synthetic addresses and local Mailpit.

@@ -2,6 +2,7 @@
   "realm": "signet-campus",
   "enabled": true,
   "verifyEmail": true,
+  "registrationAllowed": true,
   "smtpServer": {"host":"mailpit", "port":"1025", "from":"accounts@example.test", "fromDisplayName":"Signet Campus", "ssl":"false", "starttls":"false", "auth":"false"},
   "roles": {"realm": [{"name": "reviewer"}]},
   "clients": [{
