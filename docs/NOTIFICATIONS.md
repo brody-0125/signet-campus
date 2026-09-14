@@ -46,3 +46,5 @@ ORDER BY next_attempt_at;
 After correcting a delivery problem, allow automatic retry or move a specific event's `next_attempt_at` to `now()`. Sent records must not be reset: their recipient data has been removed. Review failed-recipient retention and completed-event cleanup policies before production deployment.
 
 The SMTP integration uses [Spring Boot's mail support](https://docs.spring.io/spring-boot/reference/io/email.html). Local inbox configuration follows [Mailpit's Docker guidance](https://mailpit.axllent.org/docs/install/docker/).
+
+The [replica recovery rehearsal](REPLICAS.md) demonstrates the acknowledgment-loss window with two real workers and Mailpit. A crashed transaction does not commit its attempt increment: the stored attempt count is not the number of physical emails received.
