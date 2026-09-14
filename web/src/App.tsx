@@ -28,7 +28,7 @@ function WorkspaceApp() {
   const achievements = useQuery({ queryKey: ['achievements', 'public'], queryFn: ({ signal }) => api<Achievement[]>('/achievements', undefined, signal) })
   const reviewerAchievements = useQuery({ queryKey: ['achievements', 'reviewer'], queryFn: ({ signal }) => api<Achievement[]>('/reviewer/achievements', undefined, signal), enabled: session.ready && session.authenticated && session.reviewer })
   const catalog = session.reviewer ? reviewerAchievements : achievements
-  const selected = achievements.data?.find(a => a.id === selectedId)
+  const selected = catalog.data?.find(a => a.id === selectedId && a.published)
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className="site-header"><div className="container header-inner">

@@ -135,6 +135,14 @@ it('keeps a draft visible with an error when publication loses a version race', 
   expect(await screen.findByRole('alert')).toHaveTextContent('changed')
   expect(screen.getByText('Draft · Only reviewers can see this achievement')).toBeInTheDocument()
 })
+it('opens reviewer criteria even when the separate public catalog request fails', async () => {
+  useSession.setState({ reviewer: true })
+  const user = userEvent.setup()
+  fetchMock.mockImplementation(async (url: string) => url.includes('/reviewer/') ? response([achievement]) : response({}, 503))
+  mount()
+  await user.click(await screen.findByRole('button', { name: 'View criteria' }))
+  expect(await screen.findByRole('dialog')).toHaveTextContent(achievement.criteria)
+})
 it('opens account management and keeps sign out available after a failed redirect', async () => {
   const user = userEvent.setup()
   mount()
