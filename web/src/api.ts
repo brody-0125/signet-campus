@@ -1,6 +1,6 @@
 import { accessToken } from './auth'
 
-export type Achievement = { id: string; name: string; criteria: string; version: number; published: boolean; archived: boolean }
+export type Achievement = { id: string; name: string; criteria: string; version: number; published: boolean; archived: boolean; predecessorId?: string | null }
 export type Pathway = { id: string; name: string; description: string; achievementIds: string[]; prerequisiteAchievementIds?: string[]; paused?: boolean }
 export type PathwayProgress = { pathwayId: string; enrolledAt: string; earned: number; total: number; completed: boolean; requirements: { achievementId: string; earned: boolean }[] }
 export class ApiError extends Error {
@@ -23,6 +23,7 @@ export async function credentialImage(id: string, format: 'png' | 'svg'): Promis
 async function request(path: string, body?: unknown, signal?: AbortSignal): Promise<Response> {
   const headers: Record<string, string> = {}
   const publicRequest = (body === undefined && (['/achievements', '/achievements?includeArchived=true', '/pathways'].includes(path) || path.startsWith('/shared/credentials/')))
+    || (body === undefined && /^\/achievements\/[^/?]+$/.test(path))
     || (body !== undefined && /^\/credentials\/[^/]+\/verify$/.test(path))
   if (!publicRequest) headers.Authorization = `Bearer ${await accessToken()}`
   if (body !== undefined) headers['Content-Type'] = 'application/json'

@@ -20,8 +20,8 @@ class PostgresSubmissions(private val jdbc: JdbcTemplate) : SubmissionRepository
     private val logger = KotlinLogging.logger {}
 
     override fun achievements(includeArchived: Boolean): List<AchievementSummary> = jdbc.query(
-        "SELECT id, name, criteria, version, archived FROM achievements WHERE published AND (? OR NOT archived) ORDER BY name, id",
-        { rs, _ -> AchievementSummary(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("criteria"), rs.getLong("version"), true, rs.getBoolean("archived")) }, includeArchived)
+        "SELECT id, name, criteria, version, archived, predecessor_id FROM achievements WHERE published AND (? OR NOT archived) ORDER BY name, id",
+        { rs, _ -> AchievementSummary(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("criteria"), rs.getLong("version"), true, rs.getBoolean("archived"), rs.getObject("predecessor_id", UUID::class.java)) }, includeArchived)
     @Transactional
     override fun create(submission: EvidenceSubmission): StoredSubmission {
         // Shared locks allow concurrent submissions but serialize them against catalog edits.

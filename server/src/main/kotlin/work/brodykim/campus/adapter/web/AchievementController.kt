@@ -48,6 +48,12 @@ class AchievementController(private val service: SubmissionService, private val 
     fun archive(authentication: JwtAuthenticationToken, @PathVariable id: UUID, @RequestBody input: ArchivalInput) =
         catalog.archive(actor(authentication), id, input.expectedVersion, requireNotNull(input.archived))
 
+    @PostMapping("/api/achievements/{id}/successors")
+    fun successor(authentication: JwtAuthenticationToken, @PathVariable id: UUID, @RequestBody input: AchievementInput) =
+        catalog.successor(actor(authentication), id, input.expectedVersion, input.name, input.criteria).let {
+            ResponseEntity.created(URI("/api/reviewer/achievements/${it.id}")).header("Cache-Control", "no-store").body(it)
+        }
+
     private fun actor(authentication: JwtAuthenticationToken) = Actor(UUID.fromString(authentication.token.subject),
         authentication.authorities.any { it.authority == "ROLE_REVIEWER" })
 }

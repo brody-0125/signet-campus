@@ -38,3 +38,11 @@ Pathways with an archived requirement or prerequisite report `paused: true` and 
 Archive and restore increment the optimistic version and reject stale or repeated transitions with 409. Submission, resubmission, first issuance and enrollment transactions lock the affected achievement rows against archival. A concurrent request either completes before archival or observes the pause; it cannot store new work after archival commits without passing the state check. All states persist through restart.
 
 This policy is informed by [Credly's template archival guidance](https://credlyissuer.zendesk.com/hc/en-us/articles/360027660052-Understanding-an-archived-template) and [Instructure's badge administration guidance](https://www.instructure.com/resources/webinars/canvas-credentials-catalog-beginning-year-admin-best-practices). Campus defines the pending-work and pathway pause rules above; they are not claims about those services' internal behavior.
+
+## Next editions
+
+Reviewers can choose **Next edition** on a published or archived achievement. The authoring dialog starts with the source name and criteria; change them for the new edition and save. This creates a private draft with a new ID and an immutable `predecessorId`. Publish it through the normal draft workflow when ready. Learners can expand **Previous edition criteria** to inspect the published source, including an archived source.
+
+`POST /api/achievements/{id}/successors` accepts `name`, `criteria` and the source's `expectedVersion`, and returns 201 with a reviewer-only Location. The source must have been published. A private source or stale version returns 409; invalid content returns 400. Creating a successor does not change the source version or archive it. Multiple intentional successor drafts are allowed.
+
+Editing, publishing and archiving the new edition preserve its predecessor relationship. Original evidence, reviews, signed credentials, pathway requirements and enrollments retain their original IDs. A badge for the new edition does not satisfy a pathway that requires the old edition. Reviewers must explicitly create any new pathway for a new cohort; there is no automatic migration.

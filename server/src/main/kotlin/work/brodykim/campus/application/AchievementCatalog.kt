@@ -8,12 +8,19 @@ interface AchievementCatalog {
     fun update(achievement: AchievementSummary): AchievementSummary
     fun publish(id: UUID, expectedVersion: Long): AchievementSummary
     fun archive(id: UUID, expectedVersion: Long, archived: Boolean): AchievementSummary
+    fun successor(sourceId: UUID, expectedVersion: Long, draft: AchievementSummary): AchievementSummary
 }
 class AchievementUnavailable : RuntimeException("Achievement is archived; new work is paused until the issuer restores it")
 class AchievementNotFound : RuntimeException("Achievement not found")
 class AchievementConflict : RuntimeException("Achievement changed or already has submissions")
 
 class AchievementCatalogService(private val catalog: AchievementCatalog) {
+    fun successor(actor: Actor, sourceId: UUID, expectedVersion: Long, name: String, criteria: String): AchievementSummary {
+        if (!actor.reviewer) throw ReviewForbidden()
+        val draft = AchievementSummary(UUID.randomUUID(), name.trim(), criteria.trim(), predecessorId = sourceId)
+        require(draft.name.length in 1..120 && draft.criteria.length in 1..5000 && expectedVersion >= 0)
+        return catalog.successor(sourceId, expectedVersion, draft)
+    }
     fun archive(actor: Actor, id: UUID, expectedVersion: Long, archived: Boolean): AchievementSummary {
         if (!actor.reviewer) throw ReviewForbidden()
         require(expectedVersion >= 0)

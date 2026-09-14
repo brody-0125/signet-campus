@@ -126,6 +126,14 @@ if (process.argv[2]) {
   assert.equal((await request(`${completionRecord}/verify`, null, completion)).valid, true);
   const archived = await request(`/api/achievements/${achievement.id}/archive`, reviewer, { expectedVersion: achievement.version, archived: true });
   assert.equal(archived.archived, true);
+  const successor = await request(`/api/achievements/${achievement.id}/successors`, reviewer,
+    { name: 'Next accessibility edition', criteria: 'Assess updated accessibility criteria', expectedVersion: archived.version }, 201);
+  assert.equal(successor.predecessorId, achievement.id);
+  assert.equal(successor.published, false);
+  await request(`/api/achievements/${successor.id}`, null, undefined, 404);
+  const nextEdition = await request(`/api/achievements/${successor.id}/publish`, reviewer, { expectedVersion: successor.version });
+  assert.equal(nextEdition.predecessorId, achievement.id);
+  assert.equal((await request(`/api/achievements/${successor.id}`, null)).published, true);
   assert.equal((await request('/api/achievements', null)).some(item => item.id === achievement.id), false);
   assert.equal((await request(`/api/achievements/${achievement.id}`, null)).archived, true);
   await request('/api/submissions', learner, { achievementId: achievement.id, evidence: 'Paused work' }, 423);

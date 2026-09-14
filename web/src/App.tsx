@@ -20,6 +20,7 @@ export function App() {
     : <WorkspaceApp/>
 }
 function WorkspaceApp() {
+  const [predecessor, setPredecessor] = useState<Achievement | null>(null)
   const [editing, setEditing] = useState<Achievement | 'new' | null>(null)
   const view = useWorkspace(s => s.view)
   const selectedId = useWorkspace(s => s.selectedId)
@@ -58,12 +59,13 @@ function WorkspaceApp() {
           {catalog.isPending && <p role="status">Loading achievements…</p>}
           {catalog.isError && <div role="alert"><p>Achievements could not be loaded.</p><button className="button outline" onClick={() => void catalog.refetch()}>Try again</button></div>}
           {catalog.data?.length === 0 && <p>No achievements are available yet.</p>}
-          {catalog.data?.map(a => <article className="achievement-row" key={a.id}><div className="icon-tile"><AccessibilityIcon/></div><div className="row-copy"><h3>{a.name}</h3><p>{a.criteria}</p>{a.archived && <p className="field-help">Archived · New work is paused</p>}{!a.published && <p className="field-help">Draft · Only reviewers can see this achievement</p>}</div>{a.published && <button className="button outline" onClick={() => useWorkspace.setState({ selectedId: a.id })}>View criteria</button>}{session.reviewer && !a.archived && <button className="button outline" aria-label={`Edit ${a.name}`} onClick={() => setEditing(a)}>Edit</button>}{session.reviewer && a.published && <ArchiveAchievement achievement={a}/>}{session.reviewer && !a.published && <PublishAchievement achievement={a}/>}</article>)}
+          {catalog.data?.map(a => <article className="achievement-row" key={a.id}><div className="icon-tile"><AccessibilityIcon/></div><div className="row-copy"><h3>{a.name}</h3><p>{a.criteria}</p>{a.archived && <p className="field-help">Archived · New work is paused</p>}{!a.published && <p className="field-help">Draft · Only reviewers can see this achievement</p>}</div>{a.published && <button className="button outline" onClick={() => useWorkspace.setState({ selectedId: a.id })}>View criteria</button>}{session.reviewer && !a.archived && <button className="button outline" aria-label={`Edit ${a.name}`} onClick={() => setEditing(a)}>Edit</button>}{session.reviewer && a.published && <button className="button outline" aria-label={`Create next edition of ${a.name}`} onClick={() => setPredecessor(a)}>Next edition</button>}{session.reviewer && a.published && <ArchiveAchievement achievement={a}/>}{session.reviewer && !a.published && <PublishAchievement achievement={a}/>}</article>)}
         </div></section>
       </> : view === 'pathways' ? <Pathways achievements={history.data || []}/> : view === 'account' ? session.authenticated ? <Account/> : <p className="container">Sign in to manage your account.</p> : <Submissions achievements={history.data || []}/>}
     </main>
     <footer><div className="container"><a className="wordmark" href="#" onClick={() => navigate('explore')}>signet campus</a><p>Learning, made visible.</p></div></footer>
     {selected && <EvidenceForm achievement={selected} onClose={() => useWorkspace.setState({ selectedId: null })}/>}
+    {predecessor && session.reviewer && <AchievementForm predecessor={predecessor} onClose={() => setPredecessor(null)}/>}
     {editing && session.reviewer && <AchievementForm achievement={editing === 'new' ? undefined : editing} onClose={() => setEditing(null)}/>}
   </>
 }

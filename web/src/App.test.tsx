@@ -319,3 +319,41 @@ it('renders and verifies a shared credential without authentication', async () =
   expect(fetchMock).toHaveBeenCalledWith('/api/credentials/credential-1/verify', expect.objectContaining({ headers: { 'Content-Type': 'application/json' } }))
   window.history.replaceState({}, '', '/')
 })
+
+it('creates a private next edition without editing its archived source', async () => {
+  useSession.setState({ reviewer: true })
+  const user = userEvent.setup()
+  const source = { ...achievement, archived: true, version: 4 }
+  let created = false
+  fetchMock.mockImplementation(async (url: string, options?: RequestInit) => {
+    if (url.endsWith('/successors')) { created = true; return response({ ...source, id: 'edition-2', published: false, archived: false, predecessorId: source.id }, 201) }
+    return response(url.includes('achievements') ? [source, ...(created ? [{ ...source, id: 'edition-2', name: 'Next year', published: false, archived: false, predecessorId: source.id }] : [])] : [])
+  })
+  mount()
+  await user.click(await screen.findByRole('button', { name: `Create next edition of ${source.name}` }))
+  expect(screen.getByRole('dialog')).toHaveTextContent('Existing badges and pathway requirements stay with the original edition.')
+  await user.clear(screen.getByLabelText('Achievement name'))
+  await user.type(screen.getByLabelText('Achievement name'), 'Next year')
+  await user.click(screen.getByRole('button', { name: 'Save achievement' }))
+  expect(await screen.findByText('Next year')).toBeInTheDocument()
+  expect(fetchMock).toHaveBeenCalledWith('/api/achievements/achievement-1/successors', expect.objectContaining({
+    method: 'POST', body: JSON.stringify({ name: 'Next year', criteria: source.criteria, expectedVersion: 4 }),
+  }))
+})
+
+it('loads archived previous criteria publicly and retries a failed lookup', async () => {
+  useSession.setState({ authenticated: false })
+  const user = userEvent.setup()
+  let lookups = 0
+  fetchMock.mockImplementation(async (url: string) => {
+    if (url.endsWith('/achievements/original')) return ++lookups === 1 ? response({}, 503) : response({ ...achievement, id: 'original', name: 'Original edition', criteria: 'Original criteria', archived: true })
+    return response(url.includes('achievements') ? [{ ...achievement, predecessorId: 'original' }] : [])
+  })
+  mount()
+  await user.click(await screen.findByRole('button', { name: 'View criteria' }))
+  await user.click(screen.getByRole('button', { name: 'Previous edition criteria' }))
+  await user.click(await screen.findByRole('button', { name: 'Retry previous edition' }))
+  expect(await screen.findByText('Original criteria')).toBeInTheDocument()
+  expect(screen.getByText('Archived edition')).toBeInTheDocument()
+  expect(fetchMock).toHaveBeenCalledWith('/api/achievements/original', expect.objectContaining({ headers: {} }))
+})
