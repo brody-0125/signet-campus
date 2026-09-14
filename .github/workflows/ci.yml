@@ -3,6 +3,20 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
+  replicas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node dev/prepare-replica-realm.mjs
+      - run: docker compose -p signet-campus-replicas -f compose.yml -f compose.replicas.yml up -d --build web replica
+      - run: node --test dev/replicas.test.mjs
+      - if: failure()
+        run: docker compose -p signet-campus-replicas -f compose.yml -f compose.replicas.yml logs --tail 100 server replica smtp-relay
+      - if: always()
+        run: docker compose -p signet-campus-replicas -f compose.yml -f compose.replicas.yml down -v
   accounts:
     runs-on: ubuntu-latest
     steps:
