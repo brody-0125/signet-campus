@@ -29,10 +29,11 @@ jobs:
       - run: npx playwright install --with-deps chromium
         working-directory: web
       - run: node dev/prepare-account-realm.mjs
-      - run: docker compose -p signet-campus-accounts -f compose.yml -f compose.accounts.yml up -d --build web
+      - run: docker compose -p signet-campus-identity-recovery -f compose.yml -f compose.accounts.yml -f compose.identity-recovery.yml up -d --build --wait web identity-restored-db
       - run: node --test dev/account-continuity.test.mjs
+      - run: node --test dev/identity-recovery.test.mjs
       - if: always()
-        run: docker compose -p signet-campus-accounts -f compose.yml -f compose.accounts.yml down -v
+        run: docker compose -p signet-campus-identity-recovery -f compose.yml -f compose.accounts.yml -f compose.identity-recovery.yml down -v
   https:
     runs-on: ubuntu-latest
     env:

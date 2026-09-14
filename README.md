@@ -72,6 +72,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 - [Account access and email changes](docs/ACCOUNT.md)
 - [Local development](docs/LOCAL_DEVELOPMENT.md)
 - [Backup and recovery](docs/RECOVERY.md)
+- [Identity database recovery](docs/IDENTITY_RECOVERY.md)
 - [Evidence review](docs/EVIDENCE_REVIEW.md)
 - [Testing](docs/TESTING.md)
 - [Contributing](CONTRIBUTING.md)
