@@ -18,7 +18,7 @@ async function api(path, token, body) {
   assert.ok(response.ok, `API ${path} returned ${response.status}`);
   return response.json();
 }
-test('verified personal email preserves subject, original credential and new issuance', { timeout: 240000 }, async () => {
+test('personal email verification and institutional unlinking preserve badge ownership', { timeout: 240000 }, async () => {
   for (const url of [`${issuer}/.well-known/openid-configuration`, 'http://localhost:8083/actuator/health/readiness']) {
     let ready = false;
     for (let i = 0; i < 60; i++) {
@@ -92,6 +92,42 @@ test('verified personal email preserves subject, original credential and new iss
     const next = await api(`/submissions/${await submit(updated)}/credential`, updated, {});
     assert.notEqual(next.id, original.id);
     for (const credential of [original, next]) assert.equal((await api(`/credentials/${credential.id.split('/').pop()}/verify`, updated, credential)).status, 'VALID');
-    console.log('Verified email, stable subject, unchanged original badge and fresh issuance confirmed');
+    await page.getByRole('button', { name: 'Account', exact: true }).click();
+    await page.getByRole('button', { name: 'Manage account', exact: true }).click();
+    await page.getByRole('button', { name: 'Account security', exact: true }).click();
+    await page.getByRole('link', { name: 'Linked accounts', exact: true }).click();
+    await page.getByRole('button', { name: 'Link account', exact: true }).click();
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.getByRole('textbox', { name: /username|email/i }).fill('student');
+    await page.getByLabel('Password', { exact: true }).fill('local-student-only');
+    await page.getByRole('button', { name: 'Sign In', exact: true }).click();
+    await page.getByRole('button', { name: 'Unlink account', exact: true }).waitFor();
+    // A fresh browser context proves the institutional credential actually signs in to this owner.
+    const institutional = await browser.newPage();
+    try {
+      await institutional.goto('http://localhost:5183/');
+      await institutional.getByRole('button', { name: 'Sign in', exact: true }).click();
+      await institutional.getByRole('link', { name: 'Test institution', exact: true }).click();
+      await institutional.getByRole('textbox', { name: /username|email/i }).fill('student');
+      await institutional.getByLabel('Password', { exact: true }).fill('local-student-only');
+      const exchanged = institutional.waitForResponse(response => response.url() === `${issuer}/protocol/openid-connect/token` && response.request().method() === 'POST');
+      await institutional.getByRole('button', { name: 'Sign In', exact: true }).click();
+      const response = await exchanged;
+      assert.ok(response.ok());
+      const token = (await response.json()).access_token;
+      await institutional.getByRole('button', { name: 'Account', exact: true }).waitFor();
+      const linkedClaims = JSON.parse(Buffer.from(token.split('.')[1], 'base64url'));
+      assert.equal(linkedClaims.sub, claims.sub);
+      assert.equal(linkedClaims.email, email);
+      assert.equal(linkedClaims.email_verified, true);
+      assert.deepEqual(await api(`/submissions/${source}/credential`, token), original);
+    } finally { await institutional.close(); }
+    await page.getByRole('button', { name: 'Unlink account', exact: true }).click();
+    await page.getByRole('button', { name: 'Link account', exact: true }).waitFor();
+    const independent = await login('learner');
+    assert.equal(JSON.parse(Buffer.from(independent.split('.')[1], 'base64url')).sub, claims.sub);
+    assert.deepEqual(await api(`/submissions/${source}/credential`, independent), original);
+    assert.equal((await api(`/credentials/${original.id.split('/').pop()}/verify`, independent, original)).status, 'VALID');
+    console.log('Verified personal email and institutional unlinking preserve local login, subject and badges');
   } finally { await browser.close(); }
 });
