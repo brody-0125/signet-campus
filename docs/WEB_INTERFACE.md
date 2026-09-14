@@ -20,6 +20,8 @@ Buttons and cards use an 8 px radius; dialogs use 14 px. Type ranges from 16 px 
 
 Native dialogs provide focus containment, Escape dismissal and focus restoration. Controls have visible focus outlines, form fields have associated labels, async results use status/alert regions, and reduced-motion preferences disable transitions.
 
+Learner submissions show the most recent work first. A successful resubmission returns to the first page; cancelling keeps the current page. Reviewers see the oldest pending submissions first.
+
 ## Authentication
 
 The browser uses the Keycloak JavaScript adapter with authorization code flow and PKCE S256. Access and refresh tokens remain in adapter memory; they are not stored in local storage. Requests refresh expiring tokens before accessing submission endpoints. Signing out clears cached private API data.

@@ -357,3 +357,30 @@ it('loads archived previous criteria publicly and retries a failed lookup', asyn
   expect(screen.getByText('Archived edition')).toBeInTheDocument()
   expect(fetchMock).toHaveBeenCalledWith('/api/achievements/original', expect.objectContaining({ headers: {} }))
 })
+
+it('returns to the first page only after a successful resubmission', async () => {
+  useWorkspace.setState({ view: 'submissions' })
+  const user = userEvent.setup()
+  let saved = false
+  const rejected = { submission: { ...submission, status: 'REJECTED', review: { reason: 'Add keyboard evidence' } }, version: 1 }
+  const first = Array.from({ length: 20 }, (_, index) => ({ submission: { ...submission, id: 'earlier-' + index }, version: 0 }))
+  fetchMock.mockImplementation(async (url: string, options?: RequestInit) => {
+    if (url.endsWith('/resubmit')) { saved = true; return response({}) }
+    if (url.includes('achievements')) return response([achievement])
+    if (url.includes('offset=20')) return response(saved ? [] : [rejected])
+    return response(saved ? [{ submission: { ...submission, evidence: 'Updated keyboard evidence' }, version: 2 }, ...first.slice(0, 19)] : first)
+  })
+  mount()
+  await user.click(await screen.findByRole('button', { name: 'Next' }))
+  await user.click(await screen.findByRole('button', { name: 'View submission' }))
+  await user.click(screen.getByRole('button', { name: 'Update evidence' }))
+  await user.click(screen.getByRole('button', { name: 'Cancel' }))
+  expect(screen.getByText('Page 2')).toBeInTheDocument()
+  await user.click(screen.getByRole('button', { name: 'View submission' }))
+  await user.click(screen.getByRole('button', { name: 'Update evidence' }))
+  await user.clear(screen.getByLabelText('Your evidence'))
+  await user.type(screen.getByLabelText('Your evidence'), 'Updated keyboard evidence')
+  await user.click(screen.getByRole('button', { name: 'Resubmit evidence' }))
+  expect(await screen.findByText('Page 1')).toBeInTheDocument()
+  expect(await screen.findByText('Updated keyboard evidence')).toBeInTheDocument()
+})

@@ -38,7 +38,7 @@ class PostgresSubmissions(private val jdbc: JdbcTemplate) : SubmissionRepository
     override fun list(learnerId: UUID?, offset: Int, limit: Int): List<StoredSubmission> =
         if (learnerId == null) jdbc.query("SELECT * FROM submissions WHERE status = 'PENDING' ORDER BY submitted_at, id LIMIT ? OFFSET ?",
             { rs, _ -> read(rs) }, limit, offset)
-        else jdbc.query("SELECT * FROM submissions WHERE learner_id = ? ORDER BY submitted_at, id LIMIT ? OFFSET ?",
+        else jdbc.query("SELECT * FROM submissions WHERE learner_id = ? ORDER BY submitted_at DESC, id DESC LIMIT ? OFFSET ?",
             { rs, _ -> read(rs) }, learnerId, limit, offset)
 
     @Transactional
