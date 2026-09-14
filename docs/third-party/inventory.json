@@ -1,5 +1,16 @@
 [
     {
+        "coordinate": "aopalliance:aopalliance:1.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "0addec670fedcd3f113c5c8091d783280d23f75e3acb841b61a9cdb079376a08",
+        "evidence": [
+            "aopalliance-1.0.pom"
+        ]
+    },
+    {
         "coordinate": "ch.qos.logback:logback-classic:1.5.32",
         "scopes": [
             "runtimeClasspath",
@@ -400,6 +411,29 @@
         ]
     },
     {
+        "coordinate": "com.squareup.okhttp3:okhttp:4.12.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b1050081b14bb7a3a7e55a4d3ef01b5dcfabc453b4573a4fc019767191d5f4e0",
+        "evidence": [
+            "okhttp-4.12.0.pom",
+            "okhttp3__internal__publicsuffix__NOTICE"
+        ]
+    },
+    {
+        "coordinate": "com.squareup.okio:okio-jvm:3.6.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "67543f0736fc422ae927ed0e504b98bc5e269fda0d3500579337cb713da28412",
+        "evidence": [
+            "okio-jvm-3.6.0.pom"
+        ]
+    },
+    {
         "coordinate": "com.vaadin.external.google:android-json:0.0.20131108.vaadin1",
         "scopes": [
             "testRuntimeClasspath"
@@ -549,6 +583,19 @@
         ]
     },
     {
+        "coordinate": "io.micrometer:context-propagation:1.1.4",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d9878c7286014663ff6b33321eb21197a9d1d75e5c8ddbe1e9e1823c17a4e8cf",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "context-propagation-1.1.4.pom"
+        ]
+    },
+    {
         "coordinate": "io.micrometer:micrometer-commons:1.15.9",
         "scopes": [
             "runtimeClasspath",
@@ -601,6 +648,243 @@
         ]
     },
     {
+        "coordinate": "io.micrometer:micrometer-registry-prometheus:1.15.9",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "eb8b39388e21af63a1406572459323ce2d1e78ec4b2294ce350294ceb367f664",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "micrometer-registry-prometheus-1.15.9.pom"
+        ]
+    },
+    {
+        "coordinate": "io.micrometer:micrometer-tracing-bridge-otel:1.5.9",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "62ad0b6a739948421adcf50c8ae09b5afcb0485ee4872c805cadf4b27c71812b",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "micrometer-tracing-bridge-otel-1.5.9.pom"
+        ]
+    },
+    {
+        "coordinate": "io.micrometer:micrometer-tracing:1.5.9",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "57890795517c044d4c10444acb8d579ec561b97f085fb42d3d79f2cf2db58413",
+        "evidence": [
+            "META-INF__LICENSE",
+            "META-INF__NOTICE",
+            "micrometer-tracing-1.5.9.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry.semconv:opentelemetry-semconv:1.32.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d55c19372d3af757136de763514c0a1a0d80cea0eb185afc4751081a28c42ba0",
+        "evidence": [
+            "opentelemetry-semconv-1.32.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-api:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a813c9a92b82a4ffa3a62e88216a9e9ef9a407fcd41614fe596b2895167ed638",
+        "evidence": [
+            "opentelemetry-api-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-context:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "17de3c85b341240b3b216c43adbd244c9fbd39c9e5448306d56460f80599a76b",
+        "evidence": [
+            "opentelemetry-context-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-exporter-common:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "06d08af00b9fec8e99b6a4fda2eb201facbe2fe38a89eb11cbbfbe4183b73141",
+        "evidence": [
+            "opentelemetry-exporter-common-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-exporter-zipkin:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "566a2d99362284101049436ba48b32e8267d9ca2bc0e319afb5339f185aa10cd",
+        "evidence": [
+            "opentelemetry-exporter-zipkin-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-extension-trace-propagators:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b7787ed5ffc0b7c1dfa21eb3f3e099cdf3f25e2f63c5f96961779db25b2970dc",
+        "evidence": [
+            "opentelemetry-extension-trace-propagators-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-sdk-common:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b06214ccf3cda749edcd426c1492483e201e1fcfadb9f9cba8ecb439ff5c5d0f",
+        "evidence": [
+            "opentelemetry-sdk-common-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "b3091033e5b4b4b49334709707858d993afb92fe5c32d4a0b27e02d2e956c5b7",
+        "evidence": [
+            "opentelemetry-sdk-extension-autoconfigure-spi-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-sdk-logs:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "edf7f2411d5180099efebc5a5e2f01378f647897671aa9819f2064e24b6f7e9f",
+        "evidence": [
+            "opentelemetry-sdk-logs-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-sdk-metrics:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "cf28ea29fcfd4577a4a3bda388ac08cbbb86e4b1b534822848ea5c5554bfd603",
+        "evidence": [
+            "opentelemetry-sdk-metrics-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-sdk-trace:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "483bf21dde1df1a2c9875ba7dff1e3c8c1a63789cd45ad58223ec64b5951318e",
+        "evidence": [
+            "opentelemetry-sdk-trace-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.opentelemetry:opentelemetry-sdk:1.49.0",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d6fdaf0f04724d5c9362db2f809fd21f36e95c9c039d22fe695692d606107bff",
+        "evidence": [
+            "opentelemetry-sdk-1.49.0.pom"
+        ]
+    },
+    {
+        "coordinate": "io.prometheus:prometheus-metrics-config:1.3.10",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d20ea739f1af130d67d6a8e67a0fd00169cd4e62dca7fa29c5f2ae656b7587f9",
+        "evidence": [
+            "prometheus-metrics-config-1.3.10.pom"
+        ]
+    },
+    {
+        "coordinate": "io.prometheus:prometheus-metrics-core:1.3.10",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a856dbad954222a835c9085abc9a136586eb60495f17ef8ac903dfb8be3b4f15",
+        "evidence": [
+            "prometheus-metrics-core-1.3.10.pom"
+        ]
+    },
+    {
+        "coordinate": "io.prometheus:prometheus-metrics-exposition-formats:1.3.10",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "a970d6de00a6fa3c9b62ebec1e45f70d42b88d16a19e5ef1621c1f9e89ba3c9f",
+        "evidence": [
+            "prometheus-metrics-exposition-formats-1.3.10.pom"
+        ]
+    },
+    {
+        "coordinate": "io.prometheus:prometheus-metrics-exposition-textformats:1.3.10",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "8dd118ac15a4162ac586f42ff69e8ca3efa8b1291d870c89a678f8f72de62e44",
+        "evidence": [
+            "prometheus-metrics-exposition-textformats-1.3.10.pom"
+        ]
+    },
+    {
+        "coordinate": "io.prometheus:prometheus-metrics-model:1.3.10",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "945ace48cc8d9d09f87bac0d8fbbc13e70b29c5c74b103c6fee0b9df09343148",
+        "evidence": [
+            "prometheus-metrics-model-1.3.10.pom"
+        ]
+    },
+    {
+        "coordinate": "io.prometheus:prometheus-metrics-tracer-common:1.3.10",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "835826a5728d9da8512186b67676d2ba68828713f0c0050753ce2bc718dd9acb",
+        "evidence": [
+            "prometheus-metrics-tracer-common-1.3.10.pom"
+        ]
+    },
+    {
         "coordinate": "io.setl:rdf-urdna:1.4",
         "scopes": [
             "runtimeClasspath",
@@ -609,6 +893,42 @@
         "sha256": "e0c61b320b0834f85b071b4e542dd3fc6ed23e5c301e0bf127c0fd6dcf4c13ec",
         "evidence": [
             "rdf-urdna-1.4.pom"
+        ]
+    },
+    {
+        "coordinate": "io.zipkin.reporter2:zipkin-reporter:3.5.1",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "d4cce2bd94a7ac06b04db2863ad80628d75579c7dded32bab2cdbe1233be9057",
+        "evidence": [
+            "META-INF__LICENSE",
+            "zipkin-reporter-3.5.1.pom"
+        ]
+    },
+    {
+        "coordinate": "io.zipkin.reporter2:zipkin-sender-okhttp3:3.5.1",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "8675dde3fbae13c2bc6852dd0be975fe234f6a1132701d1cad2423a02e914ce6",
+        "evidence": [
+            "META-INF__LICENSE",
+            "zipkin-sender-okhttp3-3.5.1.pom"
+        ]
+    },
+    {
+        "coordinate": "io.zipkin.zipkin2:zipkin:2.27.1",
+        "scopes": [
+            "runtimeClasspath",
+            "testRuntimeClasspath"
+        ],
+        "sha256": "44722e8540c25cde3dc2aac2625adddb590b34778fdd85f455f96c5e11eb03df",
+        "evidence": [
+            "META-INF__LICENSE",
+            "zipkin-2.27.1.pom"
         ]
     },
     {
@@ -1164,6 +1484,7 @@
     {
         "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.21",
         "scopes": [
+            "runtimeClasspath",
             "testRuntimeClasspath"
         ],
         "sha256": "b785922f11e6d91a6dd1d75cb0aef1ce37b83f8de0e3a2139139dfb823bb8a2c",
@@ -1174,6 +1495,7 @@
     {
         "coordinate": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21",
         "scopes": [
+            "runtimeClasspath",
             "testRuntimeClasspath"
         ],
         "sha256": "c62275c50ee591ca2f82c7ba42696b791600c25844f47e84bd9460302a0d5238",

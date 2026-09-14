@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
+import org.springframework.core.env.Environment
 
 @Configuration
 class ApiSecurity {
@@ -17,11 +18,17 @@ class ApiSecurity {
         }
     }
 
-    @Bean fun securityFilterChain(http: HttpSecurity) = http
+    @Bean fun securityFilterChain(http: HttpSecurity, environment: Environment) = http
         .csrf { it.disable() }
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         .authorizeHttpRequests {
-            it.requestMatchers("/actuator/health/**").permitAll()
+            it.requestMatchers(org.springframework.security.web.util.matcher.RequestMatcher { request ->
+                val managementPort = environment.getProperty("local.management.port", Int::class.java)
+                request.method == "GET" && request.requestURI == "/actuator/prometheus" &&
+                    managementPort != null && managementPort != environment.getProperty("local.server.port", Int::class.java) &&
+                    request.localPort == managementPort
+            }).permitAll()
+                .requestMatchers("/actuator/health/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/achievements", "/api/achievements/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/pathways", "/api/pathways/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/revocations").permitAll()

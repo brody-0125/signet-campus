@@ -20,6 +20,8 @@ spring:
           jwk-set-uri: ${OIDC_JWKS:http://localhost:8081/realms/signet-campus/protocol/openid-connect/certs}
           audiences: signet-campus
 management:
+  tracing:
+    enabled: ${TRACING_ENABLED:false}
   endpoint:
     health:
       probes:

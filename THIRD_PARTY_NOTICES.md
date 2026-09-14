@@ -16,7 +16,7 @@ The repository includes the unmodified Gradle wrapper scripts and JAR, originall
 
 ## Evidence for resolved software
 
-- [171 resolved artifacts and SHA-256 hashes](docs/third-party/inventory.json).
+- [199 resolved artifacts and SHA-256 hashes](docs/third-party/inventory.json).
 - [Per-coordinate POM license declarations, including inherited parents](docs/DEPENDENCY_LICENSES.md).
 - [Original POMs and license/notice files extracted from the resolved JARs](docs/third-party/).
 - Reproduce extraction from `server` with `sh ./gradlew -I third-party.init.gradle thirdPartyInventory`. The script does not resolve license expressions or declare compatibility automatically.
@@ -53,3 +53,8 @@ The local Compose service uses unmodified [Mailpit v1.31.1](https://github.com/a
 - For Parsson binary redistribution, the exact source is available at [tag 1.1.7](https://github.com/eclipse-ee4j/parsson/tree/1.1.7) and [Maven sources](https://repo.maven.apache.org/maven2/org/eclipse/parsson/parsson/1.1.7/parsson-1.1.7-sources.jar). No Parsson modifications are made here.
 
 Build plugins and the JDK/container base are not exhaustively represented by the runtime/test inventory. Include dependency inventories, assets/fonts, toolchain and base-image notices for any additional distributed artifacts. Re-run review whenever dependency versions or distribution form change.
+
+## Operational telemetry
+
+Micrometer, OpenTelemetry, the Prometheus Java client and Zipkin declare Apache-2.0 terms in the dependency ledger. AOP Alliance declares public-domain terms. Extracted upstream licenses and notices accompany the 199-artifact inventory. The optional local services use [Prometheus v3.14.0](https://github.com/prometheus/prometheus/tree/v3.14.0) and [Zipkin 3.6.1](https://github.com/openzipkin/zipkin/tree/3.6.1), both Apache-2.0 projects. Their container layers retain upstream bundled-component terms; those image layers are downloaded separately and are not covered by the server JAR inventory.
+OkHttp declares Apache-2.0 for its library, but its bundled Public Suffix List is covered by MPL-2.0. The [unmodified embedded notice](docs/third-party/com.squareup.okhttp3/okhttp/4.12.0/okhttp3__internal__publicsuffix__NOTICE) identifies this exception. See [MPL-2.0](https://www.mozilla.org/en-US/MPL/2.0/) and the [upstream OkHttp notice at the pinned release](https://github.com/square/okhttp/blob/parent-4.12.0/okhttp/src/main/resources/okhttp3/internal/publicsuffix/NOTICE). Any binary/container distribution must preserve the notice and provide the corresponding covered source under MPL terms; the server POM's Apache declaration alone is not a complete inventory of bundled material.

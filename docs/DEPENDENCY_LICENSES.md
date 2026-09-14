@@ -4,6 +4,7 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 
 | Coordinate | Scope | Declared license(s) |
 |---|---|---|
+| aopalliance:aopalliance:1.0 | runtime | Public Domain [] |
 | ch.qos.logback:logback-classic:1.5.32 | runtime | Eclipse Public License - v 2.0 [https://www.eclipse.org/legal/epl-v20.html]; GNU Lesser General Public License [https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html] |
 | ch.qos.logback:logback-core:1.5.32 | runtime | Eclipse Public License - v 2.0 [https://www.eclipse.org/legal/epl-v20.html]; GNU Lesser General Public License [https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html] |
 | com.apicatalog:titanium-jcs:1.1.1 | runtime | Apache License, Version 2.0 [http://apache.org/licenses/LICENSE-2.0] |
@@ -39,6 +40,8 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | com.jayway.jsonpath:json-path:2.9.0 | test only | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.lemonappdev:konsist:0.17.3 | test only | The Apache License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.nimbusds:nimbus-jose-jwt:10.7 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
+| com.squareup.okhttp3:okhttp:4.12.0 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| com.squareup.okio:okio-jvm:3.6.0 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | com.vaadin.external.google:android-json:0.0.20131108.vaadin1 | test only | Apache License 2.0 [http://www.apache.org/licenses/LICENSE-2.0] |
 | com.zaxxer:HikariCP:6.3.3 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | commons-codec:commons-codec:1.18.0 | runtime | Apache-2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
@@ -53,11 +56,36 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | io.kotest:kotest-extensions-jvm:6.0.4 | test only | Apache-2.0 [https://opensource.org/licenses/Apache-2.0] |
 | io.kotest:kotest-framework-engine-jvm:6.0.4 | test only | Apache-2.0 [https://opensource.org/licenses/Apache-2.0] |
 | io.kotest:kotest-runner-junit5-jvm:6.0.4 | test only | Apache-2.0 [https://opensource.org/licenses/Apache-2.0] |
+| io.micrometer:context-propagation:1.1.4 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | io.micrometer:micrometer-commons:1.15.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | io.micrometer:micrometer-core:1.15.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | io.micrometer:micrometer-jakarta9:1.15.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | io.micrometer:micrometer-observation:1.15.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.micrometer:micrometer-registry-prometheus:1.15.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.micrometer:micrometer-tracing-bridge-otel:1.5.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.micrometer:micrometer-tracing:1.5.9 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry.semconv:opentelemetry-semconv:1.32.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-api:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-context:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-exporter-common:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-exporter-zipkin:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-extension-trace-propagators:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-sdk-common:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-sdk-logs:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-sdk-metrics:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-sdk-trace:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.opentelemetry:opentelemetry-sdk:1.49.0 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.prometheus:prometheus-metrics-config:1.3.10 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.prometheus:prometheus-metrics-core:1.3.10 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.prometheus:prometheus-metrics-exposition-formats:1.3.10 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.prometheus:prometheus-metrics-exposition-textformats:1.3.10 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.prometheus:prometheus-metrics-model:1.3.10 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.prometheus:prometheus-metrics-tracer-common:1.3.10 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | io.setl:rdf-urdna:1.4 | runtime | The Apache License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.zipkin.reporter2:zipkin-reporter:3.5.1 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.zipkin.reporter2:zipkin-sender-okhttp3:3.5.1 | runtime | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
+| io.zipkin.zipkin2:zipkin:2.27.1 | runtime | The Apache Software License, Version 2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | jakarta.activation:jakarta.activation-api:2.1.4 | runtime | EDL 1.0 [http://www.eclipse.org/org/documents/edl-v10.php] |
 | jakarta.annotation:jakarta.annotation-api:2.1.1 | runtime | EPL 2.0 [http://www.eclipse.org/legal/epl-2.0]; GPL2 w/ CPE [https://www.gnu.org/software/classpath/license.html] |
 | jakarta.json:jakarta.json-api:2.1.3 | runtime | Eclipse Public License 2.0 [https://projects.eclipse.org/license/epl-2.0]; GNU General Public License, version 2 with the GNU Classpath Exception [https://projects.eclipse.org/license/secondary-gpl-2.0-cp] |
@@ -106,8 +134,8 @@ Generated 2026-09-14 from Gradle runtimeClasspath and testRuntimeClasspath. POM 
 | org.jetbrains.kotlin:kotlin-daemon-embeddable:2.2.21 | test only | Apache-2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.jetbrains.kotlin:kotlin-reflect:2.2.21 | runtime | Apache-2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.jetbrains.kotlin:kotlin-script-runtime:2.2.21 | test only | Apache-2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
-| org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.21 | test only | Apache-2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
-| org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21 | test only | Apache-2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.21 | runtime | Apache-2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
+| org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21 | runtime | Apache-2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.jetbrains.kotlin:kotlin-stdlib:2.2.21 | runtime | Apache-2.0 [http://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1 | test only | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
 | org.jetbrains.kotlinx:kotlinx-coroutines-debug:1.8.1 | test only | The Apache Software License, Version 2.0 [https://www.apache.org/licenses/LICENSE-2.0.txt] |
