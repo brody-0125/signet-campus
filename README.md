@@ -54,7 +54,7 @@ See [Testing](docs/TESTING.md) for covered behaviors, report locations and depen
 | Kotlin | 2.2.21 |
 | Spring Boot | 3.5.11 |
 | Gradle | 8.14.3 |
-| Signet Spring Boot starter | `v0.1.4` |
+| Signet Spring Boot starter | `v0.1.6` |
 | Kotest | 6.0.4 |
 | Konsist | 0.17.3 |
 | Kover | 0.9.3 |
@@ -73,6 +73,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 - [Local development](docs/LOCAL_DEVELOPMENT.md)
 - [Backup and recovery](docs/RECOVERY.md)
 - [Identity database recovery](docs/IDENTITY_RECOVERY.md)
+- [Independent credential verification](docs/INTEROPERABILITY.md)
 - [Evidence review](docs/EVIDENCE_REVIEW.md)
 - [Testing](docs/TESTING.md)
 - [Contributing](CONTRIBUTING.md)

@@ -81,7 +81,7 @@ class SignetCredentials(private val signer: CredentialSigner, private val json: 
     } catch (_: Exception) { false }
 
     override fun publicProfile(): Map<String, Any> = mapOf(
-        "@context" to listOf("https://www.w3.org/ns/credentials/v2", "https://w3id.org/security/multikey/v1"),
+        "@context" to listOf("https://www.w3.org/ns/cid/v1", "https://w3id.org/security/multikey/v1"),
         "id" to "$baseUrl/issuers/${issuer.id()}",
         "verificationMethod" to verificationKeys.map { (id, publicKey) -> mapOf("id" to id, "type" to "Multikey",
             "controller" to "$baseUrl/issuers/${issuer.id()}", "publicKeyMultibase" to KeyPairManager.toPublicKeyMultibase(publicKey)) },
