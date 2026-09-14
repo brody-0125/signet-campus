@@ -22,13 +22,16 @@ export async function credentialImage(id: string, format: 'png' | 'svg'): Promis
 }
 async function request(path: string, body?: unknown, signal?: AbortSignal): Promise<Response> {
   const headers: Record<string, string> = {}
-  if (!['/achievements', '/pathways'].includes(path) || body !== undefined) headers.Authorization = `Bearer ${await accessToken()}`
+  const publicRequest = (body === undefined && (['/achievements', '/pathways'].includes(path) || path.startsWith('/shared/credentials/')))
+    || (body !== undefined && /^\/credentials\/[^/]+\/verify$/.test(path))
+  if (!publicRequest) headers.Authorization = `Bearer ${await accessToken()}`
   if (body !== undefined) headers['Content-Type'] = 'application/json'
   const response = await fetch(`/api${path}`, {
     headers, signal,
     ...(body === undefined ? {} : { method: 'POST', body: JSON.stringify(body) }),
   })
   if (!response.ok) {
+    if (path.startsWith('/shared/credentials/')) throw new ApiError(response.status, 'This shared credential is unavailable. It may be private or sharing may have stopped.')
     if (path.endsWith('/credential')) {
       if (response.status === 400) throw new ApiError(400, 'A verified email address is required on your account to issue a badge.')
       if (response.status === 404) throw new ApiError(404, 'No credential is available for this record.')

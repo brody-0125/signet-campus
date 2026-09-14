@@ -49,6 +49,51 @@ class CredentialApiTest : SigningTestSupport() {
         .andExpect(status().isOk).andExpect(header().string("Cache-Control", "no-store"))
         .andReturn().response.contentAsString
 
+    @Test fun `sharing is private by default owner controlled and immediately reversible`() {
+        val signed = issue(submission())
+        val id = json.readTree(signed)["id"].asText().substringAfterLast('/')
+        val shared = "/api/shared/credentials/$id"
+        val control = "/api/credentials/$id/sharing"
+        fun toggle(enabled: Boolean) = mvc.perform(post(control).with(auth()).contentType(MediaType.APPLICATION_JSON)
+            .content("""{"enabled":$enabled}""")).andExpect(status().isOk)
+            .andExpect(header().string("Cache-Control", "no-store")).andExpect(jsonPath("$.enabled").value(enabled))
+        mvc.perform(get(shared)).andExpect(status().isNotFound).andExpect(header().string("Cache-Control", "no-store"))
+        mvc.perform(get(control).with(auth())).andExpect(status().isOk).andExpect(jsonPath("$.enabled").value(false))
+        mvc.perform(post(control).contentType(MediaType.APPLICATION_JSON).content("""{"enabled":true}"""))
+            .andExpect(status().isUnauthorized)
+        mvc.perform(post(control).with(auth(reviewer)).contentType(MediaType.APPLICATION_JSON).content("""{"enabled":true}"""))
+            .andExpect(status().isNotFound)
+        mvc.perform(get(control).with(auth(reviewer))).andExpect(status().isNotFound)
+        repeat(2) { toggle(true) }
+        mvc.perform(get(shared)).andExpect(status().isOk).andExpect(content().contentType("application/vc+ld+json"))
+            .andExpect(header().string("Cache-Control", "no-store")).andExpect(content().json(signed))
+        // Sharing does not open the owner's original download or evidence routes.
+        mvc.perform(get("/api/credentials/$id")).andExpect(status().isUnauthorized)
+        credentials.revoke(reviewer, UUID.fromString(id))
+        mvc.perform(get(shared)).andExpect(status().isOk).andExpect(content().json(signed))
+        mvc.perform(post("/api/credentials/$id/verify").contentType(MediaType.APPLICATION_JSON).content(signed))
+            .andExpect(jsonPath("$.status").value("REVOKED"))
+        repeat(2) { toggle(false) }
+        mvc.perform(get(shared)).andExpect(status().isNotFound).andExpect(header().string("Cache-Control", "no-store"))
+        mvc.perform(get("/api/shared/credentials/${UUID.randomUUID()}")).andExpect(status().isNotFound)
+            .andExpect(header().string("Cache-Control", "no-store"))
+    }
+
+    @Test fun `concurrent share requests preserve ownership and a later disable wins`() {
+        val signed = issue(submission())
+        val id = UUID.fromString(json.readTree(signed)["id"].asText().substringAfterLast('/'))
+        val pool = Executors.newFixedThreadPool(4)
+        try {
+            pool.invokeAll(List(4) { Callable { credentials.setSharing(owner, id, true) } }).forEach { it.get() }
+        } finally { pool.shutdownNow() }
+        assertTrue(credentials.get(owner, id).shared)
+        assertThrows(SubmissionNotFound::class.java) { credentials.setSharing(reviewer, id, false) }
+        assertEquals(json.readTree(signed), json.readTree(credentials.shared(id)!!.document))
+        credentials.setSharing(owner, id, false)
+        assertNull(credentials.shared(id))
+        assertFalse(credentials.get(owner, id).shared)
+    }
+
     @Test fun `private PNG and SVG exports preserve the signed credential and revocation status`() {
         val signed = issue(submission())
         val id = UUID.fromString(json.readTree(signed)["id"].asText().substringAfterLast('/'))

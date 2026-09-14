@@ -25,6 +25,7 @@ class ApiSecurity {
                 .requestMatchers(HttpMethod.GET, "/api/achievements", "/api/achievements/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/pathways", "/api/pathways/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/revocations").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/shared/credentials/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/issuers/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/credentials/*/verify").permitAll()
                 .requestMatchers("/api/**").authenticated()

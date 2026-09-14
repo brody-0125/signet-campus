@@ -87,6 +87,9 @@ input { margin-bottom: 20px; }
 .pathway-card ul { padding-left: 20px; margin-block: 16px; }
 .pathway-card .nav-link { text-align: left; white-space: normal; }
 .pathway-card .badge-status { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 6px; background: var(--surface); color: var(--primary); font-size: 14px; }
+.credential-document { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; background: #fff; padding: 16px; border-radius: 8px; }
+.consent-choice { display: flex; align-items: center; gap: 12px; margin-block: 16px; }
+.consent-choice input { width: 20px; height: 20px; margin: 0; flex-shrink: 0; accent-color: var(--primary); }
 .pathway-summary { margin-top: 20px; color: var(--primary); }
 .pathway-card progress { display: block; width: 100%; height: 12px; accent-color: var(--primary); margin-block: 12px 20px; }
 .pathway-choices { border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-top: 20px; }

@@ -108,6 +108,13 @@ if (process.argv[2]) {
   assert.deepEqual(await request(completionPath, learner, {}), completion);
   await request(completionPath, reviewer, undefined, 404);
   const completionRecord = `/api/credentials/${completion.id.split('/').pop()}`;
+  const sharedPath = `/api/shared/credentials/${completion.id.split('/').pop()}`;
+  await request(sharedPath, null, undefined, 404);
+  await request(`${completionRecord}/sharing`, reviewer, { enabled: true }, 404);
+  const sharing = await request(`${completionRecord}/sharing`, learner, { enabled: true });
+  assert.equal(sharing.enabled, true);
+  assert.ok(sharing.url.endsWith(`/shared/${completion.id.split('/').pop()}`));
+  assert.deepEqual(await request(sharedPath, null), completion);
   assert.equal((await request(`${completionRecord}/verify`, null, completion)).valid, true);
   for (const award of [credential, completion]) {
     for (const format of ['png', 'svg']) await verifyImageExport(award, learner, format);
@@ -132,6 +139,9 @@ if (process.argv[2]) {
   assert.equal((await request(`${completionRecord}/verify`, null, completion)).valid, true);
   await request(`${completionRecord}/revoke`, reviewer, {}, 204);
   assert.equal((await request(`${completionRecord}/verify`, null, completion)).status, 'REVOKED');
+  assert.deepEqual(await request(sharedPath, null), completion);
+  await request(`${completionRecord}/sharing`, learner, { enabled: false });
+  await request(sharedPath, null, undefined, 404);
   assert.deepEqual(await request(completionPath, learner, {}), completion);
   assert.equal((await request(`${credentialPath}/verify`, null, credential)).status, 'REVOKED');
   const after = await request('/api/revocations', null);

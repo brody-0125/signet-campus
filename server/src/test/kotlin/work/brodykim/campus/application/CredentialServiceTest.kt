@@ -62,6 +62,12 @@ class CredentialServiceTest : StringSpec({
 })
 
 private class MemoryCredentials : CredentialRepository {
+    override fun findShared(id: UUID) = records[id]?.takeIf { it.shared }
+    override fun setSharing(id: UUID, learnerId: UUID, enabled: Boolean): Boolean {
+        val record = records[id]?.takeIf { it.learnerId == learnerId } ?: return false
+        records[id] = record.copy(shared = enabled)
+        return true
+    }
     override fun findByPathway(id: UUID, learnerId: UUID): IssuedCredential? = error("Unused")
     override fun savePathwayIfAbsent(record: IssuedCredential): IssuedCredential = error("Unused")
     val records = mutableMapOf<UUID, IssuedCredential>()

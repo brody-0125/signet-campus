@@ -7,12 +7,14 @@ import java.util.UUID
 
 data class IssuedCredential(val id: UUID, val submissionId: UUID?, val learnerId: UUID,
                             val document: String, val issuedAt: Instant, val validUntil: Instant,
-                            val revokedAt: Instant? = null, val pathwayId: UUID? = null)
+                            val revokedAt: Instant? = null, val pathwayId: UUID? = null, val shared: Boolean = false)
 data class CredentialVerification(val status: String, val valid: Boolean = status == "VALID")
 
 interface CredentialRepository {
     fun revokedCredentialIds(): List<String>
     fun find(id: UUID): IssuedCredential?
+    fun findShared(id: UUID): IssuedCredential?
+    fun setSharing(id: UUID, learnerId: UUID, enabled: Boolean): Boolean
     fun findBySubmission(id: UUID): IssuedCredential?
     fun findByPathway(id: UUID, learnerId: UUID): IssuedCredential?
     fun savePathwayIfAbsent(record: IssuedCredential): IssuedCredential
@@ -51,6 +53,10 @@ class PathwayCredentialService(private val pathways: PathwayRepository, private 
 
 class CredentialService(private val submissions: SubmissionRepository, private val repository: CredentialRepository,
                         private val crypto: CredentialCryptography, private val clock: Clock) {
+    fun shared(id: UUID) = repository.findShared(id)
+    fun setSharing(actor: Actor, id: UUID, enabled: Boolean) {
+        if (!repository.setSharing(id, actor.id, enabled)) throw SubmissionNotFound()
+    }
     fun revokedCredentialIds(): List<String> = repository.revokedCredentialIds()
     fun issue(actor: Actor, submissionId: UUID, verifiedEmail: String): IssuedCredential {
         val submission = submissions.find(submissionId)?.submission ?: throw SubmissionNotFound()

@@ -101,6 +101,7 @@ it('lets a reviewer create an achievement with an authenticated request', async 
   })))
 })
 beforeEach(() => {
+  window.history.replaceState({}, '', '/')
   useWorkspace.setState({ view: 'explore', selectedId: null, notice: '' })
   useSession.setState({ authenticated: true, reviewer: false })
   vi.stubGlobal('fetch', fetchMock)
@@ -176,4 +177,43 @@ it('requests private badge images with authentication and reports download failu
   expect(fetchMock).toHaveBeenCalledWith('/api/credentials/credential-1/image/png', expect.objectContaining({
     headers: expect.objectContaining({ Authorization: 'Bearer test-token' }),
   }))
+})
+
+it('requires explicit consent to publish a badge and can stop sharing', async () => {
+  const user = userEvent.setup()
+  useWorkspace.setState({ view: 'submissions' })
+  let enabled = false
+  fetchMock.mockImplementation(async (url: string, options?: RequestInit) => {
+    if (url.endsWith('/sharing')) {
+      if (options?.method === 'POST') enabled = JSON.parse(options.body as string).enabled
+      return response({ enabled, url: enabled ? 'http://localhost/shared/credential-1' : null })
+    }
+    return response(url.endsWith('/credential') ? { id: 'http://localhost/api/credentials/credential-1' }
+      : url.includes('achievements') ? [achievement] : [{ submission: { ...submission, status: 'APPROVED' }, version: 1 }])
+  })
+  mount()
+  await user.click(await screen.findByRole('button', { name: 'View submission' }))
+  await user.click(screen.getByRole('button', { name: 'Issue badge' }))
+  expect(await screen.findByRole('button', { name: 'Publish share link' })).toBeDisabled()
+  await user.click(screen.getByLabelText('I want to make this credential public.'))
+  await user.click(screen.getByRole('button', { name: 'Publish share link' }))
+  expect(await screen.findByLabelText('Share link')).toHaveValue('http://localhost/shared/credential-1')
+  await user.click(screen.getByRole('button', { name: 'Stop sharing' }))
+  await waitFor(() => expect(screen.queryByLabelText('Share link')).not.toBeInTheDocument())
+  expect(screen.getByRole('button', { name: 'Publish share link' })).toBeDisabled()
+})
+
+it('renders and verifies a shared credential without authentication', async () => {
+  const user = userEvent.setup()
+  window.history.replaceState({}, '', '/shared/credential-1')
+  useSession.setState({ authenticated: false, ready: false })
+  fetchMock.mockImplementation(async (url: string) => response(url.endsWith('/verify') ? { status: 'REVOKED', valid: false }
+    : { id: 'http://localhost/api/credentials/credential-1', name: 'Accessible campus award', validFrom: '2026-09-14T00:00:00Z', validUntil: '2027-09-14T00:00:00Z', issuer: { name: 'Signet Campus' } }))
+  mount()
+  expect(await screen.findByRole('heading', { name: 'Accessible campus award' })).toBeInTheDocument()
+  await user.click(screen.getByRole('button', { name: 'Verify credential' }))
+  expect(await screen.findByRole('status')).toHaveTextContent('revoked')
+  expect(fetchMock).toHaveBeenCalledWith('/api/shared/credentials/credential-1', expect.objectContaining({ headers: {} }))
+  expect(fetchMock).toHaveBeenCalledWith('/api/credentials/credential-1/verify', expect.objectContaining({ headers: { 'Content-Type': 'application/json' } }))
+  window.history.replaceState({}, '', '/')
 })
