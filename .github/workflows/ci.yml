@@ -30,6 +30,7 @@ jobs:
         working-directory: web
       - run: node dev/prepare-account-realm.mjs
       - run: docker compose -p signet-campus-identity-recovery -f compose.yml -f compose.accounts.yml -f compose.identity-recovery.yml up -d --build --wait web identity-restored-db
+      - run: node --test dev/registration.test.mjs
       - run: node --test dev/account-continuity.test.mjs
       - run: node --test dev/identity-recovery.test.mjs
       - if: always()

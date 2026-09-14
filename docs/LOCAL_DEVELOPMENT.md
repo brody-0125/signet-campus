@@ -19,6 +19,8 @@ The included Keycloak realm contains synthetic local accounts:
 
 These credentials and Keycloak's development mode are for local use. Deployments must provide their own identity provider and database credentials. The `campus-dev` client's password grant exists for local smoke tests; browser clients should use authorization code flow with PKCE.
 
+New learners can choose **Sign in → Register** and confirm their synthetic address through Mailpit. Registration grants learner access, not reviewer privileges. See [Account access](ACCOUNT.md#create-a-learner-account).
+
 Demo accounts start with verified synthetic emails. After changing an address, complete its confirmation through local Mailpit at `http://localhost:8025` before a fresh sign-in. Both identity emails and pathway notifications stay in Mailpit. See [Account access](ACCOUNT.md) for the verification flow and updating an existing realm without recreating users.
 
 ## Verify the API

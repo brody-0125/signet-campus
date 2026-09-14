@@ -4,6 +4,18 @@ After signing in, open **Account**, then **Manage account**. The app opens the c
 
 Before losing access to a school or work address, arrange a durable sign-in method with the account administrator, review the account email, and complete the identity provider's verification process. Changing an email alone does not keep a disabled institutional account active. Signing in through a different provider or creating a different account does not transfer existing badges automatically.
 
+## Create a learner account
+
+On the Campus sign-in screen, select **Register**. Choose a username and password, enter your name and a personal email address, then submit the form. Open the confirmation message in local [Mailpit](http://localhost:8025) and follow its link. The identity provider requires email verification before completing sign-in. Never use a real recipient address in the local demo.
+
+The new account can enroll in pathways, submit evidence and receive approved badges. It can manage its own profile through **Account → Manage account**. Registration does not grant the reviewer role. Reviewers are assigned separately by the identity administrator. The identity provider supplies the stable subject ID; knowing another learner's email or credential ID does not grant ownership.
+
+For an existing local realm, enable **Realm settings → Login → User registration** in Keycloak and retain **Verify email** and the local SMTP configuration. Importing an updated seed does not modify an existing realm. Preserve users and their IDs; do not delete the identity volume to apply this setting. For a service deployment, choose the institution's registration policy and configure its approved email delivery, abuse controls and identity administration.
+
+The disposable account fixture below also supports `node --test dev/registration.test.mjs`. That test creates a synthetic learner through the native registration form, verifies the delivered email, checks that unverified login is blocked, enrolls the learner, issues and verifies a badge, checks private ownership after fresh login, and rejects reviewer operations. CI runs it before the account continuity and identity recovery checks.
+
+Self-registration uses the [Keycloak 26.3.3 registration setting](https://github.com/keycloak/keycloak/blob/26.3.3/docs/documentation/server_admin/topics/users/proc-enabling-user-registration.adoc). The personal-account flow is informed by [Bowdoin's pathway guidance](https://bowdoin.teamdynamix.com/TDClient/1814/Portal/KB/Article/157578/Understand-the-Digital-Badge-Learning-Pathway-Subscription-Email); Campus uses its own identity provider and access policy.
+
 ## Ownership and email changes
 
 Campus associates submissions, enrollments and credentials with the user's subject ID from its configured OIDC issuer. Keep that issuer and subject stable when changing login details. The current server expects UUID subjects, as supplied by the local Keycloak realm.
