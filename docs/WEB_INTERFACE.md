@@ -50,3 +50,9 @@ Component tests exercise submission success, failed-request evidence retention a
 Dependency versions and integrity hashes are pinned in `web/package-lock.json`. Browser bundle notices are available at `/THIRD_PARTY_NOTICES.txt` and in [the dependency notices](../web/public/THIRD_PARTY_NOTICES.txt).
 
 Public web builds require an explicit `VITE_OIDC_URL` to enable authentication. Without it, the page remains accessible and reports that sign-in is unavailable; it never falls back to the visitor's localhost. Vite development retains the local default, and Docker builds explicitly provide their identity URL. For public login, supply `VITE_OIDC_URL`, `VITE_OIDC_REALM` and `VITE_OIDC_CLIENT`, register the web origin and redirect URI on that provider, and rebuild. These are public client settings, not client secrets. Static Vercel hosting does not provision an identity service.
+
+## Sample achievements
+
+Explore offers three illustrative accessibility projects: accessible documents, keyboard-first navigation and meaningful image descriptions. Visitors start with **Sample achievements** and can open each project's criteria, sample evidence and review journey without signing in or contacting the API. **Live catalog** explicitly switches to real achievements; signed-in users default to the live catalog. Sample content cannot submit evidence or issue credentials.
+
+The preview uses the existing blue primary, Inter typography, flat bordered cards and restrained cool tints. Cards form three columns on desktop and one on mobile. Details use the shared keyboard-accessible dialog with Escape dismissal. Time estimates and examples are illustrative rather than program requirements.
