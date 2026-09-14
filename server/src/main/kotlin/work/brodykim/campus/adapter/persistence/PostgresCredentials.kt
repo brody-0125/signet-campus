@@ -16,6 +16,9 @@ class PostgresCredentials(private val jdbc: JdbcTemplate) : CredentialRepository
     override fun revokedCredentialIds(): List<String> = jdbc.queryForList(
         "SELECT document->>'id' FROM credentials WHERE revoked_at IS NOT NULL ORDER BY id", String::class.java)
     override fun find(id: UUID) = jdbc.query("SELECT * FROM credentials WHERE id = ?", { rs, _ -> read(rs) }, id).singleOrNull()
+    override fun findShared(id: UUID) = jdbc.query("SELECT * FROM credentials WHERE id = ? AND shared", { rs, _ -> read(rs) }, id).singleOrNull()
+    override fun setSharing(id: UUID, learnerId: UUID, enabled: Boolean) = jdbc.update(
+        "UPDATE credentials SET shared = ? WHERE id = ? AND learner_id = ?", enabled, id, learnerId) == 1
     override fun findBySubmission(id: UUID) = jdbc.query("SELECT * FROM credentials WHERE submission_id = ?", { rs, _ -> read(rs) }, id).singleOrNull()
     override fun findByPathway(id: UUID, learnerId: UUID) = jdbc.query(
         "SELECT * FROM credentials WHERE pathway_id = ? AND learner_id = ?", { rs, _ -> read(rs) }, id, learnerId).singleOrNull()
@@ -52,5 +55,5 @@ class PostgresCredentials(private val jdbc: JdbcTemplate) : CredentialRepository
     private fun read(rs: ResultSet) = IssuedCredential(rs.getObject("id", UUID::class.java),
         rs.getObject("submission_id", UUID::class.java), rs.getObject("learner_id", UUID::class.java),
         rs.getString("document"), rs.getTimestamp("issued_at").toInstant(), rs.getTimestamp("valid_until").toInstant(),
-        rs.getTimestamp("revoked_at")?.toInstant(), rs.getObject("pathway_id", UUID::class.java))
+        rs.getTimestamp("revoked_at")?.toInstant(), rs.getObject("pathway_id", UUID::class.java), rs.getBoolean("shared"))
 }

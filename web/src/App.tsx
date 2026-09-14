@@ -7,11 +7,17 @@ import { useWorkspace } from './store'
 import { EvidenceForm } from './EvidenceForm'
 import { Submissions } from './Submissions'
 import { Pathways } from './Pathways'
+import { SharedCredential } from './SharedCredential'
 
 export function AccessibilityIcon() {
   return <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="18" cy="7" r="3"/><path d="M7 14l11 2 11-2M18 16v7m0 0-5 10m5-10 5 10M12 15l1 9m11-9-1 9"/></svg>
 }
 export function App() {
+  return window.location.pathname.startsWith('/shared/')
+    ? <SharedCredential id={window.location.pathname.slice('/shared/'.length)}/>
+    : <WorkspaceApp/>
+}
+function WorkspaceApp() {
   const [editing, setEditing] = useState<Achievement | 'new' | null>(null)
   const view = useWorkspace(s => s.view)
   const selectedId = useWorkspace(s => s.selectedId)

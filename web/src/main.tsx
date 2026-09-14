@@ -11,4 +11,4 @@ useSession.subscribe((state, previous) => {
   if (previous.authenticated && !state.authenticated) client.clear()
 })
 createRoot(document.getElementById('root')!).render(<StrictMode><QueryClientProvider client={client}><App /></QueryClientProvider></StrictMode>)
-void initializeSession()
+if (!window.location.pathname.startsWith('/shared/')) void initializeSession()

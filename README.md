@@ -67,6 +67,7 @@ The [dependency inventory](docs/third-party/inventory.json) records resolved run
 - [Submission API](docs/API.md)
 - [Credential issuance and verification](docs/CREDENTIALS.md)
 - [Portable PNG and SVG badges](docs/PORTABLE_BADGES.md)
+- [Private and public credential sharing](docs/SHARING.md)
 - [Web interface and design system](docs/WEB_INTERFACE.md)
 - [Local development](docs/LOCAL_DEVELOPMENT.md)
 - [Evidence review](docs/EVIDENCE_REVIEW.md)

@@ -12,4 +12,4 @@ An image is a portable credential container, not a statement that its credential
 
 `GET /api/credentials/{id}/image/{format}` accepts `png` or `svg`. Authentication is required and only the credential owner may download. Responses use `Cache-Control: no-store`, the corresponding image media type, and attachment filename `signet-campus-{id}.{format}`. Unsupported formats return 400; absent or inaccessible credentials return 404. The service renders its own fixed artwork and does not accept remote URLs or uploaded source images.
 
-Private image export does not create a public sharing link. Share the file only with the recipients you choose. Public sharing controls and account transfer are separate capabilities.
+Private image export does not create a public sharing link. Share the file only with the recipients you choose. [Public sharing controls](SHARING.md) are a separate, explicit action. Account transfer is not part of image export.

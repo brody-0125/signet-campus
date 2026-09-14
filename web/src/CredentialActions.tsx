@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api, ApiError, credentialImage } from './api'
+import { CredentialSharing } from './CredentialSharing'
 
 export function CredentialActions({ source, canIssue = true }: { source: { type: 'submissions' | 'pathways'; id: string }; canIssue?: boolean }) {
   const [issued, setCredential] = useState<Record<string, unknown> | null>(null)
@@ -38,6 +39,7 @@ export function CredentialActions({ source, canIssue = true }: { source: { type:
     {credential && <><p className="field-help">Image files include your signed credential. Anyone you send a file to can read its embedded badge details.</p>
       <div className="form-actions">{(['png', 'svg'] as const).map(format => <button key={format} className="button outline" disabled={image.isPending} onClick={() => image.mutate(format)}>Download {format.toUpperCase()}</button>)}</div></>}
     {image.isError && <p className="error" role="alert">{image.error.message}</p>}
+    {credential && <CredentialSharing credential={credential}/>}
     {verification.isError && <p className="error" role="alert">{verification.error.message}</p>}
     {verification.data && <p className="notice" role="status">{verification.data.valid ? 'Verified: authentic, current and not revoked.' : `Verification result: ${verification.data.status.replaceAll('_', ' ').toLowerCase()}.`}</p>}
   </div>

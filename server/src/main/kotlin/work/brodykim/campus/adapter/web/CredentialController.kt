@@ -11,11 +11,31 @@ import work.brodykim.campus.application.Actor
 import work.brodykim.campus.application.CredentialService
 import java.util.UUID
 
+data class SharingInput(val enabled: Boolean)
+data class SharingStatus(val enabled: Boolean, val url: String?)
+
 @RestController
 class CredentialController(private val service: CredentialService, private val crypto: CredentialCryptography,
                            private val pathways: work.brodykim.campus.application.PathwayCredentialService,
                            private val images: work.brodykim.campus.application.CredentialImages,
                            @param:Value("\${campus.public-url}") private val publicUrl: String) {
+    @GetMapping("/api/shared/credentials/{id}")
+    fun shared(@PathVariable id: UUID): ResponseEntity<String> = service.shared(id)?.let { document(it.document) }
+        ?: ResponseEntity.status(404).cacheControl(CacheControl.noStore()).build()
+
+    @GetMapping("/api/credentials/{id}/sharing")
+    fun sharing(authentication: JwtAuthenticationToken, @PathVariable id: UUID) =
+        sharingStatus(id, service.get(actor(authentication), id).shared)
+
+    @PostMapping("/api/credentials/{id}/sharing")
+    fun setSharing(authentication: JwtAuthenticationToken, @PathVariable id: UUID, @RequestBody input: SharingInput): ResponseEntity<SharingStatus> {
+        service.setSharing(actor(authentication), id, input.enabled)
+        return sharingStatus(id, input.enabled)
+    }
+
+    private fun sharingStatus(id: UUID, enabled: Boolean) = ResponseEntity.ok().cacheControl(CacheControl.noStore())
+        .body(SharingStatus(enabled, if (enabled) "${publicUrl.trimEnd('/')}/shared/$id" else null))
+
     @GetMapping("/api/credentials/{id}/image/{format}")
     fun image(authentication: JwtAuthenticationToken, @PathVariable id: UUID, @PathVariable format: String): ResponseEntity<ByteArray> {
         val record = service.get(actor(authentication), id)
