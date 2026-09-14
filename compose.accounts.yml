@@ -1,0 +1,24 @@
+# Run as project signet-campus-accounts to isolate all persistent state.
+services:
+  web:
+    build:
+      args:
+        VITE_OIDC_URL: http://localhost:8084
+    ports: !override ["127.0.0.1:5183:8080"]
+  server:
+    environment:
+      CAMPUS_PUBLIC_URL: http://localhost:5183
+      OIDC_ISSUER: http://localhost:8084/realms/signet-campus
+      SIGNING_KEY_PATH: /run/secrets/campus-signing.jwk
+      VERIFICATION_KEYS: classpath:empty-jwks.json
+    ports: !override ["127.0.0.1:8083:8080"]
+  identity:
+    environment:
+      KC_HOSTNAME: http://localhost:8084
+    ports: !override ["127.0.0.1:8084:8080"]
+    volumes:
+      - ./secrets/account-realm.json:/opt/keycloak/data/import/realm.json:ro
+  mailpit:
+    ports: !override ["127.0.0.1:8026:8025"]
+  db:
+    ports: !override []
