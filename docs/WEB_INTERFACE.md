@@ -48,3 +48,5 @@ npm run build
 Component tests exercise submission success, failed-request evidence retention and version-conflict feedback. Backend tests enforce ownership, reviewer permissions and atomic writes; UI visibility is not an authorization boundary.
 
 Dependency versions and integrity hashes are pinned in `web/package-lock.json`. Browser bundle notices are available at `/THIRD_PARTY_NOTICES.txt` and in [the dependency notices](../web/public/THIRD_PARTY_NOTICES.txt).
+
+Public web builds require an explicit `VITE_OIDC_URL` to enable authentication. Without it, the page remains accessible and reports that sign-in is unavailable; it never falls back to the visitor's localhost. Vite development retains the local default, and Docker builds explicitly provide their identity URL. For public login, supply `VITE_OIDC_URL`, `VITE_OIDC_REALM` and `VITE_OIDC_CLIENT`, register the web origin and redirect URI on that provider, and rebuild. These are public client settings, not client secrets. Static Vercel hosting does not provision an identity service.
