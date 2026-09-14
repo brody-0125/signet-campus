@@ -2,7 +2,8 @@
 
 ## Requirements
 
-- Java 17
+- Docker Compose for the full local suite; Java 17 only when running Gradle directly
+- Node 24 and npm for browser and acceptance checks
 - Network access to Maven Central and JitPack
 
 The Gradle 8.14.3 wrapper is included in `server/`.
@@ -39,7 +40,7 @@ Coverage tasks include the PostgreSQL tests and require the test database enviro
 
 `EvidenceSubmissionTest` covers approval, rejection, resubmission ownership, self-review prevention, timestamp ordering, immutable decisions, issuance eligibility and evidence/reason length limits. See [Evidence review](EVIDENCE_REVIEW.md) for the transition rules.
 
-`DomainKonsistTest` checks that domain imports are restricted to domain types and the standard library.
+`DomainKonsistTest` checks domain imports and prevents the application layer from depending on adapters or frameworks.
 
 ## Credential contract
 
@@ -60,6 +61,20 @@ Signing-key rotation tests cover old-key verification, new-key issuance, removal
 ## Recovery rehearsal
 
 After starting the local Compose stack and creating synthetic credentials with `node dev/smoke.mjs`, run `node --test dev/recovery.test.mjs`. It restores the database and copied keys into an isolated server, checks all public table rows and existing credential verification, and leaves the source services running. See [Backup and recovery](RECOVERY.md) for prerequisites, limits and the operator procedure.
+
+## CI acceptance matrix
+
+Pull requests and changes to main run the following gates:
+
+| Job | Coverage |
+|---|---|
+| `web` | React interactions, production build, browser notices and key-rotation preparation |
+| `test` | Gradle checks, PostgreSQL integration, Kover, distribution contents, independent proof/schema verification, email delivery, application recovery, proxy replacement, private telemetry and collector outage |
+| `https` | Certificate/hostname/TLS checks, secure identity URLs, ingress isolation and issuance through HTTPS |
+| `replicas` | Concurrent review/issuance/archival and real SMTP acknowledgment-loss recovery across two API processes |
+| `accounts` | Native registration, email confirmation, private ownership, institutional linking/unlinking and identity-database restore |
+
+The isolated fixtures are described in [accounts](ACCOUNT.md), [HTTPS](HTTPS.md), [replicas](REPLICAS.md) and [identity recovery](IDENTITY_RECOVERY.md). They use separate project names, ports, databases and keys. Preserve those names when running cleanup commands.
 
 ## Dependency inventory
 

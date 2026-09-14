@@ -31,14 +31,14 @@ With Node.js 22 or later:
 node dev/smoke.mjs
 ```
 
-The check obtains real JWTs, submits evidence, rejects learner approval and invalid tokens, approves as a reviewer, and rejects a stale version. It prints the created submission ID. To verify persistence after restarting the server:
+The check obtains real JWTs, submits evidence, rejects learner approval and invalid tokens, approves as a reviewer, and rejects a stale version. It also issues and exports credentials, verifies sharing and revocation, and prints the created submission ID. To verify persistence after restarting the server:
 
 ```bash
 docker compose restart server
 node dev/smoke.mjs <submission-id>
 ```
 
-Wait for `GET /actuator/health/readiness` to return `UP` before running the check.
+Wait for the public achievements API and Keycloak realm discovery endpoint to return 200 before running the check. Management health uses a separate port when the telemetry overlay is enabled.
 
 ## Automated tests
 
