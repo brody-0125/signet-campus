@@ -74,9 +74,13 @@ if (process.argv[2]) {
   await request('/api/achievements', `${learner}corrupted`, undefined, 401);
   await request('/api/achievements', learner, { name: 'Unauthorized', criteria: 'Audit' }, 403);
   const authored = await request('/api/achievements', reviewer, { name: 'Keyboard audit (smoke)', criteria: 'Audit focus order' }, 201);
-  const achievement = await request(`/api/achievements/${authored.id}`, reviewer, {
+  assert.equal(authored.published, false);
+  await request(`/api/achievements/${authored.id}`, null, undefined, 404);
+  const edited = await request(`/api/achievements/${authored.id}`, reviewer, {
     name: authored.name, criteria: 'Audit focus order and keyboard operation', expectedVersion: authored.version,
   });
+  const achievement = await request(`/api/achievements/${authored.id}/publish`, reviewer, { expectedVersion: edited.version });
+  assert.equal(achievement.published, true);
   const record = await request('/api/submissions', learner, {
     achievementId: achievement.id, evidence: 'Synthetic keyboard navigation audit',
   }, 201);

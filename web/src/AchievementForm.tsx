@@ -14,13 +14,13 @@ export function AchievementForm({ achievement, onClose }: { achievement?: Achiev
     }),
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: ['achievements'] })
-      useWorkspace.setState({ notice: 'Achievement saved.' })
+      useWorkspace.setState({ notice: achievement?.published ? 'Achievement saved.' : 'Draft saved. Publish it when the criteria are ready.' })
       onClose()
     },
   })
   function submit(event: FormEvent) { event.preventDefault(); if (name.trim() && criteria.trim()) mutation.mutate() }
   return <Dialog title={achievement ? 'Edit achievement' : 'Create achievement'} onClose={onClose}>
-    <p className="field-help">Set clear, assessable criteria. Once someone submits evidence, this achievement is locked. Create a new achievement when the criteria change.</p>
+    <p className="field-help">New achievements are saved as drafts, visible only to reviewers. Publish when the criteria are ready. Once someone submits evidence, the criteria are locked.</p>
     <form onSubmit={submit}>
       <label htmlFor="achievement-name">Achievement name</label>
       <input id="achievement-name" required maxLength={120} value={name} onChange={event => setName(event.target.value)}/>
@@ -30,4 +30,19 @@ export function AchievementForm({ achievement, onClose }: { achievement?: Achiev
       <div className="form-actions"><button type="button" className="button outline" onClick={onClose}>Cancel</button><button className="button primary" disabled={mutation.isPending || !name.trim() || !criteria.trim()}>{mutation.isPending ? 'Saving…' : 'Save achievement'}</button></div>
     </form>
   </Dialog>
+}
+
+export function PublishAchievement({ achievement }: { achievement: Achievement }) {
+  const client = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: () => api(`/achievements/${achievement.id}/publish`, { expectedVersion: achievement.version }),
+    onSuccess: () => {
+      void client.invalidateQueries({ queryKey: ['achievements'] })
+      useWorkspace.setState({ notice: 'Achievement published. Learners can now submit evidence.' })
+    },
+  })
+  return <div className="publication-actions">
+    <button className="button primary" aria-label={`Publish ${achievement.name}`} disabled={mutation.isPending} onClick={() => mutation.mutate()}>{mutation.isPending ? 'Publishing…' : 'Publish'}</button>
+    {mutation.isError && <p className="error" role="alert">{mutation.error.message}</p>}
+  </div>
 }

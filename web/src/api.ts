@@ -1,6 +1,6 @@
 import { accessToken } from './auth'
 
-export type Achievement = { id: string; name: string; criteria: string; version: number }
+export type Achievement = { id: string; name: string; criteria: string; version: number; published: boolean }
 export type Pathway = { id: string; name: string; description: string; achievementIds: string[]; prerequisiteAchievementIds?: string[] }
 export type PathwayProgress = { pathwayId: string; enrolledAt: string; earned: number; total: number; completed: boolean; requirements: { achievementId: string; earned: boolean }[] }
 export class ApiError extends Error {
@@ -44,7 +44,7 @@ async function request(path: string, body?: unknown, signal?: AbortSignal): Prom
     }
     if (path.startsWith('/achievements')) {
       if (response.status === 400) throw new Error('Enter a name and criteria within the displayed limits.')
-      if (response.status === 409) throw new Error('This achievement changed or already has submissions. Refresh the catalog, or create a new achievement for different criteria.')
+      if (response.status === 409) throw new Error('This achievement changed, is already published, or has submissions that prevent editing. Refresh the catalog before trying again.')
       if (response.status === 404) throw new Error('This achievement is no longer available.')
     }
     const messages: Record<number, string> = {

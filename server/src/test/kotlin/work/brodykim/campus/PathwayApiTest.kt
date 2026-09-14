@@ -36,7 +36,8 @@ class PathwayApiTest : SigningTestSupport() {
     private val reviewer = Actor(UUID.randomUUID(), true)
     private fun auth(actor: Actor = learner) = jwt().jwt { it.subject(actor.id.toString()) }
         .authorities(if (actor.reviewer) listOf(SimpleGrantedAuthority("ROLE_REVIEWER")) else emptyList())
-    private fun achievement() = catalog.save(reviewer, null, "Audit", "Review keyboard navigation").id
+    private fun achievement() = catalog.save(reviewer, null, "Audit", "Review keyboard navigation")
+        .let { catalog.publish(reviewer, it.id, it.version).id }
     private fun body(ids: List<UUID>, prerequisites: List<UUID> = emptyList()) = json.writeValueAsString(mapOf("name" to " Accessible campus ",
         "description" to " Demonstrate accessible content skills ", "achievementIds" to ids, "prerequisiteAchievementIds" to prerequisites))
     private fun create(ids: List<UUID>, prerequisites: List<UUID> = emptyList()) = json.readTree(mvc.perform(post("/api/pathways").with(auth(reviewer))

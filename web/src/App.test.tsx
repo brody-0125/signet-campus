@@ -10,7 +10,7 @@ vi.mock('./auth', async () => {
   const { create } = await import('zustand')
   return { useSession: create(() => ({ ready: true, authenticated: true, reviewer: false, name: 'Learner', error: null })), signIn: vi.fn(), signOut: vi.fn(), manageAccount: vi.fn(), accessToken: async () => 'test-token' }
 })
-const achievement = { id: 'achievement-1', name: 'Digital Accessibility Awareness', criteria: 'Demonstrate keyboard access and text alternatives.', version: 0 }
+const achievement = { id: 'achievement-1', name: 'Digital Accessibility Awareness', criteria: 'Demonstrate keyboard access and text alternatives.', version: 0, published: true }
 const submission = { id: 'submission-1', achievementId: achievement.id, evidence: 'My keyboard audit', status: 'PENDING', submittedAt: '2026-09-14T00:00:00Z', revision: 0, review: null }
 const fetchMock = vi.fn()
 function response(body: unknown, status = 200) { return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } }) }
@@ -107,6 +107,41 @@ beforeEach(() => {
   vi.mocked(manageAccount).mockReset()
   vi.stubGlobal('fetch', fetchMock)
   fetchMock.mockImplementation(async (url: string) => response(url.includes('achievements') ? [achievement] : []))
+})
+it('publishes a reviewer draft with its saved version and removes draft controls', async () => {
+  useSession.setState({ reviewer: true })
+  const user = userEvent.setup()
+  let published = false
+  fetchMock.mockImplementation(async (url: string, options?: RequestInit) => {
+    if (options?.method === 'POST') published = true
+    const entry = { ...achievement, published, version: published ? 4 : 3 }
+    return response(options?.method === 'POST' ? entry : url.includes('/reviewer/') || published ? [entry] : [])
+  })
+  mount()
+  expect(await screen.findByText('Draft · Only reviewers can see this achievement')).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: 'View criteria' })).not.toBeInTheDocument()
+  await user.click(screen.getByRole('button', { name: `Publish ${achievement.name}` }))
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledWith('/api/achievements/achievement-1/publish', expect.objectContaining({ body: '{"expectedVersion":3}' })))
+  expect(await screen.findByRole('button', { name: 'View criteria' })).toBeInTheDocument()
+  expect(screen.queryByText('Draft · Only reviewers can see this achievement')).not.toBeInTheDocument()
+})
+it('keeps a draft visible with an error when publication loses a version race', async () => {
+  useSession.setState({ reviewer: true })
+  const user = userEvent.setup()
+  fetchMock.mockImplementation(async (url: string, options?: RequestInit) => options?.method === 'POST' ? response({}, 409)
+    : response(url.includes('/reviewer/') ? [{ ...achievement, published: false }] : []))
+  mount()
+  await user.click(await screen.findByRole('button', { name: `Publish ${achievement.name}` }))
+  expect(await screen.findByRole('alert')).toHaveTextContent('changed')
+  expect(screen.getByText('Draft · Only reviewers can see this achievement')).toBeInTheDocument()
+})
+it('opens reviewer criteria even when the separate public catalog request fails', async () => {
+  useSession.setState({ reviewer: true })
+  const user = userEvent.setup()
+  fetchMock.mockImplementation(async (url: string) => url.includes('/reviewer/') ? response([achievement]) : response({}, 503))
+  mount()
+  await user.click(await screen.findByRole('button', { name: 'View criteria' }))
+  expect(await screen.findByRole('dialog')).toHaveTextContent(achievement.criteria)
 })
 it('opens account management and keeps sign out available after a failed redirect', async () => {
   const user = userEvent.setup()

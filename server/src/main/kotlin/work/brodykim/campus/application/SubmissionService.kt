@@ -6,7 +6,7 @@ import java.util.UUID
 
 data class Actor(val id: UUID, val reviewer: Boolean)
 data class StoredSubmission(val submission: EvidenceSubmission, val version: Long)
-data class AchievementSummary(val id: UUID, val name: String, val criteria: String, val version: Long = 0)
+data class AchievementSummary(val id: UUID, val name: String, val criteria: String, val version: Long = 0, val published: Boolean = false)
 class SubmissionNotFound : RuntimeException("Submission not found")
 class ReviewForbidden : RuntimeException("Reviewer permission required")
 class SubmissionConflict : RuntimeException("Submission changed; reload before retrying")

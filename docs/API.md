@@ -1,6 +1,6 @@
 # Submission API
 
-Requests use JSON. The achievement catalog is public; submission endpoints require an OIDC bearer token with audience `signet-campus`. The token subject identifies the learner; clients cannot assign submission ownership.
+Requests use JSON. Published achievements are public; drafts are visible only through reviewer endpoints. New achievements must be explicitly published before accepting submissions. See [Achievement catalog](CATALOG.md). Submission endpoints require an OIDC bearer token with audience `signet-campus`. The token subject identifies the learner; clients cannot assign submission ownership.
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -23,7 +23,7 @@ List requests accept a non-negative offset and a limit from 1 to 100. Results us
 }
 ```
 
-The achievement must exist. The response contains `submission` and `version`. The submission includes its ID, learner and achievement IDs, evidence, submission time, review state and revision.
+The achievement must be published. The response contains `submission` and `version`. The submission includes its ID, learner and achievement IDs, evidence, submission time, review state and revision.
 
 ## Review and resubmit
 

@@ -48,6 +48,7 @@ nav { display: flex; gap: 32px; align-items: center; }
 .achievement-row { display: flex; align-items: center; gap: 24px; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-top: 16px; }
 .icon-tile { width: 72px; height: 72px; flex-shrink: 0; display: grid; place-items: center; border-radius: 8px; background: #edf2ff; color: var(--primary); }
 .row-copy { flex: 1; min-width: 0; }
+.publication-actions { max-width: 280px; }
 .row-copy h3 { font-size: 24px; letter-spacing: -.025em; }
 .row-copy p { color: var(--muted); margin-top: 6px; }
 footer { background: #171b23; color: #fff; padding-block: 32px; }
@@ -126,6 +127,7 @@ input { margin-bottom: 20px; }
   .achievement-row { flex-wrap: wrap; align-items: flex-start; padding: 20px; }
   .achievement-row .row-copy { flex-basis: calc(100% - 72px); }
   .achievement-row .button { width: 100%; }
+  .publication-actions { width: 100%; max-width: none; }
   .icon-tile { width: 48px; height: 48px; }
   .icon-tile svg { width: 28px; height: 28px; }
   .workspace { padding-block: 40px 56px; }
