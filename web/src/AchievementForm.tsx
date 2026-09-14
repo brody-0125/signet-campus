@@ -4,13 +4,14 @@ import { api, type Achievement } from './api'
 import { Dialog } from './Dialog'
 import { useWorkspace } from './store'
 
-export function AchievementForm({ achievement, onClose }: { achievement?: Achievement; onClose: () => void }) {
-  const [name, setName] = useState(achievement?.name || '')
-  const [criteria, setCriteria] = useState(achievement?.criteria || '')
+export function AchievementForm({ achievement, predecessor, onClose }: { achievement?: Achievement; predecessor?: Achievement; onClose: () => void }) {
+  const source = predecessor || achievement
+  const [name, setName] = useState(source?.name || '')
+  const [criteria, setCriteria] = useState(source?.criteria || '')
   const client = useQueryClient()
   const mutation = useMutation({
-    mutationFn: () => api(achievement ? `/achievements/${achievement.id}` : '/achievements', {
-      name: name.trim(), criteria: criteria.trim(), ...(achievement ? { expectedVersion: achievement.version } : {}),
+    mutationFn: () => api(predecessor ? `/achievements/${predecessor.id}/successors` : achievement ? `/achievements/${achievement.id}` : '/achievements', {
+      name: name.trim(), criteria: criteria.trim(), ...(source ? { expectedVersion: source.version } : {}),
     }),
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: ['achievements'] })
@@ -19,8 +20,9 @@ export function AchievementForm({ achievement, onClose }: { achievement?: Achiev
     },
   })
   function submit(event: FormEvent) { event.preventDefault(); if (name.trim() && criteria.trim()) mutation.mutate() }
-  return <Dialog title={achievement ? 'Edit achievement' : 'Create achievement'} onClose={onClose}>
+  return <Dialog title={predecessor ? 'Create next edition' : achievement ? 'Edit achievement' : 'Create achievement'} onClose={onClose}>
     <p className="field-help">New achievements are saved as drafts, visible only to reviewers. Publish when the criteria are ready. Once someone submits evidence, the criteria are locked.</p>
+    {predecessor && <p className="notice">Based on {predecessor.name}. Existing badges and pathway requirements stay with the original edition.</p>}
     <form onSubmit={submit}>
       <label htmlFor="achievement-name">Achievement name</label>
       <input id="achievement-name" required maxLength={120} value={name} onChange={event => setName(event.target.value)}/>
