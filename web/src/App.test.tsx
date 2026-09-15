@@ -412,10 +412,13 @@ it('shows unavailable sign-in as information and disables entry points without l
 })
 
 
-it('shows one failure message when both pathway and achievement requests fail', async () => {
+it('shows one pathway failure and does not carry it into anonymous submissions', async () => {
+  useSession.setState({ authenticated: false })
   fetchMock.mockResolvedValue(response({}, 503))
   mount()
   await userEvent.setup().click(screen.getByRole('button', { name: 'Pathways' }))
   expect(await screen.findByText('Pathways could not be loaded.')).toBeInTheDocument()
+  expect(screen.queryByText('Achievement details could not be loaded.')).not.toBeInTheDocument()
+  await userEvent.setup().click(screen.getByRole('button', { name: 'My submissions' }))
   expect(screen.queryByText('Achievement details could not be loaded.')).not.toBeInTheDocument()
 })

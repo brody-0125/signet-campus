@@ -50,7 +50,7 @@ function WorkspaceApp() {
     <main id="main">
       {session.notice && <p className="container notice" role="status">{session.notice}</p>}
       {session.error && <p className="container error" role="alert">{session.error}</p>}
-      {history.isError && view === 'submissions' && <div className="container error" role="alert">Achievement details could not be loaded. <button className="button outline" onClick={() => void history.refetch()}>Retry achievement details</button></div>}
+      {session.authenticated && history.isError && view === 'submissions' && <div className="container error" role="alert">Achievement details could not be loaded. <button className="button outline" onClick={() => void history.refetch()}>Retry achievement details</button></div>}
       {notice && <div className="container notice" role="status">{notice}</div>}
       {view === 'explore' ? <>
         <section className="container hero" aria-labelledby="hero-title">
@@ -76,3 +76,4 @@ function WorkspaceApp() {
     {editing && session.reviewer && <AchievementForm achievement={editing === 'new' ? undefined : editing} onClose={() => setEditing(null)}/>}
   </>
 }
+
