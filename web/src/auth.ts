@@ -8,14 +8,14 @@ const keycloak = oidcUrl ? new Keycloak({
   realm: import.meta.env.VITE_OIDC_REALM || 'signet-campus',
   clientId: import.meta.env.VITE_OIDC_CLIENT || 'campus-dev',
 }) : null
-export const useSession = create(() => ({ ready: false, authenticated: false, reviewer: false, error: '' }))
+export const useSession = create(() => ({ ready: false, authenticated: false, reviewer: false, error: '', notice: '' }))
 const sync = () => useSession.setState({
   authenticated: !!keycloak?.authenticated,
   reviewer: keycloak?.hasRealmRole('reviewer') ?? false,
 })
 export async function initializeSession() {
   if (!keycloak) {
-    useSession.setState({ ready: true, error: unavailable })
+    useSession.setState({ ready: true, notice: unavailable })
     return
   }
   try {
@@ -28,7 +28,7 @@ export async function initializeSession() {
   } finally { useSession.setState({ ready: true }) }
 }
 export async function signIn() {
-  if (!keycloak) { useSession.setState({ error: unavailable }); return }
+  if (!keycloak) { useSession.setState({ notice: unavailable }); return }
   try { await keycloak.login({ redirectUri: window.location.origin }) }
   catch { useSession.setState({ error: 'Unable to open sign-in. Please reload to try again.' }) }
 }

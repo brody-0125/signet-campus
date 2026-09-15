@@ -30,10 +30,10 @@ function WorkspaceApp() {
   const session = useSession()
   const [sampleSelection, setSamples] = useState<boolean | null>(null)
   const samples = sampleSelection ?? !session.authenticated
-  const achievements = useQuery({ queryKey: ['achievements', 'public'], queryFn: ({ signal }) => api<Achievement[]>('/achievements', undefined, signal), enabled: !samples || view !== 'explore' })
+  const achievements = useQuery({ queryKey: ['achievements', 'public'], queryFn: ({ signal }) => api<Achievement[]>('/achievements', undefined, signal), enabled: view === 'explore' && !samples })
   const reviewerAchievements = useQuery({ queryKey: ['achievements', 'reviewer'], queryFn: ({ signal }) => api<Achievement[]>('/reviewer/achievements', undefined, signal), enabled: session.ready && session.authenticated && session.reviewer })
   const catalog = session.reviewer ? reviewerAchievements : achievements
-  const history = useQuery({ queryKey: ['achievements', 'history'], queryFn: ({ signal }) => api<Achievement[]>('/achievements?includeArchived=true', undefined, signal), enabled: view === 'pathways' || view === 'submissions' })
+  const history = useQuery({ queryKey: ['achievements', 'history'], queryFn: ({ signal }) => api<Achievement[]>('/achievements?includeArchived=true', undefined, signal), enabled: view === 'pathways' || (view === 'submissions' && session.authenticated) })
   const selected = (view === 'explore' ? catalog : history).data?.find(a => a.id === selectedId && a.published)
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
@@ -45,11 +45,12 @@ function WorkspaceApp() {
         <button className="nav-link" aria-current={view === 'submissions' ? 'page' : undefined} onClick={() => navigate('submissions')}>{session.reviewer ? 'Review queue' : 'My submissions'}</button>
         {session.authenticated && <button className="nav-link" aria-current={view === 'account' ? 'page' : undefined} onClick={() => navigate('account')}>Account</button>}
       </nav>
-      <button className="button outline" disabled={!session.ready || !!session.error} onClick={session.authenticated ? signOut : signIn}>{session.authenticated ? 'Sign out' : 'Sign in'}</button>
+      <button className="button outline" disabled={!session.ready || !!session.error || !!session.notice} onClick={session.authenticated ? signOut : signIn}>{session.authenticated ? 'Sign out' : 'Sign in'}</button>
     </div></header>
     <main id="main">
+      {session.notice && <p className="container notice" role="status">{session.notice}</p>}
       {session.error && <p className="container error" role="alert">{session.error}</p>}
-      {history.isError && (view === 'pathways' || view === 'submissions') && <div className="container error" role="alert">Achievement details could not be loaded. <button className="button outline" onClick={() => void history.refetch()}>Retry achievement details</button></div>}
+      {history.isError && view === 'submissions' && <div className="container error" role="alert">Achievement details could not be loaded. <button className="button outline" onClick={() => void history.refetch()}>Retry achievement details</button></div>}
       {notice && <div className="container notice" role="status">{notice}</div>}
       {view === 'explore' ? <>
         <section className="container hero" aria-labelledby="hero-title">
@@ -64,10 +65,10 @@ function WorkspaceApp() {
           {catalog.isPending && <p role="status">Loading achievements…</p>}
           {catalog.isError && <div role="alert"><p>Achievements could not be loaded.</p><button className="button outline" onClick={() => void catalog.refetch()}>Try again</button></div>}
           {catalog.data?.length === 0 && <p>No achievements are available yet.</p>}
-          {catalog.data?.map(a => <article className="achievement-row" key={a.id}><div className="icon-tile"><AccessibilityIcon/></div><div className="row-copy"><h3>{a.name}</h3><p>{a.criteria}</p>{a.archived && <p className="field-help">Archived · New work is paused</p>}{!a.published && <p className="field-help">Draft · Only reviewers can see this achievement</p>}</div>{a.published && <button className="button outline" onClick={() => useWorkspace.setState({ selectedId: a.id })}>View criteria</button>}{session.reviewer && !a.archived && <button className="button outline" aria-label={`Edit ${a.name}`} onClick={() => setEditing(a)}>Edit</button>}{session.reviewer && a.published && <button className="button outline" aria-label={`Create next edition of ${a.name}`} onClick={() => setPredecessor(a)}>Next edition</button>}{session.reviewer && a.published && <ArchiveAchievement achievement={a}/>}{session.reviewer && !a.published && <PublishAchievement achievement={a}/>}</article>)}
+          {catalog.data?.map(a => <article className="achievement-row" key={a.id}><div className="icon-tile"><AccessibilityIcon/></div><div className="row-copy"><h3>{a.name}</h3><p>{a.criteria}</p>{a.archived && <p className="field-help">Archived · New work is paused</p>}{!a.published && <p className="field-help">Draft · Only reviewers can see this achievement</p>}</div><div className="achievement-actions">{a.published && <button className="button outline" onClick={() => useWorkspace.setState({ selectedId: a.id })}>View criteria</button>}{session.reviewer && !a.archived && <button className="button outline" aria-label={`Edit ${a.name}`} onClick={() => setEditing(a)}>Edit</button>}{session.reviewer && a.published && <button className="button outline" aria-label={`Create next edition of ${a.name}`} onClick={() => setPredecessor(a)}>Next edition</button>}{session.reviewer && a.published && <ArchiveAchievement achievement={a}/>}{session.reviewer && !a.published && <PublishAchievement achievement={a}/>}</div></article>)}
           </>}
         </div></section>
-      </> : view === 'pathways' ? <Pathways achievements={history.data || []}/> : view === 'account' ? session.authenticated ? <Account/> : <p className="container">Sign in to manage your account.</p> : <Submissions achievements={history.data || []}/>}
+      </> : view === 'pathways' ? <Pathways achievements={history.data || []} achievementError={history.isError} onRetryAchievements={() => void history.refetch()}/> : view === 'account' ? session.authenticated ? <Account/> : <p className="container">Sign in to manage your account.</p> : <Submissions achievements={history.data || []}/>}
     </main>
     <footer><div className="container"><a className="wordmark" href="#" onClick={() => navigate('explore')}>signet campus</a><p>Learning, made visible.</p></div></footer>
     {selected && <EvidenceForm achievement={selected} onClose={() => useWorkspace.setState({ selectedId: null })}/>}

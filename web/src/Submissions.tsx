@@ -9,7 +9,7 @@ import { CredentialActions } from './CredentialActions'
 
 const statusLabel = { PENDING: 'Pending review', APPROVED: 'Approved', REJECTED: 'Changes requested' }
 export function Submissions({ achievements }: { achievements: Achievement[] }) {
-  const { authenticated, reviewer, ready } = useSession()
+  const { authenticated, reviewer, ready, error, notice } = useSession()
   const [offset, setOffset] = useState(0)
   const [selected, setSelected] = useState<Submission | null>(null)
   const [editing, setEditing] = useState(false)
@@ -18,7 +18,7 @@ export function Submissions({ achievements }: { achievements: Achievement[] }) {
   const close = () => { setSelected(null); setEditing(false) }
   return <section className="container workspace" aria-labelledby="workspace-title">
     <div className="section-heading"><div><h1 id="workspace-title">{reviewer ? 'Review queue' : 'My submissions'}</h1><p className="section-intro">{reviewer ? 'Give thoughtful feedback. Recognize the work.' : 'Your work, and what comes next.'}</p></div>{authenticated && <button className="button outline" onClick={() => void query.refetch()} disabled={query.isFetching}>Refresh</button>}</div>
-    {!authenticated ? <div className="empty-state"><h2>Your progress belongs here.</h2><p>Sign in to see your submissions and reviewer feedback.</p><button className="button primary" disabled={!ready} onClick={signIn}>Sign in to continue</button></div> : <>
+    {!authenticated ? <div className="empty-state"><h2>Your progress belongs here.</h2><p>Sign in to see your submissions and reviewer feedback.</p><button className="button primary" disabled={!ready || !!error || !!notice} onClick={signIn}>Sign in to continue</button></div> : <>
       {query.isPending && <p role="status">Loading submissions…</p>}
       {query.isError && <p className="error" role="alert">{query.error.message}</p>}
       {query.data?.length === 0 && <div className="empty-state"><h2>{reviewer ? 'All caught up.' : 'Every achievement starts with evidence.'}</h2><p>{reviewer ? 'There are no submissions waiting on this page.' : 'Explore the criteria, then share a piece of work you are proud of.'}</p>{!reviewer && <button className="button primary" onClick={() => useWorkspace.getState().navigate('explore')}>Explore achievements</button>}</div>}
