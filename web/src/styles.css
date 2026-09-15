@@ -103,6 +103,9 @@ input { margin-bottom: 20px; }
 .skip-link { position: fixed; left: 20px; top: -100px; z-index: 5; background: white; padding: 14px; }
 .skip-link:focus { top: 12px; }
 @media (max-width: 900px) {
+  .header-inner { flex-wrap: wrap; gap: 4px 16px; padding-block: 16px 8px; }
+  .header-inner nav { order: 3; width: 100%; justify-content: space-between; gap: 16px; }
+  .header-inner .nav-link { white-space: nowrap; }
   .container { width: calc(100% - 48px); }
   .hero h1 { font-size: 56px; }
   .hero p { font-size: 20px; }
