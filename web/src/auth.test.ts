@@ -19,7 +19,7 @@ describe('deployment authentication', () => {
     expect(createClient).not.toHaveBeenCalled()
     expect(init).not.toHaveBeenCalled()
     expect(login).not.toHaveBeenCalled()
-    expect(auth.useSession.getState()).toMatchObject({ ready: true, authenticated: false, error: 'Sign-in is not available on this deployment.' })
+    expect(auth.useSession.getState()).toMatchObject({ ready: true, authenticated: false, error: '', notice: 'Sign-in is not available on this deployment.' })
     await expect(auth.accessToken()).rejects.toThrow('Sign-in is not available')
   })
   it('keeps the local development identity provider', async () => {

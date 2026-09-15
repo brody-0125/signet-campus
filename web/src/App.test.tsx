@@ -399,3 +399,26 @@ it('lets visitors inspect sample criteria without authentication or API requests
   await user.click(screen.getByRole('button', { name: 'Live catalog' }))
   expect(await screen.findByText(achievement.name)).toBeInTheDocument()
 })
+
+it('shows unavailable sign-in as information and disables entry points without loading private history', async () => {
+  useSession.setState({ authenticated: false, notice: 'Sign-in is not available on this deployment.' })
+  const user = userEvent.setup()
+  mount()
+  expect(screen.getByRole('status')).toHaveTextContent('Sign-in is not available')
+  await user.click(screen.getByRole('button', { name: 'My submissions' }))
+  expect(screen.getByRole('button', { name: 'Sign in to continue' })).toBeDisabled()
+  expect(fetchMock).not.toHaveBeenCalled()
+  useSession.setState({ notice: '' })
+})
+
+
+it('shows one pathway failure and does not carry it into anonymous submissions', async () => {
+  useSession.setState({ authenticated: false })
+  fetchMock.mockResolvedValue(response({}, 503))
+  mount()
+  await userEvent.setup().click(screen.getByRole('button', { name: 'Pathways' }))
+  expect(await screen.findByText('Pathways could not be loaded.')).toBeInTheDocument()
+  expect(screen.queryByText('Achievement details could not be loaded.')).not.toBeInTheDocument()
+  await userEvent.setup().click(screen.getByRole('button', { name: 'My submissions' }))
+  expect(screen.queryByText('Achievement details could not be loaded.')).not.toBeInTheDocument()
+})

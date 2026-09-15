@@ -28,7 +28,7 @@ function PathwayCard({ pathway, achievements }: { pathway: Pathway; achievements
       <button className="nav-link" onClick={() => useWorkspace.setState({ selectedId: id })}>{achievements.find(a => a.id === id)?.name || 'Achievement'}</button>
       {progress.data?.requirements.find(r => r.achievementId === id)?.earned && <span className="badge-status">Earned</span>}
     </li>)}</ul>
-    {!session.authenticated ? <button className="button outline" onClick={signIn}>Sign in to enroll</button> : <>
+    {!session.authenticated ? <button className="button outline" disabled={!session.ready || !!session.error || !!session.notice} onClick={signIn}>Sign in to enroll</button> : <>
       {progress.isPending && <p role="status">Loading your progress…</p>}
       {progress.isError && <p className="error" role="alert">{progress.error.message}</p>}
       {progress.data && <><p className="pathway-summary">{progress.data.completed ? 'Complete' : 'In progress'} · {progress.data.earned} of {progress.data.total} achievements</p>
@@ -67,7 +67,7 @@ function PathwayForm({ achievements, onClose }: { achievements: Achievement[]; o
   </form></Dialog>
 }
 
-export function Pathways({ achievements }: { achievements: Achievement[] }) {
+export function Pathways({ achievements, achievementError, onRetryAchievements }: { achievements: Achievement[]; achievementError: boolean; onRetryAchievements: () => void }) {
   const [creating, setCreating] = useState(false)
   const session = useSession()
   const pathways = useQuery({ queryKey: ['pathways'], queryFn: ({ signal }) => api<Pathway[]>('/pathways', undefined, signal) })
@@ -77,6 +77,7 @@ export function Pathways({ achievements }: { achievements: Achievement[] }) {
     <p className="field-help">Progress counts current, issued badges. Expired or revoked badges no longer count.</p>
     {pathways.isPending && <p role="status">Loading pathways…</p>}
     {pathways.isError && <div role="alert"><p>Pathways could not be loaded.</p><button className="button outline" onClick={() => void pathways.refetch()}>Try again</button></div>}
+    {pathways.isSuccess && achievementError && <p className="notice" role="status">Achievement details could not be loaded. <button className="nav-link" onClick={onRetryAchievements}>Retry achievement details</button></p>}
     {pathways.data?.length === 0 && <p className="empty-state">No pathways have been published yet.</p>}
     {pathways.data?.map(p => <PathwayCard key={p.id} pathway={p} achievements={achievements}/>)}
     {creating && session.reviewer && <PathwayForm achievements={achievements.filter(a => !a.archived)} onClose={() => setCreating(false)}/>}

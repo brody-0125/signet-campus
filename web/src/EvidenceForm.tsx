@@ -7,7 +7,7 @@ import { Dialog } from './Dialog'
 
 export function EvidenceForm({ achievement, onClose, existing, onSubmitted }: { achievement: Achievement; onClose: () => void; existing?: Submission; onSubmitted?: () => void }) {
   const authenticated = useSession(s => s.authenticated)
-  const ready = useSession(s => s.ready)
+  const ready = useSession(s => s.ready && !s.error && !s.notice)
   const [evidence, setEvidence] = useState(existing?.submission.evidence || '')
   const client = useQueryClient()
   const mutation = useMutation({

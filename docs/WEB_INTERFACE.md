@@ -56,3 +56,9 @@ Public web builds require an explicit `VITE_OIDC_URL` to enable authentication. 
 Explore offers three illustrative accessibility projects: accessible documents, keyboard-first navigation and meaningful image descriptions. Visitors start with **Sample achievements** and can open each project's criteria, sample evidence and review journey without signing in or contacting the API. **Live catalog** explicitly switches to real achievements; signed-in users default to the live catalog. Sample content cannot submit evidence or issue credentials.
 
 The preview uses the existing blue primary, Inter typography, flat bordered cards and restrained cool tints. Cards form three columns on desktop and one on mobile. Details use the shared keyboard-accessible dialog with Escape dismissal. Time estimates and examples are illustrative rather than program requirements.
+
+## Responsive layout and feedback
+
+Catalog actions wrap separately from achievement text. Compact navigation uses two columns, and sample cards adapt to a minimum readable width. Dialog headings and close controls remain visible while their bodies scroll; mobile action order follows keyboard order. Body text uses a 1.5 line height, with bounded reading width for account guidance and distinct spacing between credential actions and sharing controls.
+
+An unconfigured identity provider is presented as informational availability feedback. Sign-in entry points remain disabled in that state. Anonymous submission views do not fetch account history. Pathways show one primary load failure; when pathways load but achievement details fail, a separate retry remains available.

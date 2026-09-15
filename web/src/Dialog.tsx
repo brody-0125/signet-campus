@@ -11,6 +11,6 @@ export function Dialog({ title, onClose, children }: { title: string; onClose: (
   }, [])
   return <dialog ref={ref} aria-labelledby="dialog-title" onCancel={onClose}>
     <div className="dialog-heading"><h2 id="dialog-title">{title}</h2><button className="close-button" onClick={onClose} aria-label="Close">×</button></div>
-    {children}
+    <div className="dialog-body">{children}</div>
   </dialog>
 }
